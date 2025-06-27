@@ -1,0 +1,7 @@
+backend/data/game_collection.db
+.DS_Store
+backend/data/tempSqlFiles/CreateTables.sqlite3-query
+backend/data/tempSqlFiles/InsertDefaults.sqlite3-query
+backend/data/tempSqlFiles/InsertTestData.sqlite3-query
+frontend/src/assets/PlaceholderCoverArtSize1.png
+frontend/src/assets/PlaceholderCoverArtSize2.png
