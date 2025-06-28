@@ -25,21 +25,18 @@ export default function GameItem(props: GameItemProps) {
 	}
 
 	return (
-		<article className="flex flex-col sm:flex-row my-3 p-4 bg-(--color-darker)">
+		<article className="grid auto-cols-auto auto-rows-auto my-3 p-4 bg-(--color-darker)">
 			{
-			<img className="grow justify-self-center w-64 
-			sm:grow-0 sm:justify-self-auto sm:w-40
-			xl:w-64
+			<img className="motion-safe:transition-all ease-in-out w-40 py-4 max-sm:order-2
+			sm:row-span-3 sm:col-span-1 sm:w-40
+			lg:w-64
 			" src={imgSrc} alt={imgAlt}/>
 			}
-			<div id="gameInfoContainer">
-				<div id="primaryGameInfoContainer" className="flex flex-col sm:mx-5">
-					<h2 className="text-2xl">{game.Title}</h2>
-					<p className="">{game.Description}</p>
-				</div>
-				<div id="extraGameInfoContainer" className="flex">
-					{/* Right here should have things like the developer, publisher, release date, and genres */}
-				</div>
+			<h2 className="text-2xl max-sm:order-1 sm:col-start-2 sm:col-span-2">{game.Title}</h2>
+			<p className="max-sm:order-3 sm:col-span-2">{game.Description}</p>
+
+			<div id="extraGameInfoContainer" className="flex">
+				{/* Right here should have things like the developer, publisher, release date, and genres */}
 			</div>
 			
 		</article>
