@@ -32,8 +32,8 @@ export default function GameItem(props: GameItemProps) {
 			lg:w-64
 			" src={imgSrc} alt={imgAlt}/>
 			}
-			<h2 className="text-2xl max-sm:order-1 sm:col-start-2 sm:col-span-2 sm:row-span-1">{game.Title}</h2>
-			<p className="max-sm:order-3 sm:col-start-2">{game.Description}</p>
+			<h2 className="text-2xl max-sm:order-1 sm:col-start-2 sm:col-span-2">{game.Title}</h2>
+			<p className="max-sm:order-3">{game.Description}</p>
 
 			<div id="extraGameInfoContainer" className="flex">
 				{/* Placeholder. Right here should have things like the developer, publisher, release date, and genres once that stuff is properly being retrieved from the database. */}
