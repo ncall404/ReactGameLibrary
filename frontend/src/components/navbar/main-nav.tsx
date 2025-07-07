@@ -6,7 +6,7 @@ import NavLink from './nav-link';
 // TODO: Make the nav bar stick at the top of the screen once you have content to test it with
 export default function MainNav() {
 	return (
-		<nav className='grow flex-auto rounded-sm m-[5px] p-[10px] bg-(--color-primary) text-(--color-light)'>
+		<nav className='flex max-sm:justify-center rounded-sm m-[5px] sm:px-[10px] bg-(--color-primary) text-(--color-light)'>
 			<NavLink to="/" >Library</NavLink>
 			<NavLink to="/wishlist">Wishlist</NavLink>
 			<NavLink to="/settings">Settings</NavLink>
