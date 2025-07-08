@@ -6,10 +6,17 @@ import { cors } from 'hono/cors';
 import Database from 'better-sqlite3';
 import path from 'path';
 
+import { setupDb, resetDb } from './setup.js';
+
 const app = new Hono();
 app.use(cors());
 
-const db = new Database(path.join('data', 'game_collection.db')); // Create database object for the game_collection database.
+// Create database object for the game_collection database. If game_collection.db is missing then it is created.
+const db = new Database(path.join('data', 'game_collection.db'));
+
+// Database check to see if it is set up, if not then it runs the setup process.
+const setupMsg: string = setupDb(db);
+console.log(setupMsg);
 
 // Get list of games belonging to a library.
 app.get('/api/libraries/:libraryId/games', (c) => {
