@@ -1,4 +1,4 @@
-// Backend setup file. Sets up the database tables and image paths if they are not found or if a reset requested.
+// Backend setup file. Sets up the database tables if they are not found or if a reset is requested.
 
 // Check if tables exist in the database. Returns boolean; true if all tables exist, false otherwise.
 /* 
@@ -24,7 +24,7 @@ function checkTables(db:any): boolean {
 	return true;
 }
 
-// Creates the database tables and 
+// Creates the database tables and inserts data into relevant tables.
 function createTables(db: any) {
 	let query;
 	// Drop existing tables. (For reset functionality and fixing prior incomplete database table creation).
@@ -336,7 +336,7 @@ const setupDb = function setupDb(db:any): string {
 	return "Success: Database already existed."
 }
 
-// Resets the database tables and removes all images from the image paths.
+// Resets the database tables.
 const resetDb = function resetDb(db: any) {
 	try {
 		createTables(db);

@@ -6,7 +6,8 @@ import { cors } from 'hono/cors';
 import Database from 'better-sqlite3';
 import path from 'path';
 
-import { setupDb, resetDb } from './setup.js';
+import { setupDb, resetDb } from './dbSetup.ts';
+import { setupImageStorage, clearImageStorage } from './imageStorageSetup.ts';
 
 const app = new Hono();
 app.use(cors());
@@ -15,8 +16,8 @@ app.use(cors());
 const db = new Database(path.join('data', 'game_collection.db'));
 
 // Database check to see if it is set up, if not then it runs the setup process.
-const setupMsg: string = setupDb(db);
-console.log(setupMsg);
+console.log(setupDb(db));
+console.log(await setupImageStorage("./uploads/images"));
 
 // Get list of games belonging to a library.
 app.get('/api/libraries/:libraryId/games', (c) => {
