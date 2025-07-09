@@ -14,6 +14,7 @@ export const Route = createFileRoute('/')({
 
 
 function RouteComponent() {
+	// TODO: Change so that multiple queries can be made on this page.
 	const { status, data, error } = useQuery({
 		queryKey:['http://localhost:3000/api/libraries', 1],
 		queryFn: () => getSingleLibrary(1),
