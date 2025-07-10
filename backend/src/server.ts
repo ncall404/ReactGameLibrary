@@ -7,8 +7,8 @@ import { cors } from 'hono/cors';
 import { setupDb, resetDb } from './dbManager.ts';
 import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 
-// Import routes
-import { getGamesLibrary } from './routes/libraries.ts';
+// Import route handlers
+import { getGamesLibrary } from './handlers/libraries.ts';
 
 const app = new Hono();
 app.use(cors());
