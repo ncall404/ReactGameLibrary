@@ -5,7 +5,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
 import { setupDb, resetDb } from './dbManager.ts';
-import { setupImageStorage, clearImageStorage } from './imageStorageSetup.ts';
+import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 
 // Import routes
 import { getGamesLibrary } from './routes/libraries.ts';
