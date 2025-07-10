@@ -1,12 +1,18 @@
-// Backend setup file. Sets up the database tables if they are not found or if a reset is requested.
+// Backend setup file. Creates database object. Sets up the database tables if they are not found or if a reset is requested.
+
+import Database from 'better-sqlite3';
+import path from 'path';
+
+// Create database object for the game_collection database. If game_collection.db is missing then it is created.
+const db = new Database(path.join('data', 'game_collection.db'));
 
 // Check if tables exist in the database. Returns boolean; true if all tables exist, false otherwise.
 /* 
 NOTE: There should be either no tables missing if the database was set up successfully in the past, or all tables missing from not being set up. If there is somehow only partial tables and data lost from subsequent table dropping, then it is a 99% chance that the user poked around and deleted a table or there was an error in the initial setup meaning it needs to be done again anyways. 
 */
-function checkTables(db:any): boolean {
+function checkTables(): boolean {
 	const query = db.prepare("SELECT tbl_name FROM sqlite_schema WHERE type='table' AND NOT name='sqlite_sequence'");
-	const tables = query.all();
+	const tables: any[] = query.all();
 	
 	// Array of table names to check for.
 	const tableNames = ["CompanyType", "Company", "Game", "Library", "Wishlist", "Genre", "Platform", "Storefront",
@@ -25,7 +31,7 @@ function checkTables(db:any): boolean {
 }
 
 // Creates the database tables and inserts data into relevant tables.
-function createTables(db: any) {
+function createTables() {
 	let query;
 	// Drop existing tables. (For reset functionality and fixing prior incomplete database table creation).
 	query = db.prepare('DROP TABLE IF EXISTS GameLibrary;');
@@ -317,17 +323,17 @@ function createTables(db: any) {
 }
 
 // Checks database table existence. If the amount of tables isn't right, then setup the database.
-const setupDb = function setupDb(db:any): string {
+const setupDb = function setupDb(): string {
 	let tablesExist: boolean;
 	try {
-		tablesExist = checkTables(db);
+		tablesExist = checkTables();
 	} catch(err) {
 		return "Error: Couldn't verify the database; " + err;
 	}
 
 	if (!tablesExist) {
 		try {
-			createTables(db);
+			createTables();
 		} catch(err) {
 			return "Error: Database creation failed; " + err;
 		}
@@ -337,13 +343,13 @@ const setupDb = function setupDb(db:any): string {
 }
 
 // Resets the database tables.
-const resetDb = function resetDb(db: any) {
+const resetDb = function resetDb() {
 	try {
-		createTables(db);
+		createTables();
 	} catch(err) {
 		return "Error: Database reset failed; " + err;
 	}
 	return "Success: Database reset!";
 }
 
-export {setupDb, resetDb};
+export {db, setupDb, resetDb};
