@@ -4,7 +4,7 @@ import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 
-import { setupDb, resetDb } from './dbSetup.ts';
+import { setupDb, resetDb } from './dbManager.ts';
 import { setupImageStorage, clearImageStorage } from './imageStorageSetup.ts';
 
 // Import routes
