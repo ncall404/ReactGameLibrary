@@ -34,8 +34,3 @@ createRoot(document.getElementById('root')!).render(
 		</QueryClientProvider>
 	</StrictMode>,
 );
-
-// Database Server Connection Test (TODO: DELETE AT SOME POINT)
-/* const res = await fetch('http://localhost:3000/api/libraries/1/games');
-const data = await res.json();
-console.log(data); */
