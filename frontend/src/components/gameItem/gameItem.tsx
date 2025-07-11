@@ -14,14 +14,11 @@ export default function GameItem(props: GameItemProps) {
 	let imgSrc = "";
 	let imgAlt = "";
 	if (game.CoverArt !== null) {
-		const mimeType = "image/png"; // TODO: determine what to do with this, image types could be multiple kinds...
-
-		// imgSrc = URL.createObjectURL(game.CoverArt);
-		imgSrc = `data:${mimeType};base64,${game.CoverArt}`;
-		imgAlt = `Game Cover Art for ${game.Title}.`;
+		imgSrc = `http://localhost:3000/${game.CoverArt}`;
+		imgAlt = `Game cover art for ${game.Title}`;
 	} else {
-		imgSrc = "../../assets/PlaceHolderCoverArtSize2.png";
-		imgAlt = "Placeholder for game cover art as there was no art found in the database."
+		imgSrc = "./src/assets/PlaceHolderCoverArtSize2.png"; // TODO: Make a better placeholder image...
+		imgAlt = "Placeholder for game cover art as there was no art found in the database.";
 	}
 
 	return (

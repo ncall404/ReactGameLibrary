@@ -15,6 +15,7 @@ const app = new Hono();
 app.use(cors());
 
 // Serve images from ./uploads/images
+// TODO: Make it so that there is a placeholder sent if the image isn't found.
 app.use('/uploads/images/*', serveStatic({
 	root: './uploads/images',
 	rewriteRequestPath: (path) => path.replace(/^\/uploads\/images/, ''),
