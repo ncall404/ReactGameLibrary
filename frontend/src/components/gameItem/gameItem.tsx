@@ -1,4 +1,4 @@
-// Placeholder GameItem component
+// Work-in-progress GameItem component for displaying games and their stored info from the database.
 
 import type { Key } from "react";
 import type { GameObject } from "../../interfaces/gameObjectInterface.ts";
