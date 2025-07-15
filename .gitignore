@@ -1,7 +1,5 @@
 backend/data/game_collection.db
-backend/data/tempSqlFiles/CreateTables.sqlite3-query
-backend/data/tempSqlFiles/InsertDefaults.sqlite3-query
-backend/data/tempSqlFiles/InsertTestData.sqlite3-query
+backend/data/tempSqlFiles/
 backend/uploads/images/**
 
 frontend/src/assets/PlaceholderCoverArtSize1.png
