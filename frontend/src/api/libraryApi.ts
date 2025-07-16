@@ -16,7 +16,7 @@ const getAllLibraries = async () => {
 const getSingleLibrary = async (libraryId: number) => {
 	const res = await fetch(baseApiUrl + `/${libraryId}/games`);
 	if (!res.ok) {
-		throw new Error("Network response was not ok");
+		throw new Error("Network response was not OK");
 	}
 	const data = await res.json();
 	return data;
