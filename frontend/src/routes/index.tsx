@@ -25,7 +25,7 @@ function RouteComponent() {
 	}
 
 	if (status === 'error') {
-		return <p>Error: {error.message}</p>
+		return <p className='text-red-500'>Error: {error.message}</p>
 	}
 
 	return (
