@@ -14,25 +14,24 @@ export const Route = createFileRoute('/')({
 
 
 function RouteComponent() {
-	// TODO: Change so that multiple queries can be made on this page.
-	const { status, data, error } = useQuery({
+	const singleLibrary = useQuery({
 		queryKey:['http://localhost:3000/api/libraries', 1],
 		queryFn: () => getSingleLibrary(1),
 	});
 
-	if (status === 'pending') {
+	if (singleLibrary.status === 'pending') {
 		return <p className='text-(--color-accent)'>Loading...</p>
 	}
 
-	if (status === 'error') {
-		return <p className='text-red-500'>Error: {error.message}</p>
+	if (singleLibrary.status === 'error') {
+		return <p className='text-red-500'>Error: {singleLibrary.error.message}</p>
 	}
 
 	return (
 		<section>
 			<h1 className='text-3xl'>Game Library</h1>
 			<>
-				{data && data?.map((game: GameObject) => <GameItem key={game.GameID} data={game}/>)}
+				{singleLibrary.data && singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game}/>)}
 			</>
 		</section>
 	);
