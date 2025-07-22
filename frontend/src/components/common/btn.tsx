@@ -10,10 +10,10 @@ type BtnStyle = (typeof BtnStyle)[keyof typeof BtnStyle]; // Create union type f
 
 
 type BtnProps = {
-	className?: string, // Makes the styles easily extensible if there is a more limited scope button style needed.
-	style?: BtnStyle, // Main button styling.
-	func?: () => void, // onClick function.
-	children?: React.ReactNode,
+	className?: string; // Makes the styles easily extensible if there is a more limited scope button style needed.
+	style?: BtnStyle; // Main button styling.
+	func?: () => void; // onClick function.
+	children?: React.ReactNode;
 }
 
 export default function Btn(props: BtnProps) {
