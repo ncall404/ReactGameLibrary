@@ -22,7 +22,7 @@ export default function Btn(props: BtnProps) {
 	let buttonStyles: string;
 	switch (props.style) {
 		case BtnStyle.Primary:
-			buttonStyles = "border-(--color-accent) hover:bg-(--color-accent) hover:text-(--color-dark)";
+			buttonStyles = "border-(--color-accent) hover:bg-(--color-accent) hover:text-(--color-btn-bg)";
 			break;
 		case BtnStyle.Danger:
 			buttonStyles = "border-(--color-danger) hover:bg-(--color-danger)";
@@ -37,7 +37,7 @@ export default function Btn(props: BtnProps) {
 
 	return (
 		<button 
-		className={"p-[5px] border-y-3 rounded-xs cursor-pointer text-(--color-light) bg-(--color-dark) font-medium "
+		className={"p-[5px] border-y-3 rounded-xs cursor-pointer text-(--color-light) bg-(--color-btn-bg) font-medium "
 			+ buttonStyles + " " + props.className}
 		type={props.type}
 		onClick={props.func}>
