@@ -12,4 +12,15 @@ const getGenres = function getGenres(c: Context) {
 	return c.json(genres);
 }
 
-export {getGenres}
+// Platforms ----------------------------------------------------------------
+const getPlatforms = function getPlatforms(c: Context) {
+	const query = db.prepare(`
+		SELECT p.PlatformID, p.Title as PlatformTitle, c.Title as CompanyTitle
+		FROM Platform p
+		JOIN Company c ON p.CompanyID = c.CompanyID;
+		`);
+	const platforms = query.all();
+	return c.json(platforms)
+}
+
+export {getGenres, getPlatforms}

@@ -10,7 +10,7 @@ import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
-import { getGenres } from './handlers/gameMetadata.ts';
+import { getGenres, getPlatforms } from './handlers/gameMetadata.ts';
 
 const app = new Hono();
 app.use(cors());
@@ -31,6 +31,8 @@ app.get('/api/libraries/:libraryId/games', getGamesLibrary);
 
 // Get a list of all stored genres.
 app.get('/api/metadata/genres', getGenres);
+// Get a list of all stored platforms.
+app.get('/api/metadata/platforms', getPlatforms)
 
 serve({
 	fetch: app.fetch,
