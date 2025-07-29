@@ -37,7 +37,7 @@ export default function Btn(props: BtnProps) {
 
 	return (
 		<button 
-		className={"p-[5px] border-y-3 rounded-xs cursor-pointer text-(--color-light) bg-(--color-btn-bg) font-medium "
+		className={"p-[5px] border-2 rounded-sm cursor-pointer text-(--color-light) bg-(--color-btn-bg) font-medium "
 			+ buttonStyles + " " + props.className}
 		type={props.type}
 		onClick={props.func}>
