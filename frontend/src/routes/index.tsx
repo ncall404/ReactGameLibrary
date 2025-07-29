@@ -2,9 +2,16 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+
+import Btn from '../components/common/btn.tsx';
+import { BtnStyle } from '../components/common/btn.tsx';
 
 import GameItem from '../components/gameItem/gameItem.tsx';
 import type { GameObject } from "../interfaces/gameObjectInterface.ts";
+
+import NewGameForm from '../components/newGameForm/newGameForm.tsx';
+
 import { getSingleLibrary } from '../api/libraryApi.ts';
 
 
@@ -14,13 +21,15 @@ export const Route = createFileRoute('/')({
 
 
 function RouteComponent() {
+	const [newGameIsOpen, setNewGameIsOpen] = useState(false);
+
 	const singleLibrary = useQuery({
 		queryKey:['http://localhost:3000/api/libraries', 1],
 		queryFn: () => getSingleLibrary(1),
 	});
 
 	if (singleLibrary.status === 'pending') {
-		return <p className='text-(--color-accent)'>Loading...</p>
+		return <p className='text-(--color-accent)'>Loading games...</p>
 	}
 
 	if (singleLibrary.status === 'error') {
@@ -29,10 +38,19 @@ function RouteComponent() {
 
 	return (
 		<section>
-			<h1 className='text-3xl'>Game Library</h1>
+			<h1 className='text-3xl pb-2'>Game Library</h1>
+			{ !newGameIsOpen &&
 			<>
+				<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
 				{singleLibrary.data && singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game}/>)}
 			</>
+			}
+			{
+				newGameIsOpen && <NewGameForm 
+				onSubmitted={() => setNewGameIsOpen(false)} 
+				onCancel={() => setNewGameIsOpen(false)} 
+				collectionType='library' collectionId={1} />
+			}
 		</section>
 	);
 }
