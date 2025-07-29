@@ -11,4 +11,13 @@ const getGenres = async () => {
 	return data;
 }
 
-export {getGenres};
+const getPlatforms = async () => {
+	const res = await fetch(baseApiUrl + '/platforms');
+	if (!res.ok) {
+		throw new Error("Network response was not OK");
+	}
+	const data = await res.json();
+	return data;
+}
+
+export {getGenres, getPlatforms};
