@@ -20,4 +20,31 @@ const getPlatforms = async () => {
 	return data;
 }
 
-export {getGenres, getPlatforms};
+const getCompanies = async () => {
+	const res = await fetch(baseApiUrl + '/companies');
+	if (!res.ok) {
+		throw new Error("Network response was not OK");
+	}
+	const data = await res.json();
+	return data;
+}
+
+const getDevelopers = async () => {
+	const res = await fetch(baseApiUrl + '/developers');
+	if (!res.ok) {
+		throw new Error("Network response was not OK");
+	}
+	const data = await res.json();
+	return data;
+}
+
+const getPublishers = async () => {
+	const res = await fetch(baseApiUrl + '/publishers');
+	if (!res.ok) {
+		throw new Error("Network response was not OK");
+	}
+	const data = await res.json();
+	return data;
+}
+
+export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers};
