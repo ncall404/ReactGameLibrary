@@ -15,9 +15,9 @@ const getGenres = function getGenres(c: Context) {
 // Platforms ----------------------------------------------------------------
 const getPlatforms = function getPlatforms(c: Context) {
 	const query = db.prepare(`
-		SELECT p.PlatformID, p.Title as PlatformTitle, c.Title as CompanyTitle
+		SELECT p.PlatformID, p.Title as PlatformTitle, coalesce(c.Title, 'None') as CompanyTitle
 		FROM Platform p
-		JOIN Company c ON p.CompanyID = c.CompanyID;
+		LEFT JOIN Company c ON p.CompanyID = c.CompanyID;
 		`);
 	const platforms = query.all();
 	return c.json(platforms)
