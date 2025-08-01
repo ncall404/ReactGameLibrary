@@ -1,13 +1,13 @@
 // Work-in-progress NewGameForm component for getting the info needed to add a new GameItem to the database.
 
 import Select from "react-select";
-import type { MultiValue, SingleValue } from "react-select";
+import type { MultiValue } from "react-select";
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getGenres, getPlatforms } from "../../api/gameMetadataApi.ts";
+import { getGenres, getPlatforms, getDevelopers, getPublishers } from "../../api/gameMetadataApi.ts";
 
 // Type for the Select component data to use.
 type OptionType = {
@@ -31,8 +31,8 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const [selectedGenres, setSelectedGenres] = useState<OptionType[]>([]);
 	const [selectedPlatforms, setSelectedPlatforms] = useState<OptionType[]>([]);
 	const [selectedStorefronts, setSelectedStorefronts] = useState<OptionType[]>([]);
-	const [selectedPublisher, setSelectedPublisher] = useState<OptionType>();
-	const [selectedDeveloper, setSelectedDeveloper] = useState<OptionType>();
+	const [selectedPublisher, setSelectedPublisher] = useState<OptionType[]>();
+	const [selectedDeveloper, setSelectedDeveloper] = useState<OptionType[]>();
 
 	const genreList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/genres'],
@@ -42,6 +42,16 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const platformList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/platforms'],
 		queryFn: () => getPlatforms(),
+	});
+
+	const developerList = useQuery({
+		queryKey:['http://localhost:3000/api/metadata/developers'],
+		queryFn: () => getDevelopers(),
+	});
+
+	const publisherList = useQuery({
+		queryKey:['http://localhost:3000/api/metadata/publishers'],
+		queryFn: () => getPublishers(),
 	});
 
 	let api: string = 'https://localhost:3000/api/';
@@ -85,6 +95,28 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 		return Array.from(grouped.entries()).map(([label, options]) => ({label, options}));
 	}
+	const fillDevelopers = (): OptionType[] => {
+		if (!developerList) return [];
+
+		const developers: OptionType[] = [];
+		if (developerList.data) {
+			developerList.data?.map((developer: {CompanyID: number, Title: string}) => {
+				developers.push({value: developer.CompanyID, label: developer.Title});
+			});
+		}
+		return developers;
+	}
+	const fillPublishers = (): OptionType[] => {
+		if (!publisherList) return [];
+
+		const publishers: OptionType[] = [];
+		if (publisherList.data) {
+			publisherList.data?.map((publisher: {CompanyID: number, Title: string}) => {
+				publishers.push({value: publisher.CompanyID, label: publisher.Title});
+			});
+		}
+		return publishers;
+	}
 
 	// TODO: Allow the user to select a previously uploaded images for game cover art.
 	return (
@@ -124,26 +156,30 @@ export default function NewGameForm(props: NewGameFormProps) {
 			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit genre list</Btn>
 			<br />
 
-			<label htmlFor="newGamePublisherOptions">Publisher: </label>
+			<label htmlFor="newGamePublisherOptions">Publishers: </label>
 			<Select
 				name="gamePublishers"
 				inputId="newGamePublisherOptions"
 				className="text-(--color-dark) cursor-pointer"
+				isMulti
 				value={selectedPublisher}
-				onChange={(option: SingleValue<OptionType>) => {
-					setSelectedPublisher(option as OptionType);
+				onChange={(options: MultiValue<OptionType>) => {
+					setSelectedPublisher(options as OptionType[]);
 				}}
+				options={fillPublishers()}
 			/>
 
-			<label htmlFor="newGameDeveloperOptions">Developer: </label>
+			<label htmlFor="newGameDeveloperOptions">Developers: </label>
 			<Select
 				name="gameDevelopers"
 				inputId="newGameDeveloperOptions"
 				className="text-(--color-dark) cursor-pointer"
+				isMulti
 				value={selectedDeveloper}
-				onChange={(option: SingleValue<OptionType>) => {
-					setSelectedDeveloper(option as OptionType);
+				onChange={(options: MultiValue<OptionType>) => {
+					setSelectedDeveloper(options as OptionType[]);
 				}}
+				options={fillDevelopers()}
 			/>
 			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit company list</Btn>
 			<br />
