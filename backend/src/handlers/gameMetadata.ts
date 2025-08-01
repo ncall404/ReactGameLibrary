@@ -23,4 +23,40 @@ const getPlatforms = function getPlatforms(c: Context) {
 	return c.json(platforms)
 }
 
-export {getGenres, getPlatforms}
+// Companies ----------------------------------------------------------------
+	// Get all companies and their roles.
+const getCompanies = function getCompanies(c: Context) {
+	const query = db.prepare(`
+		SELECT c.Title as Title, group_concat(ct.Title, ',') as CType
+		FROM Company c
+		JOIN CompanyCompanyType cct ON c.CompanyID = cct.CompanyID
+		JOIN CompanyType ct ON cct.CompanyTypeID = ct.CompanyTypeID
+		GROUP BY cct.CompanyID;
+		`);
+	const companies = query.all();
+	return c.json(companies);
+}
+	// Get all developer companies.
+const getDevelopers = function getDevelopers(c: Context) {
+	const query = db.prepare(`
+		SELECT c.CompanyID as CompanyID, c.Title as Title
+		FROM Company c
+		JOIN CompanyCompanyType cct ON c.CompanyID = cct.CompanyID
+		WHERE cct.CompanyTypeID = 2;
+		`);
+	const developers = query.all();
+	return c.json(developers);
+}
+	// Get all publisher companies.
+const getPublishers = function getPublishers(c: Context) {
+	const query = db.prepare(`
+		SELECT c.CompanyID as CompanyID, c.Title as Title
+		FROM Company c
+		JOIN CompanyCompanyType cct ON c.CompanyID = cct.CompanyID
+		WHERE cct.CompanyTypeID = 3;
+		`);
+	const publishers = query.all();
+	return c.json(publishers);
+}
+
+export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers}

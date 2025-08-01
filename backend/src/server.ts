@@ -10,7 +10,7 @@ import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
-import { getGenres, getPlatforms } from './handlers/gameMetadata.ts';
+import { getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers } from './handlers/gameMetadata.ts';
 
 const app = new Hono();
 app.use(cors());
@@ -32,7 +32,13 @@ app.get('/api/libraries/:libraryId/games', getGamesLibrary);
 // Get a list of all stored genres.
 app.get('/api/metadata/genres', getGenres);
 // Get a list of all stored platforms.
-app.get('/api/metadata/platforms', getPlatforms)
+app.get('/api/metadata/platforms', getPlatforms);
+// Get a list of all stored companies and their company types.
+app.get('/api/metadata/companies', getCompanies);
+// Get a list of all stored companies with the developer type.
+app.get('/api/metadata/developers', getDevelopers);
+// Get a list of all stored companies with the publisher type.
+app.get('/api/metadata/publishers', getPublishers);
 
 serve({
 	fetch: app.fetch,
