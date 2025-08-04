@@ -7,7 +7,7 @@ import { BtnStyle } from "../common/btn.tsx";
 
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { getGenres, getPlatforms, getDevelopers, getPublishers } from "../../api/gameMetadataApi.ts";
+import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 
 // Type for the Select component data to use.
 type OptionType = {
@@ -36,22 +36,22 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 	const genreList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/genres'],
-		queryFn: () => getGenres(),
+		queryFn: () => getMetadata(MetadataField.Genres),
 	});
 
 	const platformList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/platforms'],
-		queryFn: () => getPlatforms(),
+		queryFn: () => getMetadata(MetadataField.Platforms),
 	});
 
 	const developerList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/developers'],
-		queryFn: () => getDevelopers(),
+		queryFn: () => getMetadata(MetadataField.Developers),
 	});
 
 	const publisherList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/publishers'],
-		queryFn: () => getPublishers(),
+		queryFn: () => getMetadata(MetadataField.Publishers),
 	});
 
 	let api: string = 'https://localhost:3000/api/';

@@ -2,8 +2,18 @@
 
 const baseApiUrl = "http://localhost:3000/api/metadata";
 
-const getGenres = async () => {
-	const res = await fetch(baseApiUrl + '/genres');
+const MetadataField = {
+	Genres: "genres",
+	Platforms: "platforms",
+	Companies: "companies",
+	Developers: "developers",
+	Publishers: "publishers",
+	Storefronts: "storefronts",
+} as const;
+type MetadataField = (typeof MetadataField)[keyof typeof MetadataField];
+
+const getMetadata = async (field: MetadataField) => {
+	const res = await fetch(baseApiUrl + '/' + field);
 	if (!res.ok) {
 		throw new Error("Network response was not OK");
 	}
@@ -11,40 +21,4 @@ const getGenres = async () => {
 	return data;
 }
 
-const getPlatforms = async () => {
-	const res = await fetch(baseApiUrl + '/platforms');
-	if (!res.ok) {
-		throw new Error("Network response was not OK");
-	}
-	const data = await res.json();
-	return data;
-}
-
-const getCompanies = async () => {
-	const res = await fetch(baseApiUrl + '/companies');
-	if (!res.ok) {
-		throw new Error("Network response was not OK");
-	}
-	const data = await res.json();
-	return data;
-}
-
-const getDevelopers = async () => {
-	const res = await fetch(baseApiUrl + '/developers');
-	if (!res.ok) {
-		throw new Error("Network response was not OK");
-	}
-	const data = await res.json();
-	return data;
-}
-
-const getPublishers = async () => {
-	const res = await fetch(baseApiUrl + '/publishers');
-	if (!res.ok) {
-		throw new Error("Network response was not OK");
-	}
-	const data = await res.json();
-	return data;
-}
-
-export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers};
+export {MetadataField, getMetadata};
