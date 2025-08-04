@@ -59,4 +59,22 @@ const getPublishers = function getPublishers(c: Context) {
 	return c.json(publishers);
 }
 
-export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers}
+// Storefronts --------------------------------------------------------------
+	// With websites
+const getStorefronts = function getStorefronts(c: Context) {
+	const query = db.prepare(`
+		SELECT * FROM Storefront;
+		`);
+	const storefronts = query.all();
+	return c.json(storefronts);
+}
+	// Without websites
+const getStorefrontBasics = function getStorefronts(c: Context) {
+	const query = db.prepare(`
+		SELECT StorefrontID, Title FROM Storefront;
+		`);
+	const storefronts = query.all();
+	return c.json(storefronts);
+}
+
+export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers, getStorefronts}
