@@ -54,6 +54,11 @@ export default function NewGameForm(props: NewGameFormProps) {
 		queryFn: () => getMetadata(MetadataField.Publishers),
 	});
 
+	const storefrontList = useQuery({
+		queryKey:['http://localhost:3000/api/metadata/storefronts'],
+		queryFn: () => getMetadata(MetadataField.Storefronts),
+	});
+
 	let api: string = 'https://localhost:3000/api/';
 	switch (props.collectionType) {
 		case 'library': {
@@ -117,6 +122,18 @@ export default function NewGameForm(props: NewGameFormProps) {
 		}
 		return publishers;
 	}
+	const fillStorefronts = (): OptionType[] => {
+		if (!storefrontList) return [];
+
+		const storefronts: OptionType[] = [];
+		if (storefrontList.data) {
+			storefrontList.data?.map((storefront: {StorefrontID: number, Title: string, Website: string}) => {
+				storefronts.push({value: storefront.StorefrontID, label: storefront.Title + ": " + storefront.Website});
+			});
+		}
+		return storefronts;
+	}
+	
 
 	// TODO: Allow the user to select a previously uploaded images for game cover art.
 	return (
@@ -199,7 +216,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit platform list</Btn>
 			<br />
 
-			{/* TODO: Group storefronts by platform */}
 			<label htmlFor="newGameStorefrontOptions">Storefronts: </label>
 			<Select
 				name="gameStorefronts"
@@ -210,6 +226,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				onChange={(options: MultiValue<OptionType>) => {
 					setSelectedStorefronts(options as OptionType[]);
 				}}
+				options={fillStorefronts()}
 			/>
 			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit storefront list</Btn>
 			<br />
