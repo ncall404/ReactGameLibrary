@@ -10,7 +10,9 @@ import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
+import { getLibraries, getWishlists } from './handlers/collections.ts';
 import { getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers, getStorefronts } from './handlers/gameMetadata.ts';
+import { addGameToLibrary } from './handlers/games.ts';
 
 const app = new Hono();
 app.use(cors());
@@ -29,6 +31,10 @@ console.log(await setupImageStorage("./uploads/images"));
 // Get list of games belonging to a library. 
 app.get('/api/libraries/:libraryId/games', getGamesLibrary);
 
+// Get a list of all stored libraries.
+app.get('/api/collections/libraries', getLibraries);
+// Get a list of all stored wishlists.
+app.get('/api/collections/wishlists', getWishlists);
 // Get a list of all stored genres.
 app.get('/api/metadata/genres', getGenres);
 // Get a list of all stored platforms.
@@ -41,6 +47,9 @@ app.get('/api/metadata/developers', getDevelopers);
 app.get('/api/metadata/publishers', getPublishers);
 // Get a list of all stored storefronts.
 app.get('/api/metadata/storefronts', getStorefronts);
+
+// Create a new game and add it to a library
+app.post('/api/games/add/library', addGameToLibrary);
 
 serve({
 	fetch: app.fetch,
