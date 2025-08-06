@@ -85,7 +85,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData();
-		formData.append('collectionID', optionsToString(selectedCollections));
+		formData.append('gameCollections', optionsToString(selectedCollections));
 		formData.append('gameName', gameName);
 		formData.append('gameDescription', gameDescription);
 		formData.append('releaseDate', releaseDate?.toString());
