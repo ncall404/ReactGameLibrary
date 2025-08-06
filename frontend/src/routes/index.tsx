@@ -13,6 +13,7 @@ import type { GameObject } from "../interfaces/gameObjectInterface.ts";
 import NewGameForm from '../components/newGameForm/newGameForm.tsx';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
+import { CollectionType } from '../api/collectionsApi.ts';
 
 
 export const Route = createFileRoute('/')({
@@ -46,10 +47,12 @@ function RouteComponent() {
 			</>
 			}
 			{
-				newGameIsOpen && <NewGameForm 
+				newGameIsOpen &&
+				<NewGameForm 
 				onSubmitted={() => setNewGameIsOpen(false)} 
 				onCancel={() => setNewGameIsOpen(false)} 
-				collectionType='library' collectionId={1} />
+				collectionType={CollectionType.Library} collectionId={1}
+				/>
 			}
 		</section>
 	);

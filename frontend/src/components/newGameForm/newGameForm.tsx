@@ -6,8 +6,10 @@ import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
+import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
 
 // Type for the Select component data to use.
 type OptionType = {
@@ -28,50 +30,129 @@ type NewGameFormProps = {
 }
 
 export default function NewGameForm(props: NewGameFormProps) {
+	let api: string = 'http://localhost:3000/api/';
+	switch (props.collectionType) {
+		case CollectionType.Library: {
+			api = api.concat('games/add/library');
+			break;
+		}
+		case CollectionType.Wishlist: {
+			api = api.concat('games/add/wishlist');
+			break;
+		}
+	}
+
+	// State tracking for non-Select inputs.
+	const [gameName, setGameName] = useState<string>('');
+	const [gameDescription, setGameDescription] = useState<string>('');
+	const [releaseDate, setReleaseDate] = useState<string>('');
+	const [coverArt, setCoverArt] = useState<File | null>();
+	// State tracking for Select inputs.
+	const [selectedCollections, setSelectedCollections] = useState<OptionType[]>([]);
 	const [selectedGenres, setSelectedGenres] = useState<OptionType[]>([]);
 	const [selectedPlatforms, setSelectedPlatforms] = useState<OptionType[]>([]);
 	const [selectedStorefronts, setSelectedStorefronts] = useState<OptionType[]>([]);
-	const [selectedPublisher, setSelectedPublisher] = useState<OptionType[]>();
-	const [selectedDeveloper, setSelectedDeveloper] = useState<OptionType[]>();
+	const [selectedPublishers, setSelectedPublishers] = useState<OptionType[]>([]);
+	const [selectedDevelopers, setSelectedDevelopers] = useState<OptionType[]>([]);
 
+	// Does the actual API call send the data to the backend.
+	const newGameMutation = useMutation({
+		mutationFn: async (formData: FormData) => {
+			const res = await fetch(api, {
+				method: 'POST',
+				body: formData,
+			});
+			if (!res.ok) throw new Error('Upload failed');
+			return res.json();
+		},
+		onSuccess: (data) => console.log('Uploaded: ', data),
+		onError: (err) => console.error('Error: ', err),
+	});
+
+	// Converts the selected options from Select inputs to a string format that can be sent to the backend.
+	const optionsToString = (options: OptionType[]) => {
+		let selected: string = "";
+		options.forEach((option) => {
+			selected = selected.length > 1 ?
+				selected.concat(',', option.value.toString())
+				:
+				selected.concat(option.value.toString());
+		});
+		return selected;
+	}
+
+	// Handles correctly submitting the form data.
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData();
+		formData.append('collectionID', optionsToString(selectedCollections));
+		formData.append('gameName', gameName);
+		formData.append('gameDescription', gameDescription);
+		formData.append('releaseDate', releaseDate?.toString());
+		if (coverArt) {
+			formData.append('coverArt', coverArt, coverArt?.name);
+		} else {
+			formData.append('coverArt', 'None');
+		}		
+		formData.append('gameGenres', optionsToString(selectedGenres));
+		formData.append('gamePlatforms', optionsToString(selectedPlatforms));
+		formData.append('gameStorefronts', optionsToString(selectedStorefronts));
+		formData.append('gamePublishers', optionsToString(selectedPublishers));
+		formData.append('gameDevelopers', optionsToString(selectedDevelopers));
+
+		newGameMutation.mutate(formData);
+	}
+
+	// useQuery hooks for lists that are used to fill Select inputs.
+	const collectionList = useQuery({
+		queryKey: ['http://localhost:3000/api/collections/' + props.collectionType],
+		queryFn: () => getCollectionList(CollectionType.Library),
+	})
 	const genreList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/genres'],
 		queryFn: () => getMetadata(MetadataField.Genres),
 	});
-
 	const platformList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/platforms'],
 		queryFn: () => getMetadata(MetadataField.Platforms),
 	});
-
 	const developerList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/developers'],
 		queryFn: () => getMetadata(MetadataField.Developers),
 	});
-
 	const publisherList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/publishers'],
 		queryFn: () => getMetadata(MetadataField.Publishers),
 	});
-
 	const storefrontList = useQuery({
 		queryKey:['http://localhost:3000/api/metadata/storefronts'],
 		queryFn: () => getMetadata(MetadataField.Storefronts),
 	});
 
-	let api: string = 'https://localhost:3000/api/';
-	switch (props.collectionType) {
-		case 'library': {
-			api = api.concat('libraries/addGame');
-			break;
-		}
-		case 'wishlist': {
-			api = api.concat('wishlists/addGame');
-			break;
-		}
-	}
 
 	// Functions to fill the options for the react-select inputs
+		// Collections - Library, Wishlist
+	const fillCollections = (): OptionType[] => {
+		if (!collectionList.data) return [];
+
+		const collections: OptionType[] = [];
+		if (collectionList.data) {
+			switch (props.collectionType) {
+				case CollectionType.Library:
+					collectionList.data?.map((collection: {LibraryID: number, Title: string}) => {
+						collections.push({value: collection.LibraryID, label: collection.Title});
+					})
+					break;
+				case CollectionType.Wishlist:
+					collectionList.data?.map((collection: {WishlistID: number,  Title: string}) => {
+						collections.push({value: collection.WishlistID, label: collection.Title});
+					})
+					break;
+			}
+		}
+		return collections;
+	}
+		// Genres
 	const fillGenres = (): OptionType[] => {
 		if (!genreList.data) return [];
 
@@ -83,6 +164,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		}
 		return genres;
 	}
+		// Platforms
 	const fillPlatforms = (): GroupedOption[] => {
 		if (!platformList.data) return [];
 
@@ -100,6 +182,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 		return Array.from(grouped.entries()).map(([label, options]) => ({label, options}));
 	}
+		// Developers
 	const fillDevelopers = (): OptionType[] => {
 		if (!developerList) return [];
 
@@ -111,6 +194,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		}
 		return developers;
 	}
+		// Publishers
 	const fillPublishers = (): OptionType[] => {
 		if (!publisherList) return [];
 
@@ -122,6 +206,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		}
 		return publishers;
 	}
+		// Storefronts
 	const fillStorefronts = (): OptionType[] => {
 		if (!storefrontList) return [];
 
@@ -133,27 +218,77 @@ export default function NewGameForm(props: NewGameFormProps) {
 		}
 		return storefronts;
 	}
-	
 
-	// TODO: Allow the user to select a previously uploaded images for game cover art.
+	useEffect(() => {
+		const defaultOption = fillCollections().filter(option => option.value === props.collectionId);
+		setSelectedCollections(defaultOption ?? null);
+	}, [props.collectionId]);
+
+
 	return (
-		<form action={api} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
-			<input type="hidden" name="collectionId" value={props.collectionId} />
+		<form onSubmit={handleSubmit} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+			<h2 className="text-2xl">Add Game</h2>
+			<hr />
 
-			<h2 className="text-2xl">Add Game to {props.collectionType.charAt(0).toUpperCase() + props.collectionType.slice(1)}</h2>
+			<label htmlFor="newGameCollections">Collections: </label>
+			<Select
+				name="gameCollections"
+				inputId="newGameCollections"
+				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
+				isMulti
+				required
+				value={selectedCollections}
+				onChange={(options: MultiValue<OptionType>) => {
+					setSelectedCollections(options as OptionType[]);
+				}}
+				options={fillCollections()}
+			/>
+			<br />
 			<hr />
 
 			<label htmlFor="newGameName">Name: </label>
-			<input type="text" name="gameName" id="newGameName" placeholder="Name of the game" required />
+			<input type="text"
+			name="gameName"
+			id="newGameName"
+			placeholder="Name of the game"
+			required
+			onChange={(e) => {
+				setGameName(e.currentTarget.value);
+			}} />
 
 			<label htmlFor="newGameDescription">Description: </label>
-			<textarea name="description" id="newGameDescription" placeholder="Description of the game"></textarea>
+			<textarea
+			name="description"
+			id="newGameDescription"
+			placeholder="Description of the game"
+			onChange={(e) => {
+				setGameDescription(e.currentTarget.value);
+			}}
+			></textarea>
 
 			<label htmlFor="newGameReleaseDate">Release Date: </label>
-			<input type="date" name="releaseDate" id="newGameReleaseDate" onDoubleClick={(e) => e.currentTarget.showPicker()} required />
+			<input type="date"
+			name="releaseDate"
+			id="newGameReleaseDate"
+			onDoubleClick={(e) => e.currentTarget.showPicker()}
+			required
+			onChange={(e) => {
+				setReleaseDate(e.currentTarget.value);
+			}}/>
 
 			<label htmlFor="newGameCoverArt">Cover Art: </label>
-			<input type="file" name="coverArt" id="newGameCoverArt" accept="image/*"/>
+			<input type="file"
+			name="coverArt"
+			id="newGameCoverArt"
+			accept="image/*"
+			onChange={(e) => {
+				if (e.currentTarget.files) {
+					setCoverArt(e.currentTarget.files[0]);
+				} else {
+					setCoverArt(null);
+				}
+			}}/>
 			<br />
 			<hr />
 			<br />
@@ -163,6 +298,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				name="gameGenres"
 				inputId="newGameGenreOptions"
 				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
 				isMulti
 				value={selectedGenres}
 				onChange={(options: MultiValue<OptionType>) => {
@@ -178,10 +314,11 @@ export default function NewGameForm(props: NewGameFormProps) {
 				name="gamePublishers"
 				inputId="newGamePublisherOptions"
 				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
 				isMulti
-				value={selectedPublisher}
+				value={selectedPublishers}
 				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedPublisher(options as OptionType[]);
+					setSelectedPublishers(options as OptionType[]);
 				}}
 				options={fillPublishers()}
 			/>
@@ -191,10 +328,11 @@ export default function NewGameForm(props: NewGameFormProps) {
 				name="gameDevelopers"
 				inputId="newGameDeveloperOptions"
 				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
 				isMulti
-				value={selectedDeveloper}
+				value={selectedDevelopers}
 				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedDeveloper(options as OptionType[]);
+					setSelectedDevelopers(options as OptionType[]);
 				}}
 				options={fillDevelopers()}
 			/>
@@ -205,7 +343,8 @@ export default function NewGameForm(props: NewGameFormProps) {
 			<Select
 				name="gamePlatforms"
 				inputId="newGamePlatformOptions"
-				className="text-(--color-dark) cursor-pointer" 
+				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
 				isMulti
 				value={selectedPlatforms}
 				onChange={(options: MultiValue<OptionType>) => {
@@ -221,6 +360,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				name="gameStorefronts"
 				inputId="newGameStorefrontOptions"
 				className="text-(--color-dark) cursor-pointer"
+				closeMenuOnSelect={false}
 				isMulti
 				value={selectedStorefronts}
 				onChange={(options: MultiValue<OptionType>) => {
@@ -233,8 +373,8 @@ export default function NewGameForm(props: NewGameFormProps) {
 			<hr />
 
 			<div className="flex gap-2 mt-3">
-				<Btn style={BtnStyle.Primary} func={props.onSubmitted} type="submit">Create Game</Btn>
-				<Btn style={BtnStyle.Neutral} func={props.onCancel}>Cancel</Btn>
+				<Btn style={BtnStyle.Primary} type="submit">Create Game</Btn>
+				<Btn style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
 			</div>
 		</form>
 	);
