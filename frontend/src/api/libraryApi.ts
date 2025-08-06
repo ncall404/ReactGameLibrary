@@ -1,15 +1,10 @@
 // API calls for data related to the user's game libraries.
 
-const baseApiUrl = "http://localhost:3000/api/libraries";
-
-// Get a list of the available libraries.
-const getLibraryList = async () => {
-	// TODO: Implement
-}
+const baseApiUrl = "http://localhost:3000/api/libraries"
 
 // Get the games from all game libraries.
 const getAllLibraries = async () => {
-	// TODO: Implement
+	// TODO: Implement function and rename function to be clearer about it's purpose.
 }
 
 // Get the games of a single game library.
@@ -23,4 +18,4 @@ const getSingleLibrary = async (libraryId: number) => {
 }
 
 
-export {getLibraryList, getAllLibraries, getSingleLibrary};
+export {getAllLibraries, getSingleLibrary};
