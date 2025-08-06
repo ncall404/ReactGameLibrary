@@ -219,10 +219,13 @@ export default function NewGameForm(props: NewGameFormProps) {
 		return storefronts;
 	}
 
+
 	useEffect(() => {
-		const defaultOption = fillCollections().filter(option => option.value === props.collectionId);
-		setSelectedCollections(defaultOption ?? null);
-	}, [props.collectionId]);
+		if (!collectionList.data) return;
+
+		const matches = fillCollections().filter(option => option.value === props.collectionId);
+		if (matches.length > 0) setSelectedCollections(matches);
+	}, [collectionList.data, props.collectionId]);
 
 
 	return (
