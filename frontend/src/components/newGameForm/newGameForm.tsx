@@ -309,7 +309,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}
 				options={fillGenres()}
 			/>
-			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit genre list</Btn>
+			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit genre list</Btn>
 			<br />
 
 			<label htmlFor="newGamePublisherOptions">Publishers: </label>
@@ -339,7 +339,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}
 				options={fillDevelopers()}
 			/>
-			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit company list</Btn>
+			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit company list</Btn>
 			<br />
 
 			<label htmlFor="newGamePlatformOptions">Platforms: </label>
@@ -355,7 +355,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}
 				options={fillPlatforms()}
 			/>
-			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit platform list</Btn>
+			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit platform list</Btn>
 			<br />
 
 			<label htmlFor="newGameStorefrontOptions">Storefronts: </label>
@@ -371,7 +371,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}
 				options={fillStorefronts()}
 			/>
-			<Btn style={BtnStyle.Neutral} func={() => {}}>Edit storefront list</Btn>
+			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit storefront list</Btn>
 			<br />
 			<hr />
 
