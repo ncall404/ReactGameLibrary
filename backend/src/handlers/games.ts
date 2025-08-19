@@ -58,7 +58,7 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 		try {
 			await access(coverArtPath);
 			uploadResponse = {
-				isValid: false,
+				isValid: true,
 				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
 				field: "coverArt",
 				severity: "warning"
@@ -78,57 +78,69 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 	}
 
 	// Queries for uploading the new game and it's metadata.
+	const insertGameWithMetaData = db.transaction(() => {
 		// Insert the game into the database.
-	let query = db.prepare(`
-		INSERT INTO Game (Title, Description, ReleaseDate, CoverArt) VALUES (@Title, @Description, unixepoch(@ReleaseDate), @CoverArt);
-	`);
-	query.run({Title: gameName, Description: gameDescription, ReleaseDate: releaseDate, CoverArt: coverArtPath});
-
+		const insertGame = db.prepare(`
+			INSERT INTO Game (Title, Description, ReleaseDate, CoverArt)
+			VALUES (@Title, @Description, unixepoch(@ReleaseDate), @CoverArt);
+		`);
+		insertGame.run({Title: gameName, Description: gameDescription, ReleaseDate: releaseDate, CoverArt: coverArtPath});
+		
 		// Get the ID of the new game.
-	query = db.prepare(`
-		SELECT GameID FROM Game
-		ORDER BY GameID
-		DESC LIMIT 1;
-	`);
-	const newGameIDResult = query.all()[0] as {GameID: number};
-	const newGameID = newGameIDResult.GameID;
+		const getGameID = db.prepare(`
+			SELECT GameID FROM Game
+			ORDER BY GameID
+			DESC LIMIT 1;
+		`);
+		const newGameIDResult = getGameID.get() as {GameID: number};
+		const newGameID = newGameIDResult.GameID;
 
 		// Insert company connections for the game (developers and publishers).
-	const insertGameCompany = db.prepare("INSERT INTO GameCompany (GameID, CompanyID, CompanyRoleID) VALUES (@GameID, @CompanyID, @CompanyRoleID);");
-	const insertManyGameCompanies = db.transaction((companies: any, roleID: number) => {
-		for (const company of companies) insertGameCompany.run({GameID: newGameID, CompanyID: company, CompanyRoleID: roleID});
-	});
-	insertManyGameCompanies(arrMultiSelect.gameDevelopers, 1);
-	insertManyGameCompanies(arrMultiSelect.gamePublishers, 2);
+		const insertGameCompany = db.prepare(`
+			INSERT INTO GameCompany (GameID, CompanyID, CompanyRoleID)
+			VALUES (@GameID, @CompanyID, @CompanyRoleID);
+		`);
+		for (const company of arrMultiSelect.gameDevelopers) insertGameCompany.run({GameID: newGameID, CompanyID: company, CompanyRoleID: 1});
+		for (const company of arrMultiSelect.gamePublishers) insertGameCompany.run({GameID: newGameID, CompanyID: company, CompanyRoleID: 2});
 
 		// Insert platform connections for the game.
-	const insertGamePlatform = db.prepare("INSERT INTO GamePlatform (GameID, PlatformID) VALUES (@GameID, @PlatformID);");
-	const insertManyGamePlatforms = db.transaction((platforms: any) => {
-		for (const platform of platforms) insertGamePlatform.run({GameID: newGameID, PlatformID: platform});
-	});
-	insertManyGamePlatforms(arrMultiSelect.gamePlatforms);
+		const insertGamePlatform = db.prepare(`
+			INSERT INTO GamePlatform (GameID, PlatformID)
+			VALUES (@GameID, @PlatformID);
+		`);
+		for (const platform of arrMultiSelect.gamePlatforms) insertGamePlatform.run({GameID: newGameID, PlatformID: platform});
 
 		// Insert genre connections for the game.
-	const insertGameGenre = db.prepare("INSERT INTO GameGenre (GameID, GenreID) VALUES (@GameID, @GenreID);");
-	const insertManyGameGenres = db.transaction((genres: any) => {
-		for (const genre of genres) insertGameGenre.run({GameID: newGameID, GenreID: genre});
-	});
-	insertManyGameGenres(arrMultiSelect.gameGenres);
+		const insertGameGenre = db.prepare(`
+			INSERT INTO GameGenre (GameID, GenreID)
+			VALUES (@GameID, @GenreID);
+		`);
+		for (const genre of arrMultiSelect.gameGenres) insertGameGenre.run({GameID: newGameID, GenreID: genre});
 
 		// Insert storefront connections for the game.
-	const insertGameStorefront = db.prepare("INSERT INTO GameStorefront (GameID, StorefrontID) VALUES (@GameID, @StorefrontID);");
-	const insertManyStorefronts = db.transaction((storefronts: any) => {
-		for (const storefront of storefronts) insertGameStorefront.run({GameID: newGameID, StorefrontID: storefront});
-	});
-	insertManyStorefronts(arrMultiSelect.gameStorefronts);
+		const insertGameStorefront = db.prepare(`
+			INSERT INTO GameStorefront (GameID, StorefrontID)
+			VALUES (@GameID, @StorefrontID);
+		`);
+		for (const storefront of arrMultiSelect.gameStorefronts) insertGameStorefront.run({GameID: newGameID, StorefrontID: storefront});
 
 		// Insert library connections for the game.
-	const insertIntoGameLibrary = db.prepare("INSERT INTO GameLibrary (GameID, LibraryID) VALUES (@GameID, @LibraryID);");
-	const insertIntoGameLibraries = db.transaction((libraries: any) => {
-		for (const library of libraries) insertIntoGameLibrary.run({GameID: newGameID, LibraryID: library});
+		const insertIntoGameLibrary = db.prepare(`
+			INSERT INTO GameLibrary (GameID, LibraryID)
+			VALUES (@GameID, @LibraryID);
+		`);
+		for (const library of arrMultiSelect.gameCollections) insertIntoGameLibrary.run({GameID: newGameID, LibraryID: library});
 	});
-	insertIntoGameLibraries(arrMultiSelect.gameCollections);
 
+	try {
+		insertGameWithMetaData();
+	} catch (err) {
+		uploadResponse = {
+			isValid: false,
+			message: "Error: There was a problem adding the game to the database; " + err,
+			severity: "error"
+		}
+	}
 
 	// Give a success response if there were no complications.
 	if (!uploadResponse) {
