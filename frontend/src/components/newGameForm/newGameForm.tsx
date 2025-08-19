@@ -73,7 +73,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const optionsToString = (options: OptionType[]) => {
 		let selected: string = "";
 		options.forEach((option) => {
-			selected = selected.length > 1 ?
+			selected = selected.length > 0 ?
 				selected.concat(',', option.value.toString())
 				:
 				selected.concat(option.value.toString());
