@@ -17,7 +17,7 @@ export default function Modal(props: ModalProps) {
 
 	return (
 		<div className="flex justify-center backdrop-blur-md w-full h-full top-0 right-0 fixed" onClick={props.onClose}>
-			<div className="md:min-w-sm h-fit p-2 self-center bg-(--color-dark) rounded-sm" onClick={(e) => e.stopPropagation()}>
+			<div className="min-w-xs max-w-lg md:min-w-md lg:min-w-lg lg:max-w-2xl h-fit p-2 self-center bg-(--color-dark) rounded-sm" onClick={(e) => e.stopPropagation()}>
 				{props.children}
 				<div className="justify-end content-center mr-1 text-(--color-light) flex gap-2 mt-3">
 					{
