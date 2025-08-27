@@ -9,6 +9,7 @@ const MetadataField = {
 	CompanyType: "company-types",
 	Developers: "developers",
 	Publishers: "publishers",
+	PlatformOwners: "platform-owners",
 	Storefronts: "storefronts",
 } as const;
 type MetadataField = (typeof MetadataField)[keyof typeof MetadataField];
