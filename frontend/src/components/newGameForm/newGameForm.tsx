@@ -2,6 +2,8 @@
 
 import Select from "react-select";
 import type { MultiValue } from "react-select";
+import { optionsToString } from "../../utilities.ts";
+
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 
@@ -69,19 +71,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		onError: (err) => console.error('Error: ', err),
 	});
 
-	// Converts the selected options from Select inputs to a string format that can be sent to the backend.
-	const optionsToString = (options: OptionType[]) => {
-		let selected: string = "";
-		options.forEach((option) => {
-			selected = selected.length > 0 ?
-				selected.concat(',', option.value.toString())
-				:
-				selected.concat(option.value.toString());
-		});
-		return selected;
-	}
-
-	// Handles correctly submitting the form data.
+	// Handles correctly submitting the main form's data.
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData();
