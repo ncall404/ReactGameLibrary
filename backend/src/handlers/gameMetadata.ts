@@ -27,7 +27,7 @@ const getPlatforms = function getPlatforms(c: Context) {
 	// Get all companies and their roles.
 const getCompanies = function getCompanies(c: Context) {
 	const query = db.prepare(`
-		SELECT c.Title as Title, group_concat(ct.Title, ',') as CType
+		SELECT c.CompanyID as CompanyID, c.Title as Title, group_concat(ct.Title, ',') as CompanyTypes
 		FROM Company c
 		JOIN CompanyCompanyType cct ON c.CompanyID = cct.CompanyID
 		JOIN CompanyType ct ON cct.CompanyTypeID = ct.CompanyTypeID
@@ -35,6 +35,17 @@ const getCompanies = function getCompanies(c: Context) {
 		`);
 	const companies = query.all();
 	return c.json(companies);
+}
+	// Get all platform owner companies.
+const getPlatformOwners = function getPlatformOwners(c: Context) {
+	const query = db.prepare(`
+		SELECT c.CompanyID as CompanyID, c.Title as Title
+		FROM Company c
+		JOIN CompanyCompanyType cct ON c.CompanyID = cct.CompanyID
+		WHERE cct.CompanyTypeID = 1
+		`);
+	const platformOwners = query.all();
+	return c.json(platformOwners);
 }
 	// Get all developer companies.
 const getDevelopers = function getDevelopers(c: Context) {
@@ -77,4 +88,4 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 	return c.json(storefronts);
 }
 
-export {getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers, getStorefronts}
+export {getGenres, getPlatforms, getCompanies, getPlatformOwners, getDevelopers, getPublishers, getStorefronts}
