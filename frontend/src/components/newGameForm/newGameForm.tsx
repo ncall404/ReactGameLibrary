@@ -2,6 +2,7 @@
 
 import Select from "react-select";
 import type { MultiValue } from "react-select";
+import type { OptionType, GroupedOption } from "../../types/selectOptionType.ts";
 import { optionsToString } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
@@ -12,17 +13,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
-
-// Type for the Select component data to use.
-type OptionType = {
-	value: number; // ID related to the displayed label.
-	label: string;
-}
-// Type for the Select component to be able to group items.
-type GroupedOption = {
-	label: string; // Grouping label.
-	options: OptionType[];
-}
 
 type NewGameFormProps = {
 	onSubmitted?: () => void,
