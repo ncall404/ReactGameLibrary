@@ -12,6 +12,19 @@ const getGenres = function getGenres(c: Context) {
 	return c.json(genres);
 }
 
+// TODO: Implement
+const addGenre = function addGenre(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+// TODO: Implement
+const removeGenres = function removeGenres(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+
 // Platforms ----------------------------------------------------------------
 const getPlatforms = function getPlatforms(c: Context) {
 	const query = db.prepare(`
@@ -21,6 +34,19 @@ const getPlatforms = function getPlatforms(c: Context) {
 		`);
 	const platforms = query.all();
 	return c.json(platforms)
+}
+
+// TODO: Implement
+const addPlatform = function addPlatform(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+// TODO: Implement
+const removePlatforms = function removePlatforms(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
 }
 
 // Companies ----------------------------------------------------------------
@@ -78,6 +104,19 @@ const getCompanyTypes = function getCompanyTypes(c: Context) {
 	return c.json(companyTypes);
 }
 
+// TODO: Implement
+const addCompany = function addCompany(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+// TODO: Implement
+const removeCompanies = function removeCompanies(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+
 // Storefronts --------------------------------------------------------------
 	// With websites
 const getStorefronts = function getStorefronts(c: Context) {
@@ -96,4 +135,20 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 	return c.json(storefronts);
 }
 
-export {getGenres, getPlatforms, getCompanies, getPlatformOwners, getDevelopers, getPublishers, getStorefronts}
+// TODO: Implement
+const addStorefront = function addStorefront(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+// TODO: Implement
+const removeStorefronts = function removeStorefronts(c: Context) {
+	const query = db.prepare("");
+	
+	return c.json("Placeholder");
+}
+
+export {getGenres, addGenre, removeGenres,
+		getPlatforms, addPlatform, removePlatforms,
+		getCompanies, getPlatformOwners, getDevelopers, getPublishers, getCompanyTypes, addCompany, removeCompanies,
+		getStorefronts, addStorefront, removeStorefronts};
