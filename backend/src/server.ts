@@ -11,7 +11,7 @@ import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
 import { getLibraries, getWishlists } from './handlers/collections.ts';
-import { getGenres, getPlatforms, getCompanies, getDevelopers, getPublishers, getStorefronts } from './handlers/gameMetadata.ts';
+import { getGenres, getPlatforms, getCompanies, getPlatformOwners, getDevelopers, getPublishers, getStorefronts } from './handlers/gameMetadata.ts';
 import { addGameToLibrary } from './handlers/games.ts';
 
 const app = new Hono();
@@ -41,6 +41,8 @@ app.get('/api/metadata/genres', getGenres);
 app.get('/api/metadata/platforms', getPlatforms);
 // Get a list of all stored companies and their company types.
 app.get('/api/metadata/companies', getCompanies);
+// Get a list of all stored companies with the platform type.
+app.get('/api/metadata/platform-owners', getPlatformOwners);
 // Get a list of all stored companies with the developer type.
 app.get('/api/metadata/developers', getDevelopers);
 // Get a list of all stored companies with the publisher type.
@@ -48,7 +50,7 @@ app.get('/api/metadata/publishers', getPublishers);
 // Get a list of all stored storefronts.
 app.get('/api/metadata/storefronts', getStorefronts);
 
-// Create a new game and add it to a library
+// Create a new game and add it to a library.
 app.post('/api/games/add/library', addGameToLibrary);
 
 serve({
