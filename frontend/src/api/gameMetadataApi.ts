@@ -6,6 +6,7 @@ const MetadataField = {
 	Genres: "genres",
 	Platforms: "platforms",
 	Companies: "companies",
+	CompanyType: "company-types",
 	Developers: "developers",
 	Publishers: "publishers",
 	Storefronts: "storefronts",
