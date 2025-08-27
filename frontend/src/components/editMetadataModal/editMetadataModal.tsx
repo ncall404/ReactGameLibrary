@@ -29,6 +29,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	const api = baseApi.concat(editListType);
 
 	const [editMetadataAdd, setEditMetadataAdd] = useState<string>("");
+	const [selectedCompanyTypes, setSelectedCompanyTypes] = useState<OptionType[]>([]);
 	/* const [storefrontWebsite, setStorefrontWebsite] = useState<string>("");
 	const [platformOwner, setPlatformOwner] = useState<OptionType>();
 	const [companyType, setCompanyType] = useState<OptionType>(); */
@@ -105,7 +106,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 		return [] // If other attempts to fill the data have failed, return empty array.
 	}
 
-	const fillCopmanyTypes = (): OptionType[] => {
+	const fillCompanyTypes = (): OptionType[] => {
 		if (!companyTypesList.data) return [];
 
 		const genres: OptionType[] = [];
@@ -158,11 +159,11 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 							className="text-(--color-dark) cursor-pointer"
 							closeMenuOnSelect={false}
 							isMulti
-							value={selectedForRemoval}
+							value={selectedCompanyTypes}
 							onChange={(options: MultiValue<OptionType>) => {
-								setSelectedForRemoval(options as OptionType[]);
+								setSelectedCompanyTypes(options as OptionType[]);
 							}}
-							options={fillCopmanyTypes()}
+							options={fillCompanyTypes()}
 							required
 						/>
 					</> :
