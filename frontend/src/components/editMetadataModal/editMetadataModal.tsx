@@ -64,9 +64,23 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	});
 
 
-	// Clear selected options if the modal is closed.
-	if (!props.isOpen && selectedForRemoval.length > 0) {
-		setSelectedForRemoval([]);
+	// Clear inputs if the modal is closed.
+	if (!props.isOpen) {
+		if (selectedForRemoval.length > 0) {
+			setSelectedForRemoval([]);
+		}
+		if (editMetadataAdd.length > 0) {
+			setEditMetadataAdd("");
+		}
+		if (selectedCompanyTypes.length > 0) {
+			setSelectedCompanyTypes([]);
+		}
+		if (selectedPlatformOwner !== undefined) {
+			setSelectedPlatformOwner(undefined);
+		}
+		if (storefrontWebsite.length > 0) {
+			setStorefrontWebsite("");
+		}
 	}
 
 
