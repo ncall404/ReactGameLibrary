@@ -69,6 +69,14 @@ const getPublishers = function getPublishers(c: Context) {
 	const publishers = query.all();
 	return c.json(publishers);
 }
+	// Get all company types.
+const getCompanyTypes = function getCompanyTypes(c: Context) {
+	const query = db.prepare(`
+		SELECT * FROM CompanyType
+		`);
+	const companyTypes = query.all();
+	return c.json(companyTypes);
+}
 
 // Storefronts --------------------------------------------------------------
 	// With websites
