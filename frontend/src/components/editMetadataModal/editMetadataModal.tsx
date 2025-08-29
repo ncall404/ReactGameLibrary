@@ -183,8 +183,10 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 
 	return (
 		<Modal isOpen={props.isOpen} onClose={props.onClose}>
+			<h2 className="text-2xl">{editListType.charAt(0).toUpperCase().concat(editListType.slice(1))}</h2>
 			<form onSubmit={handleEditListAdd} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
-				<label htmlFor="editMetadataAdd">Add to {editListType.charAt(0).toUpperCase().concat(editListType.slice(1))}: </label>
+				<h3 className="text-xl">Add</h3>
+				<label htmlFor="editMetadataAdd">Name: </label>
 				<input type="text"
 				name="metaDataAddTitle"
 				id="editMetadataAdd"
@@ -198,7 +200,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				{ // Company type selection
 					editListType == "companies" ?
 					<>
-						<label htmlFor="editMetadataCompanyTypes">Company Type: </label>
+						<label htmlFor="editMetadataCompanyTypes">Company type: </label>
 						<Select
 							name="companyTypes"
 							inputId="editMetadataCompanyTypes"
@@ -219,11 +221,11 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				{ // Storefront website input
 					editListType == "storefronts" ?
 					<>
-						<label htmlFor="editMetadataStorefrontWebsite">Company Type: </label>
+						<label htmlFor="editMetadataStorefrontWebsite">Storefront: </label>
 						<input type="text"
 						name="storefrontWebsite"
 						id="editMetadataStorefrontWebsite"
-						placeholder="Storefront website URL"
+						placeholder="Storefront website URL..."
 						onChange={(e) => {
 							setStorefrontWebsite(e.currentTarget.value);
 						}}/>
@@ -234,7 +236,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				{ // platform owner selection
 					editListType == "platforms" ?
 					<>
-						<label htmlFor="editMetadataPlatformOwner">Platform Owner: </label>
+						<label htmlFor="editMetadataPlatformOwner">Platform owner: </label>
 						<Select
 							name="platformOwner"
 							inputId="editMetadataPlatformOwner"
@@ -255,7 +257,8 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			</form>
 			<hr />
 			<form onSubmit={handleEditListRemove} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
-				<label htmlFor="editMetadataRemove">Remove from {editListType.charAt(0).toUpperCase().concat(editListType.slice(1))}: </label>
+				<h3 className="text-xl">Remove</h3>
+				<label htmlFor="editMetadataRemove">Options to remove: </label>
 				<Select
 					name="editMetadataRemove"
 					inputId="editMetadataRemove"
@@ -268,7 +271,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 					}}
 					options={fillRemoveOptions()}
 				/>
-				<Btn type="submit" style={BtnStyle.Primary}>Remove Option(s)</Btn>
+				<Btn type="submit" style={BtnStyle.Primary}>Remove Selected</Btn>
 			</form>
 		</Modal>
 	);
