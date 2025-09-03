@@ -304,10 +304,10 @@ const addStorefront = async function addStorefront(c: Context) {
 		if (typeof storefrontWebsite === 'string') {
 			try {
 				const query = db.prepare(`
-					INSERT INTO Storefront (Title, StorefrontWebsite)
-					VALUES (@Title, @StorefrontWebsite);
+					INSERT INTO Storefront (Title, Website)
+					VALUES (@Title, @Website);
 				`);
-				query.run({Title: storefrontTitle, StorefrontWebsite: storefrontWebsite});
+				query.run({Title: storefrontTitle, Website: storefrontWebsite});
 				actionResponse = {
 					action: "add",
 					isValid: true,
