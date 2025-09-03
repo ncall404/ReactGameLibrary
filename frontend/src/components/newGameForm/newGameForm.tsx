@@ -7,6 +7,8 @@ import { optionsToString } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
+import EditMetadataModal from "../editMetadataModal/editMetadataModal.tsx";
+import type { MetadataType } from "../editMetadataModal/editMetadataModal.tsx";
 
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -46,6 +48,11 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const [selectedStorefronts, setSelectedStorefronts] = useState<OptionType[]>([]);
 	const [selectedPublishers, setSelectedPublishers] = useState<OptionType[]>([]);
 	const [selectedDevelopers, setSelectedDevelopers] = useState<OptionType[]>([]);
+
+	// State tracking for the editing modal.
+	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+	const [editListType, setEditListType] = useState<MetadataType>("genres");
+	const [editListOptionData, setEditListOptionData] = useState<OptionType[] | GroupedOption[] | undefined>();
 
 	// Does the actual API call send the data to the backend.
 	const newGameMutation = useMutation({
@@ -209,156 +216,178 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 
 	return (
-		<form onSubmit={handleSubmit} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
-			<h2 className="text-2xl">Add Game</h2>
-			<hr />
+		<>
+			<form onSubmit={handleSubmit} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+				<h2 className="text-2xl">Add Game</h2>
+				<hr />
 
-			<label htmlFor="newGameCollections">Collections: </label>
-			<Select
-				name="gameCollections"
-				inputId="newGameCollections"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
+				<label htmlFor="newGameCollections">Collections: </label>
+				<Select
+					name="gameCollections"
+					inputId="newGameCollections"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					required
+					value={selectedCollections}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedCollections(options as OptionType[]);
+					}}
+					options={fillCollections()}
+				/>
+				<br />
+				<hr />
+
+				<label htmlFor="newGameName">Name: </label>
+				<input type="text"
+				name="gameName"
+				id="newGameName"
+				placeholder="Name of the game"
 				required
-				value={selectedCollections}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedCollections(options as OptionType[]);
+				onChange={(e) => {
+					setGameName(e.currentTarget.value);
+				}} />
+
+				<label htmlFor="newGameDescription">Description: </label>
+				<textarea
+				name="description"
+				id="newGameDescription"
+				placeholder="Description of the game"
+				onChange={(e) => {
+					setGameDescription(e.currentTarget.value);
 				}}
-				options={fillCollections()}
-			/>
-			<br />
-			<hr />
+				></textarea>
 
-			<label htmlFor="newGameName">Name: </label>
-			<input type="text"
-			name="gameName"
-			id="newGameName"
-			placeholder="Name of the game"
-			required
-			onChange={(e) => {
-				setGameName(e.currentTarget.value);
-			}} />
+				<label htmlFor="newGameReleaseDate">Release Date: </label>
+				<input type="date"
+				name="releaseDate"
+				id="newGameReleaseDate"
+				onDoubleClick={(e) => e.currentTarget.showPicker()}
+				required
+				onChange={(e) => {
+					setReleaseDate(e.currentTarget.value);
+				}}/>
 
-			<label htmlFor="newGameDescription">Description: </label>
-			<textarea
-			name="description"
-			id="newGameDescription"
-			placeholder="Description of the game"
-			onChange={(e) => {
-				setGameDescription(e.currentTarget.value);
-			}}
-			></textarea>
+				<label htmlFor="newGameCoverArt">Cover Art: </label>
+				<input type="file"
+				name="coverArt"
+				id="newGameCoverArt"
+				accept="image/*"
+				onChange={(e) => {
+					if (e.currentTarget.files) {
+						setCoverArt(e.currentTarget.files[0]);
+					} else {
+						setCoverArt(null);
+					}
+				}}/>
+				<br />
+				<hr />
+				<br />
 
-			<label htmlFor="newGameReleaseDate">Release Date: </label>
-			<input type="date"
-			name="releaseDate"
-			id="newGameReleaseDate"
-			onDoubleClick={(e) => e.currentTarget.showPicker()}
-			required
-			onChange={(e) => {
-				setReleaseDate(e.currentTarget.value);
-			}}/>
+				<label htmlFor="newGameGenreOptions">Genre(s): </label>
+				<Select
+					name="gameGenres"
+					inputId="newGameGenreOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					value={selectedGenres}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedGenres(options as OptionType[]);
+					}}
+					options={fillGenres()}
+				/>
+				<Btn style={BtnStyle.Neutral} type="button" func={() => {
+					setEditListType("genres");
+					setEditListOptionData(fillGenres);
+					setIsEditModalOpen(true);
+				}}>Edit genre list</Btn>
+				<br />
 
-			<label htmlFor="newGameCoverArt">Cover Art: </label>
-			<input type="file"
-			name="coverArt"
-			id="newGameCoverArt"
-			accept="image/*"
-			onChange={(e) => {
-				if (e.currentTarget.files) {
-					setCoverArt(e.currentTarget.files[0]);
-				} else {
-					setCoverArt(null);
-				}
-			}}/>
-			<br />
-			<hr />
-			<br />
+				<label htmlFor="newGamePublisherOptions">Publisher(s): </label>
+				<Select
+					name="gamePublishers"
+					inputId="newGamePublisherOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					value={selectedPublishers}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedPublishers(options as OptionType[]);
+					}}
+					options={fillPublishers()}
+				/>
 
-			<label htmlFor="newGameGenreOptions">Genres: </label>
-			<Select
-				name="gameGenres"
-				inputId="newGameGenreOptions"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
-				value={selectedGenres}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedGenres(options as OptionType[]);
-				}}
-				options={fillGenres()}
-			/>
-			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit genre list</Btn>
-			<br />
+				<label htmlFor="newGameDeveloperOptions">Developer(s): </label>
+				<Select
+					name="gameDevelopers"
+					inputId="newGameDeveloperOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					value={selectedDevelopers}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedDevelopers(options as OptionType[]);
+					}}
+					options={fillDevelopers()}
+				/>
+				<Btn style={BtnStyle.Neutral} type="button" func={() => {
+					setEditListType("companies");
+					setEditListOptionData(undefined);
+					setIsEditModalOpen(true);
+				}}>Edit company list</Btn>
+				<br />
 
-			<label htmlFor="newGamePublisherOptions">Publishers: </label>
-			<Select
-				name="gamePublishers"
-				inputId="newGamePublisherOptions"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
-				value={selectedPublishers}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedPublishers(options as OptionType[]);
-				}}
-				options={fillPublishers()}
-			/>
+				<label htmlFor="newGamePlatformOptions">Platform(s): </label>
+				<Select
+					name="gamePlatforms"
+					inputId="newGamePlatformOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					value={selectedPlatforms}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedPlatforms(options as OptionType[]);
+					}}
+					options={fillPlatforms()}
+				/>
+				<Btn style={BtnStyle.Neutral} type="button" func={() => {
+					setEditListType("platforms");
+					setEditListOptionData(fillPlatforms);
+					setIsEditModalOpen(true);
+				}}>Edit platform list</Btn>
+				<br />
 
-			<label htmlFor="newGameDeveloperOptions">Developers: </label>
-			<Select
-				name="gameDevelopers"
-				inputId="newGameDeveloperOptions"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
-				value={selectedDevelopers}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedDevelopers(options as OptionType[]);
-				}}
-				options={fillDevelopers()}
-			/>
-			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit company list</Btn>
-			<br />
+				<label htmlFor="newGameStorefrontOptions">Storefront(s): </label>
+				<Select
+					name="gameStorefronts"
+					inputId="newGameStorefrontOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					isMulti
+					value={selectedStorefronts}
+					onChange={(options: MultiValue<OptionType>) => {
+						setSelectedStorefronts(options as OptionType[]);
+					}}
+					options={fillStorefronts()}
+				/>
+				<Btn style={BtnStyle.Neutral} type="button" func={() => {
+					setEditListType("storefronts");
+					setEditListOptionData(fillStorefronts);
+					setIsEditModalOpen(true);
+				}}>Edit storefront list</Btn>
+				<br />
+				<hr />
 
-			<label htmlFor="newGamePlatformOptions">Platforms: </label>
-			<Select
-				name="gamePlatforms"
-				inputId="newGamePlatformOptions"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
-				value={selectedPlatforms}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedPlatforms(options as OptionType[]);
-				}}
-				options={fillPlatforms()}
-			/>
-			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit platform list</Btn>
-			<br />
+				<div className="flex gap-2 mt-3">
+					<Btn style={BtnStyle.Primary} type="submit">Create Game</Btn>
+					<Btn style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
+				</div>
+			</form>
 
-			<label htmlFor="newGameStorefrontOptions">Storefronts: </label>
-			<Select
-				name="gameStorefronts"
-				inputId="newGameStorefrontOptions"
-				className="text-(--color-dark) cursor-pointer"
-				closeMenuOnSelect={false}
-				isMulti
-				value={selectedStorefronts}
-				onChange={(options: MultiValue<OptionType>) => {
-					setSelectedStorefronts(options as OptionType[]);
-				}}
-				options={fillStorefronts()}
-			/>
-			<Btn style={BtnStyle.Neutral} type="button" func={() => {}}>Edit storefront list</Btn>
-			<br />
-			<hr />
 
-			<div className="flex gap-2 mt-3">
-				<Btn style={BtnStyle.Primary} type="submit">Create Game</Btn>
-				<Btn style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
-			</div>
-		</form>
+			<EditMetadataModal optionData={editListOptionData} metadataType={editListType} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} />
+			
+		</>
 	);
 }
