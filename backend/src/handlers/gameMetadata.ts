@@ -3,29 +3,73 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 
-// TODO: Look into making a combined API function or database query for getAll functions for when genres, platforms, storefronts, and companies are all needed (such as in the new game form).
+// TODO: Consider making a combined API function or database query for getAll functions for when genres, platforms, storefronts, and companies are all needed (such as in the new game form).
+
+// Type for the object sent back from the server in response to an attempt at adding/removing/editing a metadata record.
+type MetadataActionResponse = {
+	action: "add" | "remove" | "edit";
+	isValid: boolean; // True if there are no errors, false if there are errors.
+	message?: string;
+	severity?: "success" | "warning" | "error" | "informative";
+}
+
 
 // Genres -------------------------------------------------------------------
+	// Retrieves all genre entries from the Genre table.
 const getGenres = function getGenres(c: Context) {
 	const query = db.prepare("SELECT * FROM Genre");
 	const genres = query.all();
 	return c.json(genres);
 }
 
-// TODO: Implement
-const addGenre = function addGenre(c: Context) {
-	const query = db.prepare("");
+	// Adds a new genre to the Genre table.
+const addGenre = async function addGenre(c: Context) {
+	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const body = await c.req.parseBody();
+	const genreTitle = body['metadataAddTitle'];
+
+	if (typeof genreTitle === 'string' && genreTitle.length > 0) {
+		try {
+			const query = db.prepare(`
+				INSERT INTO Genre (Title)
+				VALUES (@Title);
+			`);
+			query.run({Title: genreTitle});
+			actionResponse = {
+				action: "add",
+				isValid: true,
+				message: "Genre successfully added to the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "add",
+				isValid: false,
+				message: "Error: The genre could not be added to the database; " + err,
+				severity: "error"
+			};
+		}
+	} else {
+		actionResponse = {
+			action: "add",
+			isValid: false,
+			message: "Error: The genre name must not be empty",
+			severity: "error"
+		};
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 // TODO: Implement
-const removeGenres = function removeGenres(c: Context) {
+const removeGenres = async function removeGenres(c: Context) {
 	const query = db.prepare("");
 	
 	return c.json("Placeholder");
 }
 
+
 // Platforms ----------------------------------------------------------------
+	// Retrieves all platform entries from the Platform table and the connected data from the Company table.
 const getPlatforms = function getPlatforms(c: Context) {
 	const query = db.prepare(`
 		SELECT p.PlatformID, p.Title as PlatformTitle, coalesce(c.Title, 'None') as CompanyTitle
@@ -36,18 +80,78 @@ const getPlatforms = function getPlatforms(c: Context) {
 	return c.json(platforms)
 }
 
+	// Adds a new platform to the Platform table.
+const addPlatform = async function addPlatform(c: Context) {
+	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const body = await c.req.parseBody();
+	const platformTitle = body['metadataAddTitle'];
+	const platformOwnerID = body['platformOwner'];
+
+	if (typeof platformTitle === 'string' && platformTitle.length > 0) {
+		// Do this when there is a platform owner specified.
+		if (typeof platformOwnerID === 'string' && platformOwnerID.length > 0) {
+			try {
+				const query = db.prepare(`
+					INSERT INTO Platform (Title, CompanyID)
+					VALUES (@Title, @CompanyID);
+				`);
+				query.run({Title: platformTitle, CompanyID: parseInt(platformOwnerID)});
+				actionResponse = {
+					action: "add",
+					isValid: true,
+					message: "Platform successfully added to the database!",
+					severity: "success"
+				};
+			} catch (err) {
+				actionResponse = {
+					action: "add",
+					isValid: false,
+					message: "Error: The platform could not be added to the database; " + err,
+					severity: "error"
+				};
+			}
+		}
+		// Do this when there is no platform owner specified.
+		else {
+			try {
+				const query = db.prepare(`
+					INSERT INTO Platform (Title)
+					VALUES (@Title);
+				`);
+				query.run({Title: platformTitle});
+				actionResponse = {
+					action: "add",
+					isValid: true,
+					message: "Platform successfully added to the database!",
+					severity: "success"
+				};
+			} catch (err) {
+				actionResponse = {
+					action: "add",
+					isValid: false,
+					message: "Error: The platform could not be added to the database; " + err,
+					severity: "error"
+				};
+			}
+		}
+	} else {
+		actionResponse = {
+			action: "add",
+			isValid: false,
+			message: "Error: The platform name must not be empty",
+			severity: "error"
+		};
+	}
+	
+	return c.json(actionResponse);
+}
 // TODO: Implement
-const addPlatform = function addPlatform(c: Context) {
+const removePlatforms = async function removePlatforms(c: Context) {
 	const query = db.prepare("");
 	
 	return c.json("Placeholder");
 }
-// TODO: Implement
-const removePlatforms = function removePlatforms(c: Context) {
-	const query = db.prepare("");
-	
-	return c.json("Placeholder");
-}
+
 
 // Companies ----------------------------------------------------------------
 	// Get all companies and their roles.
@@ -104,18 +208,72 @@ const getCompanyTypes = function getCompanyTypes(c: Context) {
 	return c.json(companyTypes);
 }
 
+	// Adds a new company to the Companies table. Adds connections between the Company and Company Types tables with the CompanyCompanyTypes table.
+const addCompany = async function addCompany(c: Context) {
+	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const body = await c.req.parseBody();
+	const companyTitle = body['metadataAddTitle'];
+	const companyTypesStr = body['companyTypes'];
+
+	if (typeof companyTypesStr !== 'string') {
+		actionResponse = {
+			action: "add",
+			isValid: false,
+			message: "Error: Invalid company type input.",
+			severity: "error"
+		};
+	} else {
+		const companyTypes = companyTypesStr.split(',');
+
+		const insertCompany = db.transaction(() => {
+			const insertCompanyName = db.prepare(`
+				INSERT INTO Company (Title)
+				VALUES (@Title);
+			`);
+			insertCompanyName.run({Title: companyTitle});
+
+			const getCompanyID = db.prepare(`
+				SELECT CompanyID FROM Company
+				ORDER BY CompanyID
+				DESC LIMIT 1;
+			`);
+			const newCompanyIDResult = getCompanyID.get() as {CompanyID: number};
+			const newCompanyID = newCompanyIDResult.CompanyID;
+
+			const insertCompanyType = db.prepare(`
+				INSERT INTO CompanyCompanyType (CompanyID, CompanyTypeID)
+				VALUES (@CompanyID, @CompanyTypeID);
+			`);
+			for (const companyType of companyTypes) insertCompanyType.run({CompanyID: newCompanyID, CompanyTypeID: companyType});
+		});
+		
+		try {
+			insertCompany();
+			actionResponse = {
+				action: "add",
+				isValid: true,
+				message: "Company successfully added to the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "add",
+				isValid: false,
+				message: "Error: There was a problem adding the company to the database; " + err,
+				severity: "error"
+			};
+		}
+	}
+
+	return c.json(actionResponse);
+}
 // TODO: Implement
-const addCompany = function addCompany(c: Context) {
+const removeCompanies = async function removeCompanies(c: Context) {
 	const query = db.prepare("");
 	
 	return c.json("Placeholder");
 }
-// TODO: Implement
-const removeCompanies = function removeCompanies(c: Context) {
-	const query = db.prepare("");
-	
-	return c.json("Placeholder");
-}
+
 
 // Storefronts --------------------------------------------------------------
 	// With websites
@@ -135,14 +293,49 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 	return c.json(storefronts);
 }
 
-// TODO: Implement
-const addStorefront = function addStorefront(c: Context) {
-	const query = db.prepare("");
+	// Adds a new storefront to the database.
+const addStorefront = async function addStorefront(c: Context) {
+	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const body = await c.req.parseBody();
+	const storefrontTitle = body['metadataAddTitle'];
+	const storefrontWebsite = body['storefrontWebsite'];
+
+	if (typeof storefrontTitle === 'string' && storefrontTitle.length > 0) {
+		if (typeof storefrontWebsite === 'string') {
+			try {
+				const query = db.prepare(`
+					INSERT INTO Storefront (Title, StorefrontWebsite)
+					VALUES (@Title, @StorefrontWebsite);
+				`);
+				query.run({Title: storefrontTitle, StorefrontWebsite: storefrontWebsite});
+				actionResponse = {
+					action: "add",
+					isValid: true,
+					message: "Storefront successfully added to the database!",
+					severity: "success"
+				};
+			} catch (err) {
+				actionResponse = {
+					action: "add",
+					isValid: false,
+					message: "Error: The storefront could not be added to the database; " + err,
+					severity: "error"
+				};
+			}
+		}
+	} else {
+		actionResponse = {
+			action: "add",
+			isValid: false,
+			message: "Error: The storefront name must not be empty",
+			severity: "error"
+		};
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 // TODO: Implement
-const removeStorefronts = function removeStorefronts(c: Context) {
+const removeStorefronts = async function removeStorefronts(c: Context) {
 	const query = db.prepare("");
 	
 	return c.json("Placeholder");
