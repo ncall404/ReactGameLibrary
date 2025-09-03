@@ -221,7 +221,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				{ // Storefront website input
 					editListType == "storefronts" ?
 					<>
-						<label htmlFor="editMetadataStorefrontWebsite">Storefront: </label>
+						<label htmlFor="editMetadataStorefrontWebsite">Storefront website: </label>
 						<input type="text"
 						name="storefrontWebsite"
 						id="editMetadataStorefrontWebsite"
