@@ -60,11 +60,63 @@ const addGenre = async function addGenre(c: Context) {
 	
 	return c.json(actionResponse);
 }
-// TODO: Implement
+	// Removes selected genre(s) from the Genre table and other connected tables (GameGenre).
 const removeGenres = async function removeGenres(c: Context) {
-	const query = db.prepare("");
+	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const body = await c.req.parseBody();
+	const selectedGenresString = body['editMetadataRemove'];
+	if (typeof selectedGenresString !== 'string') {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "Error: Invalid genre selection input.",
+			severity: "error"
+		};
+	} else if (selectedGenresString.length == 0) {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "No genres were selected for removal.",
+			severity: "warning"
+		}
+	} else {
+		const selectedGenres = selectedGenresString.split(',');
+		
+		const deleteSelectedGenres = db.transaction(() => {
+			const deleteGameConnections = db.prepare(`
+				DELETE FROM GameGenre
+				WHERE GenreID = @GenreID;
+			`);
+			const deleteGenre = db.prepare(`
+				DELETE FROM Genre
+				WHERE GenreID = @GenreID;
+			`);
+			for (const genre of selectedGenres) {
+				const genreID = parseInt(genre);
+				deleteGameConnections.run({GenreID: genreID});
+				deleteGenre.run({GenreID: genreID});
+			}
+		});
+
+		try {
+			deleteSelectedGenres();
+			actionResponse = {
+				action: "remove",
+				isValid: true,
+				message: "Genre(s) successfully removed from the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "remove",
+				isValid: false,
+				message: "Error: The selected genre(s) could not be remove from the database; " + err,
+				severity: "error"
+			};
+		}
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 
 
@@ -145,11 +197,63 @@ const addPlatform = async function addPlatform(c: Context) {
 	
 	return c.json(actionResponse);
 }
-// TODO: Implement
+	// Removes selected platform(s) from the Platform table and other connected tables (GamePlatform).
 const removePlatforms = async function removePlatforms(c: Context) {
-	const query = db.prepare("");
+	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const body = await c.req.parseBody();
+	const selectedPlatformsString = body['editMetadataRemove'];
+	if (typeof selectedPlatformsString !== 'string') {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "Error: Invalid platform selection input.",
+			severity: "error"
+		};
+	} else if (selectedPlatformsString.length == 0) {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "No platforms were selected for removal.",
+			severity: "warning"
+		}
+	} else {
+		const selectedPlatforms = selectedPlatformsString.split(',');
+		
+		const deleteSelectedPlatforms = db.transaction(() => {
+			const deleteGameConnections = db.prepare(`
+				DELETE FROM GamePlatform
+				WHERE PlatformID = @PlatformID;
+			`);
+			const deletePlatform = db.prepare(`
+				DELETE FROM Platform
+				WHERE PlatformID = @PlatformID;
+			`);
+			for (const platform of selectedPlatforms) {
+				const platformID = parseInt(platform);
+				deleteGameConnections.run({PlatformID: platformID});
+				deletePlatform.run({PlatformID: platformID});
+			}
+		});
+
+		try {
+			deleteSelectedPlatforms();
+			actionResponse = {
+				action: "remove",
+				isValid: true,
+				message: "Platform(s) successfully removed from the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "remove",
+				isValid: false,
+				message: "Error: The selected platform(s) could not be remove from the database; " + err,
+				severity: "error"
+			};
+		}
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 
 
@@ -208,7 +312,7 @@ const getCompanyTypes = function getCompanyTypes(c: Context) {
 	return c.json(companyTypes);
 }
 
-	// Adds a new company to the Companies table. Adds connections between the Company and Company Types tables with the CompanyCompanyTypes table.
+	// Adds a new company to the Company table. Adds connections between the Company and Company Types tables with the CompanyCompanyType table.
 const addCompany = async function addCompany(c: Context) {
 	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
 	const body = await c.req.parseBody();
@@ -267,11 +371,68 @@ const addCompany = async function addCompany(c: Context) {
 
 	return c.json(actionResponse);
 }
-// TODO: Implement
+	// Removes selected companies from the Company table and other connected tables (GameCompany, CompanyCompanyType).
 const removeCompanies = async function removeCompanies(c: Context) {
-	const query = db.prepare("");
+	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const body = await c.req.parseBody();
+	const selectedCompaniesString = body['editMetadataRemove'];
+	if (typeof selectedCompaniesString !== 'string') {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "Error: Invalid company selection input.",
+			severity: "error"
+		};
+	} else if (selectedCompaniesString.length == 0) {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "No companies were selected for removal.",
+			severity: "warning"
+		}
+	} else {
+		const selectedCompanies = selectedCompaniesString.split(',');
+		
+		const deleteSelectedCompanies = db.transaction(() => {
+			const deleteGameConnections = db.prepare(`
+				DELETE FROM GameCompany
+				WHERE CompanyID = @CompanyID;
+			`);
+			const deleteCompanyTypeConnections = db.prepare(`
+				DELETE FROM CompanyCompanyType
+				WHERE CompanyID = @CompanyID;
+			`);
+			const deleteCompany = db.prepare(`
+				DELETE FROM Company
+				WHERE CompanyID = @CompanyID;
+			`);
+			for (const company of selectedCompanies) {
+				const companyID = parseInt(company);
+				deleteGameConnections.run({CompanyID: companyID});
+				deleteCompanyTypeConnections.run({CompanyID: companyID});
+				deleteCompany.run({CompanyID: companyID});
+			}
+		});
+
+		try {
+			deleteSelectedCompanies();
+			actionResponse = {
+				action: "remove",
+				isValid: true,
+				message: "Companies successfully removed from the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "remove",
+				isValid: false,
+				message: "Error: The selected companies could not be remove from the database; " + err,
+				severity: "error"
+			};
+		}
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 
 
@@ -293,7 +454,7 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 	return c.json(storefronts);
 }
 
-	// Adds a new storefront to the database.
+	// Adds a new storefront to the Storefront table.
 const addStorefront = async function addStorefront(c: Context) {
 	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
 	const body = await c.req.parseBody();
@@ -334,11 +495,63 @@ const addStorefront = async function addStorefront(c: Context) {
 	
 	return c.json(actionResponse);
 }
-// TODO: Implement
+	// Removes selected storefront(s) from the Storefront table and other connected tables (GameStorefront).
 const removeStorefronts = async function removeStorefronts(c: Context) {
-	const query = db.prepare("");
+	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const body = await c.req.parseBody();
+	const selectedStorefrontsString = body['editMetadataRemove'];
+	if (typeof selectedStorefrontsString !== 'string') {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "Error: Invalid storefront selection input.",
+			severity: "error"
+		};
+	} else if (selectedStorefrontsString.length == 0) {
+		actionResponse = {
+			action: "remove",
+			isValid: false,
+			message: "No storefront(s) were selected for removal.",
+			severity: "warning"
+		}
+	} else {
+		const selectedStorefronts = selectedStorefrontsString.split(',');
+		
+		const deleteSelectedStorefronts = db.transaction(() => {
+			const deleteGameConnections = db.prepare(`
+				DELETE FROM GameStorefront
+				WHERE StorefrontID = @StorefrontID;
+			`);
+			const deleteStorefront = db.prepare(`
+				DELETE FROM Storefront
+				WHERE StorefrontID = @StorefrontID;
+			`);
+			for (const company of selectedStorefronts) {
+				const storefrontID = parseInt(company);
+				deleteGameConnections.run({StorefrontID: storefrontID});
+				deleteStorefront.run({StorefrontID: storefrontID});
+			}
+		});
+
+		try {
+			deleteSelectedStorefronts();
+			actionResponse = {
+				action: "remove",
+				isValid: true,
+				message: "Storefront(s) successfully removed from the database!",
+				severity: "success"
+			};
+		} catch (err) {
+			actionResponse = {
+				action: "remove",
+				isValid: false,
+				message: "Error: The selected storefront(s) could not be remove from the database; " + err,
+				severity: "error"
+			};
+		}
+	}
 	
-	return c.json("Placeholder");
+	return c.json(actionResponse);
 }
 
 export {getGenres, addGenre, removeGenres,
