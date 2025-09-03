@@ -200,7 +200,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				{ // Company type selection
 					editListType == "companies" ?
 					<>
-						<label htmlFor="editMetadataCompanyTypes">Company type: </label>
+						<label htmlFor="editMetadataCompanyTypes">Company type(s): </label>
 						<Select
 							name="companyTypes"
 							inputId="editMetadataCompanyTypes"
