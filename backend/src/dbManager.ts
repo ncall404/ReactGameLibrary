@@ -15,7 +15,7 @@ function checkTables(): boolean {
 	const tables: any[] = query.all();
 	
 	// Array of table names to check for.
-	const tableNames = ["CompanyType",  "CompanyRole", "Company", "Game", "Library", "Wishlist", "Genre", "Platform", "Storefront",
+	const tableNames = ["CompanyType",  "CompanyRole", "Company", "MediaFormat", "Game", "Library", "Wishlist", "Genre", "Platform", "Storefront",
 						"GameLibrary", "GameWishlist", "GameGenre", "GamePlatform", "GameStorefront", "CompanyCompanyType", "GameCompany"];
 
 	// Check existence of tables.
@@ -29,6 +29,8 @@ function checkTables(): boolean {
 	}
 	return true;
 }
+
+// TODO: Wrap createTables queries in a transaction. Wrap table dropping, table creation, and default value insertions into separate transactions.
 
 // Creates the database tables and inserts data into relevant tables.
 function createTables() {
@@ -51,6 +53,8 @@ function createTables() {
 	query.run();
 		// Core tables:
 	query = db.prepare('DROP TABLE IF EXISTS Game;');
+	query.run();
+	query = db.prepare('DROP TABLE IF EXISTS MediaFormat');
 	query.run();
 	query = db.prepare('DROP TABLE IF EXISTS Platform;');
 	query.run();
@@ -91,13 +95,22 @@ function createTables() {
 		);`
 	);
 	query.run();
+	// MediaFormat
+	query = db.prepare(`CREATE TABLE MediaFormat (
+		MediaFormatID INTEGER PRIMARY KEY AUTOINCREMENT,
+		Title TEXT UNIQUE NOT NULL
+		);`
+	);
+	query.run();
 	// Game
 	query = db.prepare(`CREATE TABLE Game (
 		GameID INTEGER PRIMARY KEY AUTOINCREMENT,
 		Title TEXT NOT NULL,
 		Description TEXT,
 		ReleaseDate INTEGER NOT NULL,
-		CoverArt TEXT
+		CoverArt TEXT,
+		MediaFormatID INTEGER,
+		FOREIGN KEY (MediaFormatID) REFERENCES MediaFormat(MediaFormatID)
 		);`
 	);
 	query.run();
@@ -215,7 +228,7 @@ function createTables() {
 		);`
 	);
 	query.run();
-
+	 
 	// ----------------------------------------------------------------------
 	// Inserting Default Table Data -----------------------------------------
 	// ----------------------------------------------------------------------
@@ -381,6 +394,16 @@ function createTables() {
 		{Title: 'Party'},
 		{Title: 'Roguelike'},
 		{Title: 'Educational'},
+	]);
+	// Media Formats
+	const insertMediaFormat = db.prepare('INSERT INTO MediaFormat (Title) VALUES (@Title);');
+	const insertManyMediaFormats = db.transaction((mediaFormats: any) =>  {
+		for (const mediaFormat of mediaFormats) insertMediaFormat.run(mediaFormat);
+	})
+	insertManyMediaFormats([
+		{Title: 'Physical'},
+		{Title: 'Digital'},
+		{Title: 'Physical and Digital'},
 	]);
 }
 
