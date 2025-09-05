@@ -1,7 +1,7 @@
 // Library page component and route. Displays selected library of games.
 
 import { createFileRoute } from '@tanstack/react-router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import Btn from '../components/common/btn.tsx';
@@ -24,8 +24,10 @@ export const Route = createFileRoute('/')({
 function RouteComponent() {
 	const [newGameIsOpen, setNewGameIsOpen] = useState(false);
 
+	const queryClient = new QueryClient();
+
 	const singleLibrary = useQuery({
-		queryKey:['http://localhost:3000/api/libraries', 1],
+		queryKey:['libraries'],
 		queryFn: () => getSingleLibrary(1),
 	});
 
@@ -49,7 +51,10 @@ function RouteComponent() {
 			{
 				newGameIsOpen &&
 				<NewGameForm 
-				onSubmitted={() => setNewGameIsOpen(false)} 
+				onSubmitted={() => {
+					setNewGameIsOpen(false);
+					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
+				}} 
 				onCancel={() => setNewGameIsOpen(false)} 
 				collectionType={CollectionType.Library} collectionId={1}
 				/>
