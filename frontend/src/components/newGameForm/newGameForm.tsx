@@ -92,27 +92,27 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 	// useQuery hooks for lists that are used to fill Select inputs.
 	const collectionList = useQuery({
-		queryKey: ['http://localhost:3000/api/collections/' + props.collectionType],
+		queryKey: ['collections' + props.collectionType],
 		queryFn: () => getCollectionList(CollectionType.Library),
 	})
 	const genreList = useQuery({
-		queryKey:['http://localhost:3000/api/metadata/genres'],
+		queryKey:['metadata', 'genres'],
 		queryFn: () => getMetadata(MetadataField.Genres),
 	});
 	const platformList = useQuery({
-		queryKey:['http://localhost:3000/api/metadata/platforms'],
+		queryKey:['metadata', 'platforms'],
 		queryFn: () => getMetadata(MetadataField.Platforms),
 	});
 	const developerList = useQuery({
-		queryKey:['http://localhost:3000/api/metadata/developers'],
+		queryKey:['metadata', 'companies', 'developers'],
 		queryFn: () => getMetadata(MetadataField.Developers),
 	});
 	const publisherList = useQuery({
-		queryKey:['http://localhost:3000/api/metadata/publishers'],
+		queryKey:['metadata', 'companies', 'publishers'],
 		queryFn: () => getMetadata(MetadataField.Publishers),
 	});
 	const storefrontList = useQuery({
-		queryKey:['http://localhost:3000/api/metadata/storefronts'],
+		queryKey:['metadata', 'storefronts'],
 		queryFn: () => getMetadata(MetadataField.Storefronts),
 	});
 
