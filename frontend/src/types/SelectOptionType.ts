@@ -11,4 +11,4 @@ type GroupedOption = {
 	options: OptionType[];
 }
 
-export type {OptionType, GroupedOption}
+export type {OptionType, GroupedOption};
