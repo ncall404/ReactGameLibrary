@@ -2,8 +2,8 @@
 
 import Select from "react-select";
 import type { MultiValue } from "react-select";
-import type { OptionType, GroupedOption } from "../../types/selectOptionType.ts";
-import { optionsToString } from "../../utilities.ts";
+import type { OptionType } from "../../types/selectOptionType.ts";
+import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
@@ -117,100 +117,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 	});
 
 
-	// Functions to fill the options for the react-select inputs
-		// Collections - Library, Wishlist
-	const fillCollections = (): OptionType[] => {
-		if (!collectionList.data) return [];
-
-		const collections: OptionType[] = [];
-		if (collectionList.data) {
-			switch (props.collectionType) {
-				case CollectionType.Library:
-					collectionList.data?.map((collection: {LibraryID: number, Title: string}) => {
-						collections.push({value: collection.LibraryID, label: collection.Title});
-					})
-					break;
-				case CollectionType.Wishlist:
-					collectionList.data?.map((collection: {WishlistID: number,  Title: string}) => {
-						collections.push({value: collection.WishlistID, label: collection.Title});
-					})
-					break;
-			}
-		}
-		return collections;
-	}
-		// Genres
-	const fillGenres = (): OptionType[] => {
-		if (!genreList.data) return [];
-
-		const genres: OptionType[] = [];
-		if (genreList.data) {
-			genreList.data?.map((genre: {GenreID: number, Title: string}) => {
-				genres.push({value: genre.GenreID, label: genre.Title});
-			});
-		}
-		return genres;
-	}
-		// Platforms
-	const fillPlatforms = (): GroupedOption[] => {
-		if (!platformList.data) return [];
-
-		const grouped = new Map<string, OptionType[]>();
-
-		platformList.data.forEach((platform: {PlatformID: number, PlatformTitle: string, CompanyTitle: string}) => {
-			const company = platform.CompanyTitle;
-			const option: OptionType = {value: platform.PlatformID, label: platform.PlatformTitle}
-
-			if (!grouped.has(company)) {
-				grouped.set(company, []);
-			}
-			grouped.get(company)!.push(option);
-		});
-
-		return Array.from(grouped.entries()).map(([label, options]) => ({label, options}));
-	}
-		// Developers
-	const fillDevelopers = (): OptionType[] => {
-		if (!developerList) return [];
-
-		const developers: OptionType[] = [];
-		if (developerList.data) {
-			developerList.data?.map((developer: {CompanyID: number, Title: string}) => {
-				developers.push({value: developer.CompanyID, label: developer.Title});
-			});
-		}
-		return developers;
-	}
-		// Publishers
-	const fillPublishers = (): OptionType[] => {
-		if (!publisherList) return [];
-
-		const publishers: OptionType[] = [];
-		if (publisherList.data) {
-			publisherList.data?.map((publisher: {CompanyID: number, Title: string}) => {
-				publishers.push({value: publisher.CompanyID, label: publisher.Title});
-			});
-		}
-		return publishers;
-	}
-		// Storefronts
-	const fillStorefronts = (): OptionType[] => {
-		if (!storefrontList) return [];
-
-		const storefronts: OptionType[] = [];
-		if (storefrontList.data) {
-			storefrontList.data?.map((storefront: {StorefrontID: number, Title: string, Website: string}) => {
-				storefronts.push({value: storefront.StorefrontID, label: storefront.Title + ": " + storefront.Website});
-			});
-		}
-		return storefronts;
-	}
-
-
 	useEffect(() => {
 		if (!collectionList.data) return;
 
-		const matches = fillCollections().filter(option => option.value === props.collectionId);
+		const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
 		if (matches.length > 0) setSelectedCollections(matches);
 	}, [collectionList.data, props.collectionId]);
 
@@ -233,7 +143,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedCollections(options as OptionType[]);
 					}}
-					options={fillCollections()}
+					options={fillOptionsArray(collectionList.data)}
 				/>
 				<br />
 				<hr />
@@ -295,7 +205,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedGenres(options as OptionType[]);
 					}}
-					options={fillGenres()}
+					options={fillOptionsArray(genreList.data)}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("genres");
@@ -315,7 +225,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedPublishers(options as OptionType[]);
 					}}
-					options={fillPublishers()}
+					options={fillOptionsArray(publisherList.data)}
 				/>
 
 				<label htmlFor="newGameDeveloperOptions">Developer(s): </label>
@@ -329,7 +239,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedDevelopers(options as OptionType[]);
 					}}
-					options={fillDevelopers()}
+					options={fillOptionsArray(developerList.data)}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("companies");
@@ -349,7 +259,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedPlatforms(options as OptionType[]);
 					}}
-					options={fillPlatforms()}
+					options={fillGroupedOptionsArray(platformList.data)}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("platforms");
@@ -369,7 +279,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedStorefronts(options as OptionType[]);
 					}}
-					options={fillStorefronts()}
+					options={fillOptionsArray(storefrontList.data)}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("storefronts");
