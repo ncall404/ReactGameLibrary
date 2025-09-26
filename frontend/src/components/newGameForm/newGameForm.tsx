@@ -52,7 +52,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 	// State tracking for the editing modal.
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 	const [editListType, setEditListType] = useState<MetadataType>("genres");
-	const [editListOptionData, setEditListOptionData] = useState<OptionType[] | GroupedOption[] | undefined>();
 
 	// Does the actual API call send the data to the backend.
 	const newGameMutation = useMutation({
@@ -209,7 +208,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("genres");
-					setEditListOptionData(fillGenres);
 					setIsEditModalOpen(true);
 				}}>Edit genre list</Btn>
 				<br />
@@ -243,7 +241,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("companies");
-					setEditListOptionData(undefined);
 					setIsEditModalOpen(true);
 				}}>Edit company list</Btn>
 				<br />
@@ -263,7 +260,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("platforms");
-					setEditListOptionData(fillPlatforms);
 					setIsEditModalOpen(true);
 				}}>Edit platform list</Btn>
 				<br />
@@ -283,7 +279,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditListType("storefronts");
-					setEditListOptionData(fillStorefronts);
 					setIsEditModalOpen(true);
 				}}>Edit storefront list</Btn>
 				<br />
@@ -296,7 +291,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 			</form>
 
 
-			<EditMetadataModal optionData={editListOptionData} metadataType={editListType} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} />
+			<EditMetadataModal metadataType={editListType} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} />
 			
 		</>
 	);

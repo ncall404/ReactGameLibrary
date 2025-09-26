@@ -7,23 +7,25 @@ import { BtnStyle } from "../common/btn.tsx";
 import Select from "react-select";
 import type { MultiValue, SingleValue } from "react-select";
 import type { OptionType, GroupedOption } from "../../types/selectOptionType.ts";
-import { optionsToString } from "../../utilities.ts";
+import { fillGroupedOptionsArray, fillOptionsArray, optionsToString } from "../../utilities.ts";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, QueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getMetadata, MetadataField } from "../../api/gameMetadataApi.ts";
 
 type MetadataType = "genres" | "companies" | "platforms" | "storefronts";
 
 type EditMetadataModalProps = {
-	optionData: OptionType[] | GroupedOption[] | undefined;
+	//optionData: OptionType[] | GroupedOption[] | undefined;
 	metadataType: MetadataType;
 	isOpen: boolean;
 	onClose: () => void;
 }
 
 export default function EditMetadataModal(props: EditMetadataModalProps) {
+	const queryClient = new QueryClient();
+
 	const editListType = props.metadataType;
 	const baseApi: string = 'http://localhost:3000/api/metadata/';
 	const api = baseApi.concat(editListType);
@@ -36,6 +38,8 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	// States for remove form.
 	const [selectedForRemoval, setSelectedForRemoval] = useState<OptionType[]>([]);
 
+	const [removeOptions, setRemoveOptions] = useState<OptionType[] | GroupedOption[]>([]);
+
 	// Mutation for adding metadata.
 	const editMetadataAddMutation = useMutation({
 		mutationFn: async(formData: FormData) => {
@@ -46,7 +50,31 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			if (!res.ok) throw new Error('Failed to add to ' + props.metadataType);
 			return res.json();
 		},
-		onSuccess: (data) => {console.log('Uploaded: ', data)},
+		onSuccess: async (data) => {
+			console.log('Uploaded: ', data);
+			// Clear state for inputs.
+			switch (editListType) {
+				case "companies":
+					setSelectedCompanyTypes([])
+					break;
+				case "platforms":
+					setSelectedPlatformOwner(undefined);
+					break;
+				case "storefronts":
+					setStorefrontWebsite("");
+			}
+			setEditMetadataAdd("");
+
+			// Invalidate data that possibly changed.
+			await invalidateData();
+			// Refetch data and update available options for select.
+			if (editListType == 'companies') {
+				await companiesList.refetch();
+			} else {
+				await removeList.refetch();
+			}
+			fillRemoveOptions();
+		},
 		onError: (err) => console.error('Error: ', err),
 	});
 	// Mutation for removing metadata.
@@ -59,9 +87,27 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			if (!res.ok) throw new Error('Failed to remove from ' + props.metadataType);
 			return res.json();
 		},
-		onSuccess: (data) => {console.log('Uploaded: ', data)},
+		onSuccess: async (data) => {
+			console.log('Uploaded: ', data);
+			// Clear state for inputs.
+			setSelectedForRemoval([]);
+			// Invalidate data that possibly changed.
+			await invalidateData();
+			// Refetch data and update available options for select.
+			// TODO: TODO: TODO: TODO: TODO: TODO: TODO: TODO: This isn't updating the "companies" queries outside of this component (the separate developer and publisher ones).
+			if (editListType == 'companies') {
+				await companiesList.refetch();
+			} else {
+				await removeList.refetch();
+			}
+			fillRemoveOptions();
+		},
 		onError: (err) => console.error('Error: ', err),
 	});
+
+	const invalidateData = async () => {
+		await queryClient.invalidateQueries({queryKey: [editListType]});
+	}
 
 
 	// Clear inputs if the modal is closed.
@@ -83,19 +129,24 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 		}
 	}
 
+	// TODO: Probably move this and a portion of fillRemoveOptions to a custom hook to do the conditional logic in and not needlessly query the server with the unused one. Not until this version is functioning though.
+	const removeList = useQuery({
+		queryKey: ['metadata', editListType],
+		queryFn: () => getMetadata(editListType)
+	});
 
 	const companiesList = useQuery({
-		queryKey: ['http://localhost:3000/api/metadata/companies'],
+		queryKey: ['metadata', 'companies', 'all-companies'],
 		queryFn: () => getMetadata(MetadataField.Companies),
 	});
 
 	const companyTypesList = useQuery({
-		queryKey: ['http://localhost:3000/api/metadata/company-types'],
+		queryKey: ['metadata', 'company-types'],
 		queryFn: () => getMetadata(MetadataField.CompanyType),
 	})
 
 	const platformOwnersList = useQuery({
-		queryKey: ['http://localhost:3000/api/metadata/platform-owners'],
+		queryKey: ['metadata', 'platform-owners'],
 		queryFn: () => getMetadata(MetadataField.PlatformOwners),
 	});
 
@@ -103,31 +154,20 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	// Functions to fill the options for the react-select inputs
 		// Function to fill the options of metadata to remove from a category.
 	const fillRemoveOptions = (): OptionType[] | GroupedOption[] => {
-		// Fill the option data with companies if the passed in optionsData is undefined and metadataType is "companies".
-		if (props.optionData === undefined && props.metadataType === "companies") {
-			if (!companiesList) return [];
-
-			const grouped = new Map<string, OptionType[]>();
-
-			if (companiesList.data) {
-				companiesList.data?.forEach((company: {CompanyID: number, Title: string, CompanyTypes: string}) => {
-					const cTypes = company.CompanyTypes.replaceAll(',', ', ');
-
-					const option: OptionType = {value: company.CompanyID, label: company.Title}
-
-					if (!grouped.has(cTypes)) {
-						grouped.set(cTypes, []);
-					}
-					grouped.get(cTypes)!.push(option);
-				});
-
-				return Array.from(grouped.entries()).map(([label, options]) => ({label, options}));
-			}
+		let queryDataList;
+		if (editListType === "companies") {
+			queryDataList = companiesList;
+		} else {
+			queryDataList = removeList;
 		}
 
-		if (props.optionData !== undefined) return props.optionData; // Return previously-filled-in option data if some was passed in.
-		
-		return [] // If all attempts to fill the data have failed, return empty array.
+		if (!queryDataList.data) return []; // If no data is found then return an empty array.
+
+		if (editListType !== "platforms") {
+			return fillOptionsArray(queryDataList.data);
+		} else {
+			return fillGroupedOptionsArray(queryDataList.data);
+		}
 	}
 		// Fills the possible company types for the add metadata form.
 	const fillCompanyTypes = (): OptionType[] => {
@@ -153,6 +193,19 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 		}
 		return platformOwners;
 	}
+
+	// NOTE: fillRemoveOptions does not work out in the dependencies array (even as a useCallback function); it causes repeated updates.
+	useEffect(() => {
+		if (companiesList.data  && companiesList.isStale) {
+			setRemoveOptions(fillRemoveOptions());
+		}
+	}, [companiesList.data, companiesList.isStale]);
+
+	useEffect(() => {
+		if (removeList.data && removeList.isStale) {
+			setRemoveOptions(fillRemoveOptions());
+		}
+	}, [removeList.data, removeList.isStale]);
 
 
 	const handleEditListAdd = (e: React.FormEvent<HTMLFormElement>) => {
@@ -191,6 +244,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				name="metaDataAddTitle"
 				id="editMetadataAdd"
 				placeholder="Option to add..."
+				value={editMetadataAdd}
 				required
 				onChange={(e) => {
 					setEditMetadataAdd(e.currentTarget.value);
@@ -226,6 +280,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 						name="storefrontWebsite"
 						id="editMetadataStorefrontWebsite"
 						placeholder="Storefront website URL..."
+						value={storefrontWebsite}
 						onChange={(e) => {
 							setStorefrontWebsite(e.currentTarget.value);
 						}}/>
@@ -269,7 +324,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedForRemoval(options as OptionType[]);
 					}}
-					options={fillRemoveOptions()}
+					options={removeOptions}
 				/>
 				<Btn type="submit" style={BtnStyle.Primary}>Remove Selected</Btn>
 			</form>
