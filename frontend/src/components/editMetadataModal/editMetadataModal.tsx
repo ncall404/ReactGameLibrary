@@ -9,7 +9,7 @@ import type { MultiValue, SingleValue } from "react-select";
 import type { OptionType, GroupedOption } from "../../types/selectOptionType.ts";
 import { fillGroupedOptionsArray, fillOptionsArray, optionsToString } from "../../utilities.ts";
 
-import { useQuery, QueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { getMetadata, MetadataField } from "../../api/gameMetadataApi.ts";
@@ -24,7 +24,7 @@ type EditMetadataModalProps = {
 }
 
 export default function EditMetadataModal(props: EditMetadataModalProps) {
-	const queryClient = new QueryClient();
+	const queryClient = useQueryClient();
 
 	const editListType = props.metadataType;
 	const baseApi: string = 'http://localhost:3000/api/metadata/';
