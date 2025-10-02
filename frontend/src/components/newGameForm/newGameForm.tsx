@@ -8,7 +8,6 @@ import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../.
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 import EditMetadataModal from "../editMetadataModal/editMetadataModal.tsx";
-import type { MetadataType } from "../editMetadataModal/editMetadataModal.tsx";
 
 import { useQuery } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -51,7 +50,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 	// State tracking for the editing modal.
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-	const [editListType, setEditListType] = useState<MetadataType>("genres");
+	const [editMetadataField, setEditMetadataField] = useState<MetadataField>(MetadataField.Genres);
 
 	// Does the actual API call send the data to the backend.
 	const newGameMutation = useMutation({
@@ -93,26 +92,32 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const collectionList = useQuery({
 		queryKey: ['collections' + props.collectionType],
 		queryFn: () => getCollectionList(CollectionType.Library),
+		select: (data) => fillOptionsArray(data)
 	})
 	const genreList = useQuery({
-		queryKey:['metadata', 'genres'],
+		queryKey:['metadata', MetadataField.Genres],
 		queryFn: () => getMetadata(MetadataField.Genres),
+		select: (data) => fillOptionsArray(data)
 	});
 	const platformList = useQuery({
-		queryKey:['metadata', 'platforms'],
+		queryKey:['metadata', MetadataField.Platforms],
 		queryFn: () => getMetadata(MetadataField.Platforms),
+		select: (data) => fillGroupedOptionsArray(data)
 	});
 	const developerList = useQuery({
-		queryKey:['metadata', 'companies', 'developers'],
+		queryKey:['metadata', MetadataField.Companies, MetadataField.Developers],
 		queryFn: () => getMetadata(MetadataField.Developers),
+		select: (data) => fillOptionsArray(data)
 	});
 	const publisherList = useQuery({
-		queryKey:['metadata', 'companies', 'publishers'],
+		queryKey:['metadata', MetadataField.Companies, MetadataField.Publishers],
 		queryFn: () => getMetadata(MetadataField.Publishers),
+		select: (data) => fillOptionsArray(data)
 	});
 	const storefrontList = useQuery({
-		queryKey:['metadata', 'storefronts'],
+		queryKey:['metadata', MetadataField.Storefronts],
 		queryFn: () => getMetadata(MetadataField.Storefronts),
+		select: (data) => fillOptionsArray(data)
 	});
 
 
@@ -142,7 +147,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedCollections(options as OptionType[]);
 					}}
-					options={fillOptionsArray(collectionList.data)}
+					options={collectionList.data}
 				/>
 				<br />
 				<hr />
@@ -204,10 +209,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedGenres(options as OptionType[]);
 					}}
-					options={fillOptionsArray(genreList.data)}
+					options={genreList.data}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
-					setEditListType("genres");
+					setEditMetadataField(MetadataField.Genres);
 					setIsEditModalOpen(true);
 				}}>Edit genre list</Btn>
 				<br />
@@ -223,7 +228,8 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedPublishers(options as OptionType[]);
 					}}
-					options={fillOptionsArray(publisherList.data)}
+					isLoading={publisherList.isLoading}
+					options={publisherList.data}
 				/>
 
 				<label htmlFor="newGameDeveloperOptions">Developer(s): </label>
@@ -237,10 +243,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedDevelopers(options as OptionType[]);
 					}}
-					options={fillOptionsArray(developerList.data)}
+					options={developerList.data}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
-					setEditListType("companies");
+					setEditMetadataField("companies");
 					setIsEditModalOpen(true);
 				}}>Edit company list</Btn>
 				<br />
@@ -256,10 +262,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedPlatforms(options as OptionType[]);
 					}}
-					options={fillGroupedOptionsArray(platformList.data)}
+					options={platformList.data}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
-					setEditListType("platforms");
+					setEditMetadataField("platforms");
 					setIsEditModalOpen(true);
 				}}>Edit platform list</Btn>
 				<br />
@@ -275,10 +281,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedStorefronts(options as OptionType[]);
 					}}
-					options={fillOptionsArray(storefrontList.data)}
+					options={storefrontList.data}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
-					setEditListType("storefronts");
+					setEditMetadataField("storefronts");
 					setIsEditModalOpen(true);
 				}}>Edit storefront list</Btn>
 				<br />
@@ -291,7 +297,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 			</form>
 
 
-			<EditMetadataModal metadataType={editListType} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} />
+			<EditMetadataModal metadataField={editMetadataField} isOpen={isEditModalOpen} onClose={() => setIsEditModalOpen(false)} />
 			
 		</>
 	);
