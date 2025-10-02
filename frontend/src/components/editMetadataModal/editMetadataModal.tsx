@@ -87,9 +87,9 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 
 	const invalidateData = async () => {
 		await queryClient.invalidateQueries({
-			queryKey: [editMetadataField],
+			queryKey: ['metadata', editMetadataField],
 			exact: false,
-			refetchType: 'all'
+			refetchType: 'all',
 		});
 	}
 
