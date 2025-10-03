@@ -8,7 +8,7 @@ export default function MainNav() {
 	return (
 		<nav className='flex max-sm:justify-center rounded-sm m-[5px] sm:px-[10px] bg-(--color-primary) text-(--color-light)'>
 			<NavLink to="/" >Library</NavLink>
-			<NavLink to="/wishlist">Wishlist</NavLink>
+			{/* <NavLink to="/wishlist">Wishlist</NavLink> */}
 			<NavLink to="/settings">Settings</NavLink>
 			<NavLink to="/about">About</NavLink>
 		</nav>
