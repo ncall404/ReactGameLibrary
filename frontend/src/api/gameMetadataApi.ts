@@ -11,6 +11,7 @@ const MetadataField = {
 	Publishers: "publishers",
 	PlatformOwners: "platform-owners",
 	Storefronts: "storefronts",
+	MediaFormat: "media-format",
 } as const;
 type MetadataField = (typeof MetadataField)[keyof typeof MetadataField];
 
