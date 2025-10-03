@@ -11,7 +11,7 @@ type GameUploadResponse = {
 	isValid: boolean; // True if there are no errors, false if there are errors.
 	message?: string;
 	field?: 
-		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" |
+		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
 		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
 	severity?: "success" | "warning" | "error" | "informative";
 }
@@ -47,7 +47,13 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 	const gameDescription = body['gameDescription'];
 	const releaseDate = body['releaseDate'];
 	const coverArt = typeof body['coverArt'] === 'string' ? null : body['coverArt'] as File;
-	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt);
+
+	let gameMediaFormat: number | null = null;
+	if (typeof body['gameMediaFormats'] === 'string' && !isNaN(Number(body['gameMediaFormats']))) {
+		gameMediaFormat = Number(body['gameMediaFormats']);
+	}
+	
+	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);
 	if (!validateGameInfoResponse.isValid) {
 		return c.json(validateGameInfoResponse);
 	}
@@ -81,10 +87,10 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 	const insertGameWithMetaData = db.transaction(() => {
 		// Insert the game into the database.
 		const insertGame = db.prepare(`
-			INSERT INTO Game (Title, Description, ReleaseDate, CoverArt)
-			VALUES (@Title, @Description, unixepoch(@ReleaseDate), @CoverArt);
+			INSERT INTO Game (Title, Description, ReleaseDate, CoverArt, MediaFormatID)
+			VALUES (@Title, @Description, unixepoch(@ReleaseDate), @CoverArt, @MediaFormatID);
 		`);
-		insertGame.run({Title: gameName, Description: gameDescription, ReleaseDate: releaseDate, CoverArt: coverArtPath});
+		insertGame.run({Title: gameName, Description: gameDescription, ReleaseDate: releaseDate, CoverArt: coverArtPath, MediaFormatID: gameMediaFormat});
 		
 		// Get the ID of the new game.
 		const getGameID = db.prepare(`
@@ -155,7 +161,7 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 
 
 // Validates the data that will be uploaded to the Game table.
-async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null):
+async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number | null):
 Promise<GameUploadResponse> {
 	// Validate gameName
 	if (typeof gameName !== 'string') { // Type validation
@@ -222,6 +228,16 @@ Promise<GameUploadResponse> {
 		if (!covertArtValidation.isValid) {
 			return covertArtValidation;
 		}
+	}
+
+	// Validate gameMediaFormat
+	if (gameMediaFormat !== null && ![1, 2, 3].includes(gameMediaFormat)){
+		return {
+			isValid: false,
+			message: "Error: Media Format must be empty or a valid value.",
+			field: "gameMediaFormats",
+			severity: "error"
+		};
 	}
 
 	return{ isValid: true };
