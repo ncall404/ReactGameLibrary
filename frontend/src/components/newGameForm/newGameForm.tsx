@@ -1,7 +1,7 @@
 // Work-in-progress NewGameForm component for getting the info needed to add a new GameItem to the database.
 
 import Select from "react-select";
-import type { MultiValue } from "react-select";
+import type { MultiValue, SingleValue } from "react-select";
 import type { OptionType } from "../../types/selectOptionType.ts";
 import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../../utilities.ts";
 
@@ -47,6 +47,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const [selectedStorefronts, setSelectedStorefronts] = useState<OptionType[]>([]);
 	const [selectedPublishers, setSelectedPublishers] = useState<OptionType[]>([]);
 	const [selectedDevelopers, setSelectedDevelopers] = useState<OptionType[]>([]);
+	const [selectedMediaFormat, setSelectedMediaFormat] = useState<OptionType>();
 
 	// State tracking for the editing modal.
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -84,6 +85,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		formData.append('gameStorefronts', optionsToString(selectedStorefronts));
 		formData.append('gamePublishers', optionsToString(selectedPublishers));
 		formData.append('gameDevelopers', optionsToString(selectedDevelopers));
+		formData.append('gameMediaFormat', selectedMediaFormat?.value.toString() as string);
 
 		newGameMutation.mutate(formData);
 	}
@@ -119,6 +121,11 @@ export default function NewGameForm(props: NewGameFormProps) {
 		queryFn: () => getMetadata(MetadataField.Storefronts),
 		select: (data) => fillOptionsArray(data)
 	});
+	const mediaFormatList = useQuery({
+		queryKey:['metadata', MetadataField.MediaFormat],
+		queryFn: () => getMetadata(MetadataField.MediaFormat),
+		select: (data) => fillOptionsArray(data)
+	})
 
 
 	useEffect(() => {
@@ -196,6 +203,20 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}/>
 				<br />
 				<hr />
+				<br />
+
+				<label htmlFor="newGameMediaFormatOptions">Media Format: </label>
+				<Select 
+					name="gameMediaFormat"
+					inputId="newGameMediaFormatOptions"
+					className="text-(--color-dark) cursor-pointer"
+					closeMenuOnSelect={false}
+					value={selectedMediaFormat}
+					onChange={(option: SingleValue<OptionType>) => {
+						setSelectedMediaFormat(option as OptionType);
+					}}
+					options={mediaFormatList.data}
+				/>
 				<br />
 
 				<label htmlFor="newGameGenreOptions">Genre(s): </label>
