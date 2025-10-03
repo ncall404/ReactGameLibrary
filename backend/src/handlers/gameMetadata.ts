@@ -554,7 +554,18 @@ const removeStorefronts = async function removeStorefronts(c: Context) {
 	return c.json(actionResponse);
 }
 
+// Media formats ------------------------------------------------------------
+const getMediaFormats = async function getMediaFormats(c: Context) {
+	const query = db.prepare(`
+		SELECT * FROM MediaFormat;
+		`);
+	const mediaFormats = query.all();
+	return c.json(mediaFormats);
+}
+
+
 export {getGenres, addGenre, removeGenres,
 		getPlatforms, addPlatform, removePlatforms,
 		getCompanies, getPlatformOwners, getDevelopers, getPublishers, getCompanyTypes, addCompany, removeCompanies,
-		getStorefronts, addStorefront, removeStorefronts};
+		getStorefronts, addStorefront, removeStorefronts,
+		getMediaFormats};

@@ -14,7 +14,8 @@ import { getLibraries, getWishlists } from './handlers/collections.ts';
 import { getGenres, addGenre, removeGenres,
 		getPlatforms, addPlatform, removePlatforms,
 		getCompanies, getPlatformOwners, getDevelopers, getPublishers, getCompanyTypes, addCompany, removeCompanies,
-		getStorefronts, addStorefront, removeStorefronts } from './handlers/gameMetadata.ts';
+		getStorefronts, addStorefront, removeStorefronts,
+		getMediaFormats } from './handlers/gameMetadata.ts';
 import { addGameToLibrary } from './handlers/games.ts';
 
 const app = new Hono();
@@ -54,6 +55,8 @@ app.get('/api/metadata/publishers', getPublishers);
 app.get('/api/metadata/company-types', getCompanyTypes);
 // Get a list of all stored storefronts.
 app.get('/api/metadata/storefronts', getStorefronts);
+// Get a list of all stored media formats
+app.get('/api/metadata/media-formats', getMediaFormats);
 
 // Create a new game and add it to a library.
 app.post('/api/games/add/library', addGameToLibrary);
