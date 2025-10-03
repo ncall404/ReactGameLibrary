@@ -56,7 +56,7 @@ app.get('/api/metadata/company-types', getCompanyTypes);
 // Get a list of all stored storefronts.
 app.get('/api/metadata/storefronts', getStorefronts);
 // Get a list of all stored media formats
-app.get('/api/metadata/media-formats', getMediaFormats);
+app.get('/api/metadata/media-format', getMediaFormats);
 
 // Create a new game and add it to a library.
 app.post('/api/games/add/library', addGameToLibrary);
