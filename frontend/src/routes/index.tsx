@@ -27,7 +27,7 @@ function RouteComponent() {
 	const queryClient = useQueryClient();
 
 	const singleLibrary = useQuery({
-		queryKey:['libraries'],
+		queryKey:['libraries', 'contents', 'single-library'],
 		queryFn: () => getSingleLibrary(1),
 	});
 
