@@ -379,7 +379,6 @@ function createTables() {
 		{Title: 'Puzzle'},
 		{Title: 'Action'},
 		{Title: 'Adventure'},
-		{Title: 'Action-Adventure'},
 		{Title: 'Metroidvania'},
 		{Title: 'Sports'},
 		{Title: 'Survival'},
