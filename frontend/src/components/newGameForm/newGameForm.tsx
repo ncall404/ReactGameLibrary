@@ -2,7 +2,7 @@
 
 import Select from "react-select";
 import type { MultiValue, SingleValue } from "react-select";
-import type { OptionType } from "../../types/selectOptionType.ts";
+import type { OptionType } from "../../types/SelectOptionType.ts";
 import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
@@ -210,7 +210,6 @@ export default function NewGameForm(props: NewGameFormProps) {
 					name="gameMediaFormat"
 					inputId="newGameMediaFormatOptions"
 					className="text-(--color-dark) cursor-pointer"
-					closeMenuOnSelect={false}
 					value={selectedMediaFormat}
 					onChange={(option: SingleValue<OptionType>) => {
 						setSelectedMediaFormat(option as OptionType);
