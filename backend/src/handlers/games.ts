@@ -49,8 +49,8 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 	const coverArt = typeof body['coverArt'] === 'string' ? null : body['coverArt'] as File;
 
 	let gameMediaFormat: number | null = null;
-	if (typeof body['gameMediaFormats'] === 'string' && !isNaN(Number(body['gameMediaFormats']))) {
-		gameMediaFormat = Number(body['gameMediaFormats']);
+	if (typeof body['gameMediaFormat'] === 'string' && !isNaN(Number(body['gameMediaFormat']))) {
+		gameMediaFormat = Number(body['gameMediaFormat']);
 	}
 	
 	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);
