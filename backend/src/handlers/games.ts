@@ -60,7 +60,7 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 
 	let coverArtPath = "";
 	if (coverArt) {
-		coverArtPath = join('./uploads/images/', coverArt.name);
+		coverArtPath = join('./images/uploads/', coverArt.name);
 		try {
 			await access(coverArtPath);
 			uploadResponse = {

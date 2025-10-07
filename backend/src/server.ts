@@ -23,14 +23,14 @@ app.use(cors());
 
 // Serve images from ./uploads/images
 // TODO: Make it so that there is a placeholder sent if the image isn't found.
-app.use('/uploads/images/*', serveStatic({
-	root: './uploads/images',
-	rewriteRequestPath: (path) => path.replace(/^\/uploads\/images/, ''),
+app.use('/images/*/*', serveStatic({
+	root: './images',
+	rewriteRequestPath: (path) => path.replace(/^\/images\//, ''),
 }));
 
 // Database check to see if it is set up, if not then it runs the setup process.
 console.log(setupDb());
-console.log(await setupImageStorage("./uploads/images"));
+console.log(await setupImageStorage("./images/uploads"));
 
 // Get list of games belonging to a library. 
 app.get('/api/libraries/:libraryId/games', getGamesLibrary);
