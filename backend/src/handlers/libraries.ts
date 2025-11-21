@@ -3,6 +3,7 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 
+// TODO: Add game media format to query.
 const getGamesLibrary = function getGamesLibrary(c: Context) {
 	const libraryId = c.req.param('libraryId');
 	const query = db.prepare(`
