@@ -16,9 +16,6 @@ export default function GameItem(props: GameItemProps) {
 	if (game.CoverArt !== null) {
 		imgSrc = `http://localhost:3000/${game.CoverArt}`;
 		imgAlt = `Game cover art for ${game.Title}`;
-	} else {
-		imgSrc = "./src/assets/PlaceHolderCoverArtSize2.png"; // TODO: Make a better placeholder image...
-		imgAlt = "Placeholder for game cover art as there was no art found in the database.";
 	}
 
 	return (
