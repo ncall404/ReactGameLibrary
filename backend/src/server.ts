@@ -1,7 +1,7 @@
 // API server for the game library app. Allows front-end interaction with the sqlite database.
 
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { cors } from 'hono/cors';
 import { serveStatic } from '@hono/node-server/serve-static';
 
@@ -21,16 +21,35 @@ import { addGameToLibrary } from './handlers/games.ts';
 const app = new Hono();
 app.use(cors());
 
-// Serve images from ./uploads/images
-// TODO: Make it so that there is a placeholder sent if the image isn't found.
-app.use('/images/*/*', serveStatic({
-	root: './images',
-	rewriteRequestPath: (path) => path.replace(/^\/images\//, ''),
-}));
-
 // Database check to see if it is set up, if not then it runs the setup process.
 console.log(setupDb());
 console.log(await setupImageStorage("./images/uploads"));
+
+
+// Serve images from ./uploads/images or a placeholder if the requested image is not available.
+app.use('/images/*', serveStatic({
+	root: './images',
+	rewriteRequestPath: (path) => path.replace(/^\/images\//, ''),
+}));
+app.notFound(async (c) => {
+	// If an image is requested but not found, give a fallback image.
+	if (c.req.path.startsWith('/images/')) {
+		const fallbackRes = await serveStatic({
+			root: './images',
+			path: 'static/fallback/ImageNotFoundFallback-256.avif',
+		})(c, async () => {});
+		// Double check that the fallback image was found.
+		if (fallbackRes instanceof Response && fallbackRes.status === 200) {
+			return fallbackRes;
+		}
+		// If the fallback is missing for some reason.
+		console.error("Fallback image not found.")
+		return c.text('Fallback image not found.', 404);
+	}
+
+	// For non-image failures.
+	return c.text ('404 Not Found', 404);
+});
 
 // Get list of games belonging to a library. 
 app.get('/api/libraries/:libraryId/games', getGamesLibrary);

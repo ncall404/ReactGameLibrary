@@ -81,6 +81,8 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 				});
 			}
 		}
+	} else {
+		coverArtPath = './images/uploads/no-image-provided'.normalize();
 	}
 
 	// Queries for uploading the new game and it's metadata.
