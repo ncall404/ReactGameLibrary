@@ -19,16 +19,20 @@ export default function GameItem(props: GameItemProps) {
 	}
 
 	return (
-		<article className="grid auto-cols-auto auto-rows-max sm:gap-x-4 gap-y-1 my-3 p-4 bg-(--color-darker)">
-			{
-			<img className="motion-safe:transition-all ease-in-out w-40 col-start-1 max-sm:order-2
-			sm:row-span-3
-			lg:w-64
-			" src={imgSrc} alt={imgAlt}/>
-			}
-			<h2 className="text-2xl max-sm:order-1 sm:col-start-2 sm:col-span-2">{game.Title}</h2>
-			<p className="max-sm:order-3 text-pretty">{game.Description}</p>
+		<article className="flex flex-col gap-2 my-3 p-4 bg-(--color-darker)">
+			{/* Div for main game information */}
+			<div className="flex max-md:flex-col max-md:gap-2 gap-4">
+				<img className="motion-safe:transition-all ease-in-out
+				min-md:w-56 lg:w-64 max-md:w-fit
+				max-md:h-56 min-md:h-fit" 
+				src={imgSrc} alt={imgAlt}/>
+				<div className="grow flex flex-col gap-0.25">
+					<h2 className="text-2xl">{game.Title}</h2>
+					<p className="text-pretty">{game.Description}</p>
+				</div>
+			</div>
 
+			{/* Div for game metadata */}
 			<div id="extraGameInfoContainer" className="flex">
 				{/* Placeholder. Right here should have things like the developer, publisher, release date, and genres once that stuff is properly being retrieved from the database. */}
 			</div>
