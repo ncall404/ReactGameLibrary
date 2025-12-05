@@ -242,7 +242,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 
 				<Btn type="submit" style={BtnStyle.Primary}>Add Option</Btn>
 			</form>
-			<hr />
+			
 			<form onSubmit={handleEditListRemove} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
 				<h3 className="text-xl">Remove</h3>
 				<label htmlFor="editMetadataRemove">Options to remove: </label>
