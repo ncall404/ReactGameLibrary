@@ -13,7 +13,7 @@ const clearImageStorage = async function clearImageStorage(imageStoragePath: str
 const setupImageStorage = async function setupImageStorage(imageStoragePath: string) {
 	let storageExists: boolean;
 	try {
-		await access("../"+imageStoragePath, constants.F_OK);
+		await access(imageStoragePath, constants.F_OK);
 		storageExists = true;
 	} catch {
 		storageExists = false;
