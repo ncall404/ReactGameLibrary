@@ -22,8 +22,7 @@ const app = new Hono();
 app.use(cors());
 
 // Database check to see if it is set up, if not then it runs the setup process.
-console.log(setupDb());
-console.log(await setupImageStorage("./images/uploads"));
+console.log(await setupDb());
 
 
 // Serve images from ./uploads/images or a placeholder if the requested image is not available.

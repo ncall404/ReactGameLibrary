@@ -3,8 +3,12 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 
+import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
+
 // Create database object for the game_collection database. If game_collection.db is missing then it is created.
 const db = new Database(path.join('data', 'game_collection.db'));
+// Relative path to use for storing uploaded images.
+const imageUploadPath = "./images/uploads";
 
 // Check if tables exist in the database. Returns boolean; true if all tables exist, false otherwise.
 /* 
@@ -406,9 +410,12 @@ function createTables() {
 	]);
 }
 
+
 // Checks database table existence. If the amount of tables isn't right, then setup the database.
-const setupDb = function setupDb(): string {
+const setupDb = async function setupDb(): Promise<string> {
+	let databaseCreationResult: string;
 	let tablesExist: boolean;
+
 	try {
 		tablesExist = checkTables();
 	} catch(err) {
@@ -421,15 +428,26 @@ const setupDb = function setupDb(): string {
 		} catch(err) {
 			return "Error: Database creation failed; " + err;
 		}
-		return "Success: Database created!"
+		databaseCreationResult = "Success: Database created!";
+	} else {
+		databaseCreationResult = "Success: Database already existed.";
 	}
-	return "Success: Database already existed."
+
+	let imagePathCreationResult: string;
+	imagePathCreationResult = await setupImageStorage(imageUploadPath);
+
+	return databaseCreationResult + "\n" + imagePathCreationResult
 }
 
+
 // Resets the database tables.
-const resetDb = function resetDb() {
+const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<string> {
 	try {
 		createTables();
+
+		if (deleteUploadedImages) {
+			await clearImageStorage(imageUploadPath);
+		}
 	} catch(err) {
 		return "Error: Database reset failed; " + err;
 	}
