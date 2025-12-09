@@ -4,13 +4,13 @@ import { access, mkdir, rm } from "fs/promises";
 import { constants } from "fs";
 
 // Clears the contents of the path for image storage. This removes all stored pictures.
-const clearImageStorage = async function clearImageStorage(imageStoragePath: string) {
+const clearImageStorage = async function clearImageStorage(imageStoragePath: string): Promise<void> {
 	await rm(imageStoragePath, {recursive: true, force: true});
 	await mkdir(imageStoragePath, {recursive: true});
 }
 
 // Checks folder path for image storage then creates the path if it wasn't found.
-const setupImageStorage = async function setupImageStorage(imageStoragePath: string) {
+const setupImageStorage = async function setupImageStorage(imageStoragePath: string): Promise<string> {
 	let storageExists: boolean;
 	try {
 		await access(imageStoragePath, constants.F_OK);
