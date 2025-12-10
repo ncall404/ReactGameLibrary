@@ -7,6 +7,7 @@ import { BtnStyle } from '../components/common/btn.tsx';
 import Modal from '../components/common/modal.tsx';
 
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/settings')({
 	component: RouteComponent,
@@ -14,6 +15,17 @@ export const Route = createFileRoute('/settings')({
 
 function RouteComponent() {
 	const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
+
+	const resetAppMutation = useMutation({
+		mutationFn: async () => {
+			// TODO: Change to using the api variable when you ge
+			const res = await fetch('http://localhost:3000/api/settings/reset-app', {
+				method: 'POST',
+			});
+			if (!res.ok) throw new Error('App reset failed');
+			return res.json();
+		}
+	});
 
 	return (
 		<>
@@ -30,7 +42,10 @@ function RouteComponent() {
 
 			<Modal
 			isOpen={isResetConfirmOpen}
-			onConfirm={() => {setIsResetConfirmOpen(false)}}
+			onConfirm={() => {
+				resetAppMutation.mutate();
+				setIsResetConfirmOpen(false)
+			}}
 			onClose={() => {setIsResetConfirmOpen(false)}}
 			isForm={true}>
 				<h2 className="text-2xl">Confirm App Reset</h2>
