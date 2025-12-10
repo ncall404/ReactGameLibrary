@@ -439,9 +439,18 @@ const setupDb = async function setupDb(): Promise<string> {
 	return databaseCreationResult + "\n" + imagePathCreationResult
 }
 
+type ResetStatus = {
+	success: boolean;
+	message: string;
+}
 
 // Resets the database tables.
-const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<string> {
+const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<ResetStatus> {
+	const resetStatus: ResetStatus = {
+		success: false,
+		message: ""
+	}
+
 	try {
 		createTables();
 
@@ -449,9 +458,16 @@ const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Pr
 			await clearImageStorage(imageUploadPath);
 		}
 	} catch(err) {
-		return "Error: Database reset failed; " + err;
+		resetStatus.message = "Database reset failed; " + err;
+		console.error("Error: " + resetStatus.message);
+		return resetStatus;
 	}
-	return "Success: Database reset!";
+
+	resetStatus.success = true;
+	resetStatus.message = "Database reset!"
+	console.log("Success: " + resetStatus.message);
+	return resetStatus;
 }
 
 export {db, setupDb, resetDb};
+export type {ResetStatus};
