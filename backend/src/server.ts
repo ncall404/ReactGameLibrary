@@ -17,6 +17,7 @@ import { getGenres, addGenre, removeGenres,
 		getStorefronts, addStorefront, removeStorefronts,
 		getMediaFormats } from './handlers/gameMetadata.ts';
 import { addGameToLibrary } from './handlers/games.ts';
+import { resetApp } from './handlers/settings.ts';
 
 const app = new Hono();
 app.use(cors());
@@ -97,6 +98,9 @@ app.post('/api/metadata/companies/remove', removeCompanies);
 app.post('/api/metadata/platforms/remove', removePlatforms);
 	// Remove storefronts from the stored storefronts.
 app.post('/api/metadata/storefronts/remove', removeStorefronts);
+
+// Reset App Database/Image Storage =========================================
+app.post('/api/settings/reset-app', resetApp);
 
 serve({
 	fetch: app.fetch,
