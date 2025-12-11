@@ -9,7 +9,7 @@ import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 import EditMetadataModal from "../editMetadataModal/editMetadataModal.tsx";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
@@ -23,6 +23,8 @@ type NewGameFormProps = {
 }
 
 export default function NewGameForm(props: NewGameFormProps) {
+	const queryClient = useQueryClient();
+
 	let api: string = 'http://localhost:3000/api/';
 	switch (props.collectionType) {
 		case CollectionType.Library: {
@@ -63,9 +65,20 @@ export default function NewGameForm(props: NewGameFormProps) {
 			if (!res.ok) throw new Error('Upload failed');
 			return res.json();
 		},
-		onSuccess: (data) => console.log('Uploaded: ', data),
+		onSuccess: (data) => {
+			console.log('Uploaded: ', data);
+			invalidateData();
+		},
 		onError: (err) => console.error('Error: ', err),
 	});
+
+	const invalidateData = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: ['libraries', 'contents', 'single-library'],
+			exact: true,
+			refetchType: 'all',
+		});
+	}
 
 	// Handles correctly submitting the main form's data.
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
