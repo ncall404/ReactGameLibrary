@@ -16,8 +16,8 @@ import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
 
 type NewGameFormProps = {
-	onSubmitted?: () => void,
-	onCancel?: () => void,
+	onSubmitted: () => void,
+	onCancel: () => void,
 	collectionType: string, // Change type to object as const with the possible collection types in it.
 	collectionId: number,
 }
@@ -88,6 +88,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		formData.append('gameMediaFormat', selectedMediaFormat?.value.toString() as string);
 
 		newGameMutation.mutate(formData);
+		if (props.onSubmitted) props.onSubmitted();
 	}
 
 	// useQuery hooks for lists that are used to fill Select inputs.
