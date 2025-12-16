@@ -34,7 +34,12 @@ function checkTables(): boolean {
 	return true;
 }
 
-// TODO: Wrap createTables queries in a transaction. Wrap table dropping, table creation, and default value insertions into separate transactions.
+// Type for the object sent back from the server in response to a server request if it has no extra needs (i.e. extra data or an extra field).
+// 		TODO: Combine with other similar/identical types for responses from other files such as in settings.ts and move to a new more appropriate location that is TBD.
+type BackendResponse = {
+	message: string;
+	status: "success" | "warning" | "error" | "informative";
+}
 
 // Creates the database tables and inserts data into relevant tables.
 function createTables() {
@@ -444,11 +449,12 @@ type ResetStatus = {
 	message: string;
 }
 
+
 // Resets the database tables.
-const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<ResetStatus> {
-	const resetStatus: ResetStatus = {
-		success: false,
-		message: ""
+const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<BackendResponse> {
+	const resetStatus: BackendResponse = {
+		message: "Database reset incomplete.",
+		status: "error"
 	}
 
 	try {
@@ -463,11 +469,11 @@ const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Pr
 		return resetStatus;
 	}
 
-	resetStatus.success = true;
-	resetStatus.message = "Database reset!"
+	resetStatus.message = "Database reset!";
+	resetStatus.status = "success";
 	console.log("Success: " + resetStatus.message);
 	return resetStatus;
 }
 
 export {db, setupDb, resetDb};
-export type {ResetStatus};
+export type {BackendResponse};
