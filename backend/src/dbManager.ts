@@ -417,36 +417,46 @@ function createTables() {
 
 
 // Checks database table existence. If the amount of tables isn't right, then setup the database.
-const setupDb = async function setupDb(): Promise<string> {
-	let databaseCreationResult: string;
+const setupDb = async function setupDb(): Promise<BackendResponse> {
+	const result: BackendResponse = {
+		message: "Databse setup incomplete",
+		status: "error"
+	};
 	let tablesExist: boolean;
 
 	try {
 		tablesExist = checkTables();
 	} catch(err) {
-		return "Error: Couldn't verify the database; " + err;
+		return {
+			message: "Error verifying the database: " + err,
+			status: "error"
+		}
 	}
 
 	if (!tablesExist) {
 		try {
 			createTables();
 		} catch(err) {
-			return "Error: Database creation failed; " + err;
+			return {
+				message: "Error creating the database: " + err,
+				status: "error"
+			}
 		}
-		databaseCreationResult = "Success: Database created!";
+		result.message = "Success: Database created!";
+		result.status = "success";
 	} else {
-		databaseCreationResult = "Success: Database already existed.";
+		result.message = "Success: Database already existed.";
+		result.status = "informative";
 	}
 
-	let imagePathCreationResult: string;
-	imagePathCreationResult = await setupImageStorage(imageUploadPath);
+	const imageStorageResult = await setupImageStorage(imageUploadPath);
+	// If the status of the imageStorageResult isn't success and the result status is, then it should be set to the lower status of the imageStorageResult since they are sent back together.
+	if ((result.status !== "informative" && imageStorageResult.status === "informative") || imageStorageResult.status === "error") {
+		result.status = imageStorageResult.status;
+	}
 
-	return databaseCreationResult + "\n" + imagePathCreationResult
-}
-
-type ResetStatus = {
-	success: boolean;
-	message: string;
+	result.message = result.message + "\n" + imageStorageResult.message;
+	return result;
 }
 
 
