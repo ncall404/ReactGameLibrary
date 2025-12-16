@@ -1,12 +1,11 @@
 // API server for the game library app. Allows front-end interaction with the sqlite database.
 
 import { serve } from '@hono/node-server';
-import { Hono, type Context } from 'hono';
+import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serveStatic } from '@hono/node-server/serve-static';
 
-import { setupDb, resetDb } from './dbManager.ts';
-import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
+import { setupDb } from './dbManager.ts';
 
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
