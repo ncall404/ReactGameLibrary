@@ -256,7 +256,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					name="gamePublishers"
 					inputId="newGamePublisherOptions"
 					className="text-(--color-dark) cursor-pointer"
-					closeMenuOnSelect={false}
+					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPublishers}
 					onChange={(options: MultiValue<OptionType>) => {
@@ -271,7 +271,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					name="gameDevelopers"
 					inputId="newGameDeveloperOptions"
 					className="text-(--color-dark) cursor-pointer"
-					closeMenuOnSelect={false}
+					closeMenuOnSelect={true}
 					isMulti
 					value={selectedDevelopers}
 					onChange={(options: MultiValue<OptionType>) => {
