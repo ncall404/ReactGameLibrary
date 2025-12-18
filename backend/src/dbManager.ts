@@ -381,30 +381,21 @@ function createTables(): BackendResponse {
 			for (const genre of genres) insertGenres.run(genre);
 		});
 		insertManyGenres([
-			{Title: 'Role Playing'},
-			{Title: 'First Person Shooter'},
-			{Title: 'Third Person Shooter'},
-			{Title: 'Battle Royale'},
-			{Title: 'Platformer'},
-			{Title: 'Racing'},
-			{Title: 'Massive Multiplayer Online'},
-			{Title: 'Puzzle'},
 			{Title: 'Action'},
 			{Title: 'Adventure'},
-			{Title: 'Metroidvania'},
+			{Title: 'Role Playing'},
+			{Title: 'Platformer'},
+			{Title: 'Shooter'},
+			{Title: 'Puzzle'},
+			{Title: 'Racing'},
 			{Title: 'Sports'},
-			{Title: 'Survival'},
 			{Title: 'Fighting'},
-			{Title: 'Beat-Em Up'},
-			{Title: 'Hack and Slash'},
 			{Title: 'Strategy'},
 			{Title: 'Real-Time Strategy'},
-			{Title: 'Sandbox'},
 			{Title: 'Simulation'},
-			{Title: 'Flight'},
-			{Title: 'Party'},
-			{Title: 'Roguelike'},
-			{Title: 'Educational'},
+			{Title: 'Survival'},
+			{Title: 'Sandbox'},
+			{Title: 'Massive Multiplayer Online'},
 		]);
 		// Media Formats
 		const insertMediaFormat = db.prepare('INSERT INTO MediaFormat (Title) VALUES (@Title);');
