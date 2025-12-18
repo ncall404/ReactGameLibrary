@@ -57,6 +57,7 @@ app.get('/api/libraries/:libraryId/games', getGamesLibrary);
 app.get('/api/collections/libraries', getLibraries);
 // Get a list of all stored wishlists.
 app.get('/api/collections/wishlists', getWishlists);
+
 // Get a list of all stored genres.
 app.get('/api/metadata/genres', getGenres);
 // Get a list of all stored platforms.
