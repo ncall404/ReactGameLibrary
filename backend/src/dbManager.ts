@@ -275,13 +275,13 @@ function createTables(): BackendResponse {
 			for (const company of companies) insertCompanies.run(company);
 		});
 		insertManyCompanies([
-			{Title: 'Google'},
-			{Title: 'Apple'},
 			{Title: 'Nintendo'},
 			{Title: 'Sony'},
 			{Title: 'Microsoft'},
 			{Title: 'Sega'},
 			{Title: 'Atari'},
+			{Title: 'Google'},
+			{Title: 'Apple'},
 		]);
 		// Common Company's Types
 		const insertCompanyCompanyTypes = db.prepare('INSERT INTO CompanyCompanyType (CompanyID, CompanyTypeID) VALUES (@CompanyID, @CompanyTypeID);');
@@ -290,7 +290,11 @@ function createTables(): BackendResponse {
 		});
 		insertManyCompanyCompanyTypes([
 			{CompanyID: 1, CompanyTypeID: 1},
+			{CompanyID: 1, CompanyTypeID: 2},
+			{CompanyID: 1, CompanyTypeID: 3},
 			{CompanyID: 2, CompanyTypeID: 1},
+			{CompanyID: 2, CompanyTypeID: 2},
+			{CompanyID: 2, CompanyTypeID: 3},
 			{CompanyID: 3, CompanyTypeID: 1},
 			{CompanyID: 3, CompanyTypeID: 2},
 			{CompanyID: 3, CompanyTypeID: 3},
@@ -301,11 +305,7 @@ function createTables(): BackendResponse {
 			{CompanyID: 5, CompanyTypeID: 2},
 			{CompanyID: 5, CompanyTypeID: 3},
 			{CompanyID: 6, CompanyTypeID: 1},
-			{CompanyID: 6, CompanyTypeID: 2},
-			{CompanyID: 6, CompanyTypeID: 3},
 			{CompanyID: 7, CompanyTypeID: 1},
-			{CompanyID: 7, CompanyTypeID: 2},
-			{CompanyID: 7, CompanyTypeID: 3}
 		]);
 		// Common Platforms
 		const insertPlatforms = db.prepare('INSERT INTO Platform (Title, CompanyID) VALUES (@Title, @CompanyID);');
@@ -315,49 +315,49 @@ function createTables(): BackendResponse {
 		insertManyPlatforms([
 			// PC
 			{Title: 'Desktop', CompanyID: null},
-			// Mobile
-			{Title: 'Android', CompanyID: 1},
-			{Title: 'IOS', CompanyID: 2},
 			// Nintendo
-			{Title: 'Switch 2', CompanyID: 3},
-			{Title: 'Switch', CompanyID: 3},
-			{Title: 'Wii U', CompanyID: 3},
-			{Title: 'Nintendo 3DS/2DS', CompanyID: 3},
-			{Title: 'Wii', CompanyID: 3},
-			{Title: 'Nintendo DS', CompanyID: 3},
-			{Title: 'Gamecube', CompanyID: 3},
-			{Title: 'Game Boy Advance', CompanyID: 3},
-			{Title: 'N64', CompanyID: 3},
-			{Title: 'Super Nintendo Entertainment System', CompanyID: 3},
-			{Title: 'Game Boy', CompanyID: 3},
-			{Title: 'Nintendo Entertainment System', CompanyID: 3},
+			{Title: 'Switch 2', CompanyID: 1},
+			{Title: 'Switch', CompanyID: 1},
+			{Title: 'Wii U', CompanyID: 1},
+			{Title: 'Nintendo 3DS/2DS', CompanyID: 1},
+			{Title: 'Wii', CompanyID: 1},
+			{Title: 'Nintendo DS', CompanyID: 1},
+			{Title: 'Gamecube', CompanyID: 1},
+			{Title: 'Game Boy Advance', CompanyID: 1},
+			{Title: 'N64', CompanyID: 1},
+			{Title: 'Super Nintendo Entertainment System', CompanyID: 1},
+			{Title: 'Game Boy', CompanyID: 1},
+			{Title: 'Nintendo Entertainment System', CompanyID: 1},
 			// Sony
-			{Title: 'PlayStation 5', CompanyID: 4},
-			{Title: 'PlayStation 4', CompanyID: 4},
-			{Title: 'PlayStation Vita', CompanyID: 4},
-			{Title: 'PlayStation 3', CompanyID: 4},
-			{Title: 'PlayStation Portable', CompanyID: 4},
-			{Title: 'PlayStation 2', CompanyID: 4},
-			{Title: 'Sony PlayStation', CompanyID: 4},
+			{Title: 'PlayStation 5', CompanyID: 2},
+			{Title: 'PlayStation 4', CompanyID: 2},
+			{Title: 'PlayStation Vita', CompanyID: 2},
+			{Title: 'PlayStation 3', CompanyID: 2},
+			{Title: 'PlayStation Portable', CompanyID: 2},
+			{Title: 'PlayStation 2', CompanyID: 2},
+			{Title: 'Sony PlayStation', CompanyID: 2},
 			// Microsoft
-			{Title: 'Xbox Series X/S', CompanyID: 5},
-			{Title: 'Xbox One', CompanyID: 5},
-			{Title: 'Xbox 360', CompanyID: 5},
-			{Title: 'Xbox', CompanyID: 5},
+			{Title: 'Xbox Series X/S', CompanyID: 3},
+			{Title: 'Xbox One', CompanyID: 3},
+			{Title: 'Xbox 360', CompanyID: 3},
+			{Title: 'Xbox', CompanyID: 3},
+			// Mobile
+			{Title: 'Android', CompanyID: 6},
+			{Title: 'IOS', CompanyID: 7},
 			// Sega
-			{Title: 'Dreamcast', CompanyID: 6},
-			{Title: 'Sega Nomad', CompanyID: 6},
-			{Title: 'Sega Saturn', CompanyID: 6},
-			{Title: 'Game Gear', CompanyID: 6},
-			{Title: 'Sega Genesis/Mega Drive', CompanyID: 6},
-			{Title: 'Sega SG-1000', CompanyID: 6},
+			{Title: 'Dreamcast', CompanyID: 4},
+			{Title: 'Sega Nomad', CompanyID: 4},
+			{Title: 'Sega Saturn', CompanyID: 4},
+			{Title: 'Game Gear', CompanyID: 4},
+			{Title: 'Sega Genesis/Mega Drive', CompanyID: 4},
+			{Title: 'Sega SG-1000', CompanyID: 4},
 			// Atari
-			{Title: 'Atari VCS', CompanyID: 7},
-			{Title: 'Atari Jaguar', CompanyID: 7},
-			{Title: 'Atari Lynx', CompanyID: 7},
-			{Title: 'Atari 7800', CompanyID: 7},
-			{Title: 'Atari 5200', CompanyID: 7},
-			{Title: 'Atari 2600', CompanyID: 7},
+			{Title: 'Atari VCS', CompanyID: 5},
+			{Title: 'Atari Jaguar', CompanyID: 5},
+			{Title: 'Atari Lynx', CompanyID: 5},
+			{Title: 'Atari 7800', CompanyID: 5},
+			{Title: 'Atari 5200', CompanyID: 5},
+			{Title: 'Atari 2600', CompanyID: 5},
 		]);
 		// Common Storefronts
 		const insertStorefronts = db.prepare('INSERT INTO Storefront (Title, Website) VALUES (@Title, @Website);');
