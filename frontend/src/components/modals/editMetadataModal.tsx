@@ -1,4 +1,4 @@
-// WIP component
+// Modal component for editing game metadata such as companies, genres, platforms.
 
 import Modal from "../common/modal.tsx";
 import Btn from "../common/btn.tsx";
