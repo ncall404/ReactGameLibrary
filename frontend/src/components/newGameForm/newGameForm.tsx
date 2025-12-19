@@ -7,7 +7,7 @@ import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../.
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
-import EditMetadataModal from "../editMetadataModal/editMetadataModal.tsx";
+import EditMetadataModal from "../modals/editMetadataModal.tsx";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
