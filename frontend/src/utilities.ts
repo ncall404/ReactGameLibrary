@@ -1,6 +1,6 @@
-// Utility functions used across more than one other file.
+// Utility functions likely to be used across more than one other file.
 
-import type { OptionType } from "./types/selectOptionType";
+import type { OptionType } from "./types/SelectOptionType";
 
 // Converts the selected options from Select inputs to a string format that can be sent to the backend.
 const optionsToString = (options: OptionType[]) => {
