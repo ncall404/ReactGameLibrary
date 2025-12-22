@@ -7,7 +7,7 @@ import { BtnStyle } from "../common/btn.tsx";
 import Select from "react-select";
 import type { MultiValue, SingleValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillGroupedOptionsArray, fillOptionsArray, optionsToString } from "../../utilities.ts";
+import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -168,7 +168,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 
 	return (
 		<Modal isOpen={props.isOpen} onClose={props.onClose}>
-			<h2 className="text-2xl">{editMetadataField.charAt(0).toUpperCase().concat(editMetadataField.slice(1))}</h2>
+			<h2 className="text-2xl">{upperFirstLetter(editMetadataField)}</h2>
 			<form onSubmit={handleEditListAdd} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
 				<h3 className="text-xl">Add</h3>
 				<label htmlFor="editMetadataAdd">Name: </label>
