@@ -4,3 +4,5 @@
 const upperFirstLetter = (source: string): string => {
 	return source.charAt(0).toUpperCase().concat(source.slice(1));
 }
+
+export {upperFirstLetter};
