@@ -433,7 +433,7 @@ function createTables(): BackendResponse {
 // Checks database table existence. If the amount of tables isn't right, then setup the database.
 const setupDb = async function setupDb(): Promise<BackendResponse> {
 	const result: BackendResponse = {
-		message: "Databse setup incomplete",
+		message: "Database setup incomplete",
 		status: "error"
 	};
 	let tablesExist: boolean;
