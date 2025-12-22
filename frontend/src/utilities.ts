@@ -57,4 +57,13 @@ const fillGroupedOptionsArray = (optionsData: Array<Record<string, string | numb
 	return Array.from(grouped.entries()).map(([label, options]) => ({label, options}));
 }
 
-export {optionsToString, fillOptionsArray, fillGroupedOptionsArray};
+
+// Takes the first letter of a string and changes it to upper-case.
+const upperFirstLetter = (source: string): string => {
+	return source.charAt(0).toUpperCase().concat(source.slice(1));
+}
+
+export {
+	optionsToString, fillOptionsArray, fillGroupedOptionsArray,
+	upperFirstLetter
+};
