@@ -35,7 +35,6 @@ const addCollection = async function addCollection(c: Context) {
 	const body = await c.req.parseBody();
 	const collectionType = body['collectionType'] as keyof typeof tableWhitelist;
 	const collectionTitle = body['collectionAddTitle'] as string;
-	console.log(collectionType);
 
 	// Verify that a collection title was provided by the user.
 	if (collectionTitle.length <= 0) {
@@ -75,3 +74,52 @@ const addCollection = async function addCollection(c: Context) {
 
 	return c.json(response);
 }
+
+// Remove a collection.
+const removeCollection = async function removeCollection(c: Context) {
+	const response: BackendResponse = {
+		message: "Adding collection not completed.",
+		status: "error"
+	};
+
+	const body = await c.req.parseBody();
+	const collectionType = body['collectionType'] as keyof typeof tableWhitelist;
+	const selectedCollectionsString = body['collectionRemove'] as string;
+
+	if (selectedCollectionsString.length == 0) {
+		response.message = "No options were selected for removal.";
+		response.status = "warning";
+	} else {
+		const selectedCollections = selectedCollectionsString.split(',');
+
+		const deleteSelectedCollections = db.transaction(() => {
+			const deleteGameConnection = db.prepare(`
+				DELETE FROM ${"Game".concat(upperFirstLetter(collectionType))}
+				WHERE ${tableWhitelist[collectionType] + "ID"} = @CollectionID;
+			`);
+			const deleteCollection = db.prepare(`
+				DELETE FROM ${upperFirstLetter(collectionType)}
+				WHERE ${tableWhitelist[collectionType] + "ID"} = @CollectionID;
+			`);
+
+			for (const collection of selectedCollections) {
+				const collectionID = parseInt(collection);
+				deleteGameConnection.run({CollectionID: collectionID});
+				deleteCollection.run({CollectionID: collectionID});
+			}
+		});
+
+		try {
+			deleteSelectedCollections();
+			response.message = `${upperFirstLetter(collectionType)}(s) successfully removed.`;
+			response.status = "success";
+		} catch (err) {
+			response.message = `Error deleting the ${collectionType}: ${err}`;
+		}
+	}
+
+	return c.json(response);
+}
+
+
+export {getLibraries, getWishlists, addCollection, removeCollection};
