@@ -1,5 +1,8 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
+import type { BackendResponse } from "../dbManager.ts";
+
+import { upperFirstLetter } from "../utilities.ts";
 
 // Get all libraries.
 const getLibraries = function getLibraries(c: Context) {
@@ -16,4 +19,59 @@ const getWishlists = function getWishlists(c: Context) {
 }
 
 
-export {getLibraries, getWishlists};
+// Table name whitelist lookup object.
+const tableWhitelist = {
+	library: "Library",
+	wishlist: "Wishlist"
+} as const;
+
+// Add a collection.
+const addCollection = async function addCollection(c: Context) {
+	const response: BackendResponse = {
+		message: "Adding collection not completed.",
+		status: "error"
+	};
+
+	const body = await c.req.parseBody();
+	const collectionType = body['collectionType'] as keyof typeof tableWhitelist;
+	const collectionTitle = body['collectionAddTitle'] as string;
+	console.log(collectionType);
+
+	// Verify that a collection title was provided by the user.
+	if (collectionTitle.length <= 0) {
+		response.message = `No ${collectionType} name was provided.`;
+		return c.json(response);
+	}
+
+	// Check if the collection name is already in use so that a number can be added to the end to differentiate it.
+	const checkCollectionsQuery = db.prepare(`
+		SELECT COUNT(*) as Count FROM ${upperFirstLetter(collectionType)}
+		WHERE substr(lower(Title), 1, length(lower(@NewTitle))) = lower(@NewTitle);
+	`);
+	const numCollectionName = checkCollectionsQuery.get({NewTitle: collectionTitle}) as {Count: number};
+
+	// Actually create the new collection.
+	const addCollectionTransaction = db.transaction(() => {
+		const addCollectionQuery = db.prepare(`
+			INSERT INTO ${upperFirstLetter(collectionType)} (Title)
+			VALUES (@Title);
+		`);
+
+		addCollectionQuery.run({Title: numCollectionName.Count > 0 ? collectionTitle.concat(` ${numCollectionName.Count + 1}`) : collectionTitle});
+	});
+
+	try {
+		addCollectionTransaction();
+		if (numCollectionName.Count > 0) {
+			response.message = `Created the ${collectionType} successfully. Name changed to "${collectionTitle.concat(` ${numCollectionName.Count + 1}`)}" to avoid duplicate naming.`;
+			response.status = "informative";
+		} else {
+			response.message = `Created the ${collectionType} "${collectionTitle}" successfully.`;
+			response.status = "success";
+		}
+	} catch (err) {
+		response.message = `Error creating the ${collectionType}: + ${err}`;
+	}
+
+	return c.json(response);
+}
