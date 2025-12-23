@@ -9,7 +9,7 @@ import { setupDb } from './dbManager.ts';
 
 // Import route handlers
 import { getGamesLibrary } from './handlers/libraries.ts';
-import { getLibraries, getWishlists } from './handlers/collections.ts';
+import { getLibraries, getWishlists, addCollection, removeCollection } from './handlers/collections.ts';
 import { getGenres, addGenre, removeGenres,
 		getPlatforms, addPlatform, removePlatforms,
 		getCompanies, getPlatformOwners, getDevelopers, getPublishers, getCompanyTypes, addCompany, removeCompanies,
@@ -50,6 +50,9 @@ app.notFound(async (c) => {
 	return c.text ('404 Not Found', 404);
 });
 
+// ==========================================================================
+// GET handlers =============================================================
+// ==========================================================================
 // Get list of games belonging to a library. 
 app.get('/api/libraries/:libraryId/games', getGamesLibrary);
 
@@ -77,8 +80,16 @@ app.get('/api/metadata/storefronts', getStorefronts);
 // Get a list of all stored media formats
 app.get('/api/metadata/media-format', getMediaFormats);
 
+// ==========================================================================
+// POST handlers ============================================================
+// ==========================================================================
 // Create a new game and add it to a library.
 app.post('/api/games/add/library', addGameToLibrary);
+
+// Add a new collection.
+app.post('/api/collections/add', addCollection);
+// Remove a collection.
+app.post('/api/collections/remove', removeCollection);
 
 // Create Metadata ==========================================================
 	// Create a new genre and add it to the stored genres.
