@@ -17,4 +17,23 @@ const getCollectionList = async (collectionType: CollectionType) => {
 	return data;
 }
 
-export {CollectionType, getCollectionList};
+
+const addCollection = async (formData: FormData) => {
+	const res = await fetch(baseApiUrl.concat("/add"), {
+		method: 'POST',
+		body: formData,
+	});
+	if (!res.ok) throw new Error('Failed to add collection');
+	return res.json();
+}
+
+const removeCollection = async (formData: FormData) => {
+	const res = await fetch(baseApiUrl.concat("/remove"), {
+		method: 'POST',
+		body: formData,
+	});
+	if (!res.ok) throw new Error('Failed to remove collection');
+	return res.json();
+}
+
+export {CollectionType, getCollectionList, addCollection, removeCollection};
