@@ -17,6 +17,7 @@ type GameUploadResponse = {
 }
 
 
+// TODO: Consider renaming to something like createGame when you make a function for adding an existing game to a collection to keep function intentions clear.
 // Validates submitted data and then creates entries for the game in the database.
 const addGameToLibrary = async function addGameToLibrary(c: Context) {
 	let uploadResponse: GameUploadResponse | null = null;
