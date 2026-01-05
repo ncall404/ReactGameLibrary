@@ -36,8 +36,14 @@ const getGamesLibrary = function getGamesLibrary(c: Context) {
 		WHERE gl.LibraryID = ?
 		GROUP BY g.GameID;
 	`);
+	try {
 	const games = query.all(libraryId);
 	return c.json(games);
+	} catch (err) {
+		return c.json({
+			message: "Error retrieving games: " + err
+		});
+	}
 }
 
 export {getGamesLibrary};
