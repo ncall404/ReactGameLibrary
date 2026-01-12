@@ -278,4 +278,47 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	};
 }
 
-export {addGameToLibrary};
+// Retrieves all games in the database that don't belong to a game library. Will have to expand to check if they are in a wishlist if/when that gets implemented.
+const getGamesWithoutCollection = function getGamesWithoutCollection(c: Context) {
+	const query = db.prepare(`
+		SELECT g.GameID, g.Title AS Title, g.Description, g.ReleaseDate, g.CoverArt,
+		(
+			SELECT group_concat(Title, ', ')
+			FROM (
+				SELECT DISTINCT c.Title
+				FROM GameCompany gc
+				JOIN Company c ON gc.CompanyID = c.CompanyID
+				JOIN Companyrole cr ON gc.CompanyRoleID = cr.CompanyRoleID
+				WHERE gc.GameID = g.GameID AND cr.Title = 'Publisher'
+			)
+		) AS Publishers,
+		(
+			SELECT group_concat(Title, ', ')
+			FROM (
+				SELECT DISTINCT c.Title
+				FROM GameCompany gc
+				JOIN Company c ON gc.CompanyID = c.CompanyID
+				JOIN Companyrole cr ON gc.CompanyRoleID = cr.CompanyRoleID
+				WHERE gc.GameID = g.GameID AND cr.Title = 'Developer'
+			)
+		) AS Developers,
+		group_concat(gen.Title, ', ') AS Genres
+		FROM Game g 
+		LEFT JOIN GameLibrary gl ON g.GameID = gl.GameID
+		LEFT JOIN GameGenre gg ON g.GameID = gg.GameID
+		LEFT JOIN Genre gen ON gg.GenreID = gen.GenreID
+		WHERE gl.GameID IS NULL
+		GROUP BY g.GameID;
+	`);
+
+	try {
+		const games = query.all();
+		return c.json(games);
+	} catch (err) {
+		return c.json({
+			message: "Error retrieving games: " + err
+		});
+	}
+}
+
+export {addGameToLibrary, getGamesWithoutCollection};
