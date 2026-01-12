@@ -2,7 +2,7 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Btn from '../components/common/btn.tsx';
 import { BtnStyle } from '../components/common/btn.tsx';
@@ -11,9 +11,15 @@ import GameItem from '../components/gameItem/gameItem.tsx';
 import type { GameObject } from "../interfaces/gameObjectInterface.ts";
 
 import NewGameForm from '../components/newGameForm/newGameForm.tsx';
+import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx';
+
+import Select from "react-select";
+import type { SingleValue } from "react-select";
+import type { OptionType } from "../types/SelectOptionType.ts";
+import { fillOptionsArray } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
-import { CollectionType } from '../api/collectionsApi.ts';
+import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
 
 
 export const Route = createFileRoute('/')({
@@ -23,12 +29,40 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
 	const [newGameIsOpen, setNewGameIsOpen] = useState(false);
+	const [editCollectionsIsOpen, setEditCollectionsIsOpen] = useState(false);
+	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
 
 	const queryClient = useQueryClient();
 
+	// For retrieving a list of the stored libraries. Formats to work in a Select input.
+	const libraryList = useQuery({
+		queryKey:['collections', 'library-list'],
+		queryFn: () => getCollectionList(CollectionType.Library),
+		select: (data) => {
+			const libraryOptions = fillOptionsArray(data);
+			// Add "None" option to returned array of libraries and return the new array of libraries.
+			libraryOptions.unshift({
+				value: 0,
+				label: "None"
+			});
+			return libraryOptions;
+		}
+	});
+
+	useEffect(() => {
+		if (!libraryList.data) return;
+
+		if (libraryList.data.length > 1) {
+			setSelectedCollection(libraryList.data[1]);
+		} else {
+			setSelectedCollection(libraryList.data[0]);
+		}
+	}, [libraryList.data]);
+
+	// For retrieving the contents of a single library.
 	const singleLibrary = useQuery({
-		queryKey:['libraries', 'contents', 'single-library'],
-		queryFn: () => getSingleLibrary(1),
+		queryKey:['libraries', 'contents', 'single-library', selectedCollection.value],
+		queryFn: () => getSingleLibrary(selectedCollection.value),
 	});
 
 	if (singleLibrary.status === 'pending') {
@@ -45,8 +79,21 @@ function RouteComponent() {
 			{ !newGameIsOpen &&
 			<>
 				<div className='flex gap-2 max-sm:flex-col'>
+					<Select
+						name="selectedCollection"
+						inputId="selectedCollection"
+						className="text-(--color-dark) cursor-pointer md:min-w-3xs"
+						value={selectedCollection}
+						onChange={(option: SingleValue<OptionType>) => {
+							setSelectedCollection(option as OptionType);
+							queryClient.invalidateQueries({queryKey: ['single-library', selectedCollection.value]})
+						}}
+						options={libraryList.data}
+						hideSelectedOptions
+						noOptionsMessage={() => "No collections found."}
+					/>
 					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
+					<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
 				</div>
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
@@ -61,7 +108,7 @@ function RouteComponent() {
 					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
 				}} 
 				onCancel={() => setNewGameIsOpen(false)} 
-				collectionType={CollectionType.Library} collectionId={1}
+				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
 				/>
 			}
 		</section>

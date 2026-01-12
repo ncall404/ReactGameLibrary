@@ -74,7 +74,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 
 	const invalidateData = async () => {
 		await queryClient.invalidateQueries({
-			queryKey: ['libraries', 'contents', 'single-library'],
+			queryKey: ['libraries', 'contents', 'single-library', props.collectionId],
 			exact: true,
 			refetchType: 'all',
 		});
