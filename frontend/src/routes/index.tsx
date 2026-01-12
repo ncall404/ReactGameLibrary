@@ -44,7 +44,12 @@ function RouteComponent() {
 			<h1 className='text-3xl pb-2'>Game Library</h1>
 			{ !newGameIsOpen &&
 			<>
-				<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
+				<div className='flex gap-2 max-sm:flex-col'>
+					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
+<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
+				</div>
+
+				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
 				{singleLibrary.data && singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game}/>)}
 			</>
 			}
