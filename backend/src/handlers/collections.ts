@@ -78,7 +78,7 @@ const addCollection = async function addCollection(c: Context) {
 // Remove a collection.
 const removeCollection = async function removeCollection(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding collection not completed.",
+		message: "Removing collection not completed.",
 		status: "error"
 	};
 
