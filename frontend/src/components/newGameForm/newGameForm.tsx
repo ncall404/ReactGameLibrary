@@ -290,7 +290,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					name="gamePlatforms"
 					inputId="newGamePlatformOptions"
 					className="text-(--color-dark) cursor-pointer"
-					closeMenuOnSelect={false}
+					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPlatforms}
 					onChange={(options: MultiValue<OptionType>) => {
@@ -309,7 +309,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 					name="gameStorefronts"
 					inputId="newGameStorefrontOptions"
 					className="text-(--color-dark) cursor-pointer"
-					closeMenuOnSelect={false}
+					closeMenuOnSelect={true}
 					isMulti
 					value={selectedStorefronts}
 					onChange={(options: MultiValue<OptionType>) => {
