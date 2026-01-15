@@ -82,7 +82,7 @@ function RouteComponent() {
 					<Select
 						name="selectedCollection"
 						inputId="selectedCollection"
-						className="text-(--color-dark) cursor-pointer md:min-w-3xs"
+						className="text-(--color-dark) cursor-pointer sm:min-w-3xs"
 						value={selectedCollection}
 						onChange={(option: SingleValue<OptionType>) => {
 							setSelectedCollection(option as OptionType);
