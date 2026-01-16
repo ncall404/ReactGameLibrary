@@ -15,7 +15,7 @@ import { getGenres, addGenre, removeGenres,
 		getCompanies, getPlatformOwners, getDevelopers, getPublishers, getCompanyTypes, addCompany, removeCompanies,
 		getStorefronts, addStorefront, removeStorefronts,
 		getMediaFormats } from './handlers/gameMetadata.ts';
-import { addGameToLibrary } from './handlers/games.ts';
+import { addGameToLibrary, deleteGame } from './handlers/games.ts';
 import { resetApp } from './handlers/settings.ts';
 
 const app = new Hono();
@@ -83,8 +83,11 @@ app.get('/api/metadata/media-format', getMediaFormats);
 // ==========================================================================
 // POST handlers ============================================================
 // ==========================================================================
-// Create a new game and add it to a library.
+// TODO: Adjust 'add' API endpoint path and function name.
+// Add a game to the database.
 app.post('/api/games/add/library', addGameToLibrary);
+// Delete a game from the database.
+app.post('/api/games/delete', deleteGame);
 
 // Add a new collection.
 app.post('/api/collections/add', addCollection);
