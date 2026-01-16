@@ -4,7 +4,9 @@ import { writeFile, access } from 'fs/promises';
 import { fileTypeFromBlob } from 'file-type';
 import { join } from 'path';
 import type { Context } from "hono";
+
 import { db } from "../dbManager.ts";
+import type { BackendResponse } from '../dbManager.ts';
 
 // Type for the object sent back from the server in response to an attempt at uploading a game.
 type GameUploadResponse = {
@@ -278,6 +280,68 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	};
 }
 
+
+// Deletes a game and it's connections from the database.
+const deleteGame = async function deleteGame(c: Context) {
+	const response: BackendResponse = {
+		message: "Deleting game not completed.",
+		status: "error"
+	}
+
+	const body = await c.req.parseBody();
+	const deleteGameID = parseInt(body['deleteGameID'] as string);
+
+	if (deleteGameID) {
+		const deleteGame = db.transaction(() => {
+			// Delete game connections to other tables prior to deleting the game itself.
+			const deleteGameLibraryEntry = db.prepare(`
+				DELETE FROM GameLibrary
+				WHERE GameID = @GameID
+			`);
+			const deleteGameGenreEntry = db.prepare(`
+				DELETE FROM GameGenre
+				WHERE GameID = @GameID
+			`);
+			const deleteGamePlatformEntry = db.prepare(`
+				DELETE FROM GamePlatform
+				WHERE GameID = @GameID
+			`);
+			const deleteGameStorefrontEntry = db.prepare(`
+				DELETE FROM GameStorefront
+				WHERE GameID = @GameID
+			`);
+			const deleteGameCompanyEntry = db.prepare(`
+				DELETE FROM GameCompany
+				WHERE GameID = @GameID
+			`);
+
+			// Delete game from Game table.
+			const deleteGameEntry = db.prepare(`
+				DELETE FROM Game
+				WHERE GameID = @GameID
+			`);
+
+			deleteGameLibraryEntry.run({GameID: deleteGameID});
+			deleteGameGenreEntry.run({GameID: deleteGameID});
+			deleteGamePlatformEntry.run({GameID: deleteGameID});
+			deleteGameStorefrontEntry.run({GameID: deleteGameID});
+			deleteGameCompanyEntry.run({GameID: deleteGameID});
+			deleteGameEntry.run({GameID: deleteGameID});
+		});
+		
+		try {
+			deleteGame();
+			response.message = "Game successfully deleted.";
+			response.status = "success";
+		} catch (err) {
+			response.message = `Error deleting the game: ${err}`;
+		}
+	}
+
+	return c.json(response);
+}
+
+
 // Retrieves all games in the database that don't belong to a game library. Will have to expand to check if they are in a wishlist if/when that gets implemented.
 const getGamesWithoutCollection = function getGamesWithoutCollection(c: Context) {
 	const query = db.prepare(`
@@ -321,4 +385,4 @@ const getGamesWithoutCollection = function getGamesWithoutCollection(c: Context)
 	}
 }
 
-export {addGameToLibrary, getGamesWithoutCollection};
+export {addGameToLibrary, deleteGame, getGamesWithoutCollection};
