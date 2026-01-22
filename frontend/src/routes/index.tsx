@@ -28,7 +28,7 @@ export const Route = createFileRoute('/')({
 
 
 function RouteComponent() {
-	const [newGameIsOpen, setNewGameIsOpen] = useState(false);
+	const [gameFormIsOpen, setGameFormIsOpen] = useState(false);
 	const [editCollectionsIsOpen, setEditCollectionsIsOpen] = useState(false);
 	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
 
@@ -76,7 +76,7 @@ function RouteComponent() {
 	return (
 		<section>
 			<h1 className='text-3xl pb-2'>Game Library</h1>
-			{ !newGameIsOpen &&
+			{ !gameFormIsOpen &&
 			<>
 				<div className='flex gap-2 max-sm:flex-col'>
 					<Select
@@ -93,7 +93,7 @@ function RouteComponent() {
 						noOptionsMessage={() => "No collections found."}
 					/>
 					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-					<Btn style={BtnStyle.Primary} func={() => setNewGameIsOpen(true)}>New Game</Btn>
+					<Btn style={BtnStyle.Primary} func={() => setGameFormIsOpen(true)}>New Game</Btn>
 				</div>
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
@@ -101,13 +101,13 @@ function RouteComponent() {
 			</>
 			}
 			{
-				newGameIsOpen &&
+				gameFormIsOpen &&
 				<NewGameForm 
 				onSubmitted={() => {
-					setNewGameIsOpen(false);
+					setGameFormIsOpen(false);
 					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
 				}} 
-				onCancel={() => setNewGameIsOpen(false)} 
+				onCancel={() => setGameFormIsOpen(false)} 
 				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
 				/>
 			}
