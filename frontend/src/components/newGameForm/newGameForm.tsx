@@ -58,7 +58,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const [editMetadataField, setEditMetadataField] = useState<MetadataField>(MetadataField.Genres);
 
 	// Does the actual API call send the data to the backend.
-	const newGameMutation = useMutation({
+	const gameMutation = useMutation({
 		mutationFn: async (formData: FormData) => {
 			const res = await fetch(api, {
 				method: 'POST',
@@ -102,7 +102,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		formData.append('gameDevelopers', optionsToString(selectedDevelopers));
 		formData.append('gameMediaFormat', selectedMediaFormat?.value.toString() as string);
 
-		newGameMutation.mutate(formData);
+		gameMutation.mutate(formData);
 		if (props.onSubmitted) props.onSubmitted();
 	}
 
