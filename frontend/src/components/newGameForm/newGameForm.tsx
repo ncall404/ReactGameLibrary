@@ -327,7 +327,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 				<hr />
 
 				<div className="flex gap-2 mt-3">
-					<Btn style={BtnStyle.Primary} type="submit">Create Game</Btn>
+					<Btn style={BtnStyle.Primary} type="submit">Confirm</Btn>
 					<Btn style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
 				</div>
 			</form>
