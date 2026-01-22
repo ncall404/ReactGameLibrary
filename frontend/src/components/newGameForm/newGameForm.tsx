@@ -20,6 +20,8 @@ type NewGameFormProps = {
 	onCancel: () => void,
 	collectionType: string, // Change type to object as const with the possible collection types in it.
 	collectionId: number,
+	formType: "create" | "edit",
+	gameID?: number,
 }
 
 export default function NewGameForm(props: NewGameFormProps) {

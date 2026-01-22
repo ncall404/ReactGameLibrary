@@ -109,6 +109,7 @@ function RouteComponent() {
 				}} 
 				onCancel={() => setGameFormIsOpen(false)} 
 				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
+				formType="create"
 				/>
 			}
 		</section>
