@@ -175,40 +175,40 @@ export default function NewGameForm(props: NewGameFormProps) {
 				<br />
 				<hr />
 
-				<label htmlFor="newGameName">Name: </label>
+				<label htmlFor="gameFormName">Name: </label>
 				<input type="text"
 				name="gameName"
-				id="newGameName"
+				id="gameFormName"
 				placeholder="Name of the game"
 				required
 				onChange={(e) => {
 					setGameName(e.currentTarget.value);
 				}} />
 
-				<label htmlFor="newGameDescription">Description: </label>
+				<label htmlFor="gameFormDescription">Description: </label>
 				<textarea
 				name="description"
-				id="newGameDescription"
+				id="gameFormDescription"
 				placeholder="Description of the game"
 				onChange={(e) => {
 					setGameDescription(e.currentTarget.value);
 				}}
 				></textarea>
 
-				<label htmlFor="newGameReleaseDate">Release Date: </label>
+				<label htmlFor="gameFormReleaseDate">Release Date: </label>
 				<input type="date"
 				name="releaseDate"
-				id="newGameReleaseDate"
+				id="gameFormReleaseDate"
 				onDoubleClick={(e) => e.currentTarget.showPicker()}
 				required
 				onChange={(e) => {
 					setReleaseDate(e.currentTarget.value);
 				}}/>
 
-				<label htmlFor="newGameCoverArt">Cover Art: </label>
+				<label htmlFor="gameFormCoverArt">Cover Art: </label>
 				<input type="file"
 				name="coverArt"
-				id="newGameCoverArt"
+				id="gameFormCoverArt"
 				accept="image/*"
 				onChange={(e) => {
 					if (e.currentTarget.files) {
@@ -221,10 +221,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 				<hr />
 				<br />
 
-				<label htmlFor="newGameMediaFormatOptions">Media Format: </label>
+				<label htmlFor="gameFormMediaFormatOptions">Media Format: </label>
 				<Select 
 					name="gameMediaFormat"
-					inputId="newGameMediaFormatOptions"
+					inputId="gameFormMediaFormatOptions"
 					className="text-(--color-dark) cursor-pointer"
 					value={selectedMediaFormat}
 					onChange={(option: SingleValue<OptionType>) => {
@@ -234,10 +234,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 				/>
 				<br />
 
-				<label htmlFor="newGameGenreOptions">Genre(s): </label>
+				<label htmlFor="gameFormGenreOptions">Genre(s): </label>
 				<Select
 					name="gameGenres"
-					inputId="newGameGenreOptions"
+					inputId="gameFormGenreOptions"
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={false}
 					isMulti
@@ -253,10 +253,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}>Edit genre list</Btn>
 				<br />
 
-				<label htmlFor="newGamePublisherOptions">Publisher(s): </label>
+				<label htmlFor="gameFormPublisherOptions">Publisher(s): </label>
 				<Select
 					name="gamePublishers"
-					inputId="newGamePublisherOptions"
+					inputId="gameFormPublisherOptions"
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={true}
 					isMulti
@@ -268,10 +268,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 					options={publisherList.data}
 				/>
 
-				<label htmlFor="newGameDeveloperOptions">Developer(s): </label>
+				<label htmlFor="gameFormDeveloperOptions">Developer(s): </label>
 				<Select
 					name="gameDevelopers"
-					inputId="newGameDeveloperOptions"
+					inputId="gameFormDeveloperOptions"
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={true}
 					isMulti
@@ -287,10 +287,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}>Edit company list</Btn>
 				<br />
 
-				<label htmlFor="newGamePlatformOptions">Platform(s): </label>
+				<label htmlFor="gameFormPlatformOptions">Platform(s): </label>
 				<Select
 					name="gamePlatforms"
-					inputId="newGamePlatformOptions"
+					inputId="gameFormPlatformOptions"
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={true}
 					isMulti
@@ -306,10 +306,10 @@ export default function NewGameForm(props: NewGameFormProps) {
 				}}>Edit platform list</Btn>
 				<br />
 
-				<label htmlFor="newGameStorefrontOptions">Storefront(s): </label>
+				<label htmlFor="gameFormStorefrontOptions">Storefront(s): </label>
 				<Select
 					name="gameStorefronts"
-					inputId="newGameStorefrontOptions"
+					inputId="gameFormStorefrontOptions"
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={true}
 					isMulti
