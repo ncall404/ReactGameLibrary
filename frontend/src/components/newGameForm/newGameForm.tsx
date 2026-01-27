@@ -89,7 +89,7 @@ export default function NewGameForm(props: NewGameFormProps) {
 		formData.append('gameCollections', optionsToString(selectedCollections));
 		formData.append('gameName', gameName);
 		formData.append('gameDescription', gameDescription);
-		formData.append('releaseDate', releaseDate?.toString());
+		formData.append('releaseDate', releaseDate);
 		if (coverArt) {
 			formData.append('coverArt', coverArt, coverArt?.name);
 		} else {
