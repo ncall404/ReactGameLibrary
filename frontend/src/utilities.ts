@@ -63,7 +63,13 @@ const upperFirstLetter = (source: string): string => {
 	return source.charAt(0).toUpperCase().concat(source.slice(1));
 }
 
+
+// Scrolls to the top of the page.
+const scrollToTop = function scrollToTop() {
+	window.scrollTo(0, 0);
+}
+
 export {
 	optionsToString, fillOptionsArray, fillGroupedOptionsArray,
-	upperFirstLetter
+	upperFirstLetter, scrollToTop
 };
