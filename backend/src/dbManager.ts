@@ -211,11 +211,9 @@ function createTables(): BackendResponse {
 		// GameStorefront
 		query = db.prepare(`CREATE TABLE GameStorefront (
 			GameID INTEGER,
-			PlatformID INTEGER,
 			StorefrontID INTEGER,
-			PRIMARY KEY (GameID, PlatformID, StorefrontID),
+			PRIMARY KEY (GameID, StorefrontID),
 			FOREIGN KEY (GameID) REFERENCES Game(GameID),
-			FOREIGN KEY (PlatformID) REFERENCES Platform(PlatformID),
 			FOREIGN KEY (StorefrontID) REFERENCES Storefront(StorefrontID)
 			);`
 		);
