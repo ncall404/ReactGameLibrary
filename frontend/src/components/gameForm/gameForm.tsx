@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
 
-type NewGameFormProps = {
+type GameFormProps = {
 	onSubmitted: () => void,
 	onCancel: () => void,
 	collectionType: string, // Change type to object as const with the possible collection types in it.
@@ -24,7 +24,7 @@ type NewGameFormProps = {
 	gameID?: number,
 }
 
-export default function NewGameForm(props: NewGameFormProps) {
+export default function GameForm(props: GameFormProps) {
 	const queryClient = useQueryClient();
 
 	const api: string = 'http://localhost:3000/api/games/'.concat(props.formType);

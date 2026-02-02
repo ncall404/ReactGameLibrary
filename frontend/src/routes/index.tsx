@@ -10,7 +10,7 @@ import { BtnStyle } from '../components/common/btn.tsx';
 import GameItem from '../components/gameItem/gameItem.tsx';
 import type { GameObject } from "../interfaces/gameObjectInterface.ts";
 
-import NewGameForm from '../components/newGameForm/newGameForm.tsx';
+import GameForm from '../components/gameForm/gameForm.tsx';
 import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx';
 
 import Select from "react-select";
@@ -119,7 +119,7 @@ function RouteComponent() {
 			}
 			{
 				gameFormIsOpen &&
-				<NewGameForm 
+				<GameForm 
 				onSubmitted={() => {
 					setGameFormIsOpen(false);
 					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
