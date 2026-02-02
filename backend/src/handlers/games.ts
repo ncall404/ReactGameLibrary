@@ -19,9 +19,8 @@ type GameUploadResponse = {
 }
 
 
-// TODO: Consider renaming to something like createGame when you make a function for adding an existing game to a collection to keep function intentions clear.
 // Validates submitted data and then creates entries for the game in the database.
-const addGameToLibrary = async function addGameToLibrary(c: Context) {
+const createGame = async function createGame(c: Context) {
 	let uploadResponse: GameUploadResponse | null = null;
 	const body = await c.req.parseBody();
 
@@ -37,7 +36,7 @@ const addGameToLibrary = async function addGameToLibrary(c: Context) {
 		Object.entries(multiSelect).map(([key, value]) => {
 			if (typeof value === 'string') { // Verify the value isn't a file.
 				return [key, value.split(',') // Split the selections into an array.
-					.map(val => Number(val.trim())) // Convert to numbers.
+					.map(val => parseInt(val.trim())) // Convert to numbers.
 					.filter(num => !isNaN(num)) // Make sure only valid numbers get through.
 				];
 			}
@@ -717,4 +716,4 @@ const getGameData = function getGameData(c: Context) {
 }
 
 
-export {addGameToLibrary, editGame, deleteGame, getGameData, getGamesWithoutCollection};
+export {createGame, editGame, deleteGame, getGameData, getGamesWithoutCollection};
