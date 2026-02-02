@@ -61,6 +61,9 @@ app.get('/api/collections/libraries', getLibraries);
 // Get a list of all stored wishlists.
 app.get('/api/collections/wishlists', getWishlists);
 
+// Get the data for a single game.
+app.get('api/game/:gameID', getGameData);
+
 // Get a list of all stored genres.
 app.get('/api/metadata/genres', getGenres);
 // Get a list of all stored platforms.
@@ -87,6 +90,8 @@ app.get('/api/metadata/media-format', getMediaFormats);
 app.post('/api/games/create', createGame);
 // Delete a game from the database.
 app.post('/api/games/delete', deleteGame);
+// Edit a game in the database.
+app.post('/api/games/edit', editGame);
 
 // Add a new collection.
 app.post('/api/collections/add', addCollection);
