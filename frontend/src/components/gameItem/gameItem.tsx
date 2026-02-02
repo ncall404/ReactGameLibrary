@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 interface GameItemProps {
 	key: Key, // Should be the GameId.
 	data: GameObject,
+	editFunction: () => void,
 }
 
 export default function GameItem(props: GameItemProps) {
@@ -70,9 +71,8 @@ export default function GameItem(props: GameItemProps) {
 					<p className="text-pretty">{game.Description}</p>
 				</div>
 				<div id="gameActionButtons" className="flex md:flex-col gap-2 place-content-center md:basis-32">
-					{/* TODO: Implement edit button functionality then uncomment. */}
-					{/* <Btn className="max-md:flex-grow" style={BtnStyle.Neutral}>Edit</Btn> */}
-					<Btn func={handleDelete} className="max-md:flex-grow" style={BtnStyle.Danger}>Delete</Btn>
+					<Btn func={props.editFunction} className="max-md:grow md:w-32" style={BtnStyle.Neutral}>Edit</Btn>
+					<Btn func={handleDelete} className="max-md:grow md:w-32" style={BtnStyle.Danger}>Delete</Btn>
 				</div>
 			</div>
 

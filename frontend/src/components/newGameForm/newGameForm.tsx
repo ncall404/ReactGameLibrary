@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { MultiValue, SingleValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, fillGroupedOptionsArray, optionsToString } from "../../utilities.ts";
+import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
@@ -27,18 +27,10 @@ type NewGameFormProps = {
 export default function NewGameForm(props: NewGameFormProps) {
 	const queryClient = useQueryClient();
 
-	let api: string = 'http://localhost:3000/api/';
-	switch (props.collectionType) {
-		case CollectionType.Library: {
-			api = api.concat('games/add/library');
-			break;
-		}
-		case CollectionType.Wishlist: {
-			api = api.concat('games/add/wishlist');
-			break;
-		}
-	}
+	const api: string = 'http://localhost:3000/api/games/'.concat(props.formType);
 
+
+	const gameID = props.gameID ? props.gameID : 0
 	// State tracking for non-Select inputs.
 	const [gameName, setGameName] = useState<string>('');
 	const [gameDescription, setGameDescription] = useState<string>('');
@@ -52,6 +44,9 @@ export default function NewGameForm(props: NewGameFormProps) {
 	const [selectedPublishers, setSelectedPublishers] = useState<OptionType[]>([]);
 	const [selectedDevelopers, setSelectedDevelopers] = useState<OptionType[]>([]);
 	const [selectedMediaFormat, setSelectedMediaFormat] = useState<OptionType>();
+
+	// State tracking for the cover art image path for when GameForm is in edit mode.
+	const [coverArtPath, setCoverArtPath] = useState<string | undefined>();
 
 	// State tracking for the editing modal.
 	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -82,10 +77,14 @@ export default function NewGameForm(props: NewGameFormProps) {
 		});
 	}
 
+	// TODO: Whenever wishlists get added, submit the collection type with the rest of the formData.
 	// Handles correctly submitting the main form's data.
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData();
+		if (props.formType === "edit" && props.gameID) {
+			formData.append('gameID', props.gameID.toString());
+		}
 		formData.append('gameCollections', optionsToString(selectedCollections));
 		formData.append('gameName', gameName);
 		formData.append('gameDescription', gameDescription);
@@ -105,6 +104,19 @@ export default function NewGameForm(props: NewGameFormProps) {
 		gameMutation.mutate(formData);
 		if (props.onSubmitted) props.onSubmitted();
 	}
+
+	// useQuery hook for loading data when editing a game entry
+	const gameData = useQuery({
+		queryKey:['game', gameID],
+		queryFn: async () => {
+			const res = await fetch(`http://localhost:3000/api/game/${gameID}`);
+			if (!res.ok) {
+				throw new Error("Network response was not OK");
+			}
+			const data = await res.json();
+			return data;
+		}
+	});
 
 	// useQuery hooks for lists that are used to fill Select inputs.
 	const collectionList = useQuery({
@@ -151,11 +163,96 @@ export default function NewGameForm(props: NewGameFormProps) {
 		if (matches.length > 0) setSelectedCollections(matches);
 	}, [collectionList.data, props.collectionId]);
 
+	useEffect(() => {
+		if (gameID > 0 && props.formType == "edit") {
+			if (!gameData.data) return;
+
+			parseGameData(gameData.data);
+		}
+	}, [gameData.data, gameID, props.formType]);
+
+
+	const parseGameData = function parseGameData(data: 
+		{
+			gameData: {
+				Title: string,
+				Description: string,
+				ReleaseDate: string,
+				CoverArt: string,
+				MediaFormatID: number,
+				MediaFormatTitle: string,
+			}
+			libraryData: {
+				LibraryID: number,
+				Title: string,
+			}[],
+			publisherData: {
+				CompanyID: number,
+				Title: string,
+			}[],
+			developerData: {
+				CompanyID: number,
+				Title: string,
+			}[],
+			genreData: {
+				GenreID: number,
+				Title: string,
+			}[],
+			platformData: {
+				PlatformID: number,
+				Title: string,
+			}[],
+			storefrontData: {
+				StorefrontID: number,
+				Title: string,
+			}[],
+		}
+	) {
+		setSelectedCollections(data.libraryData.map((value: {LibraryID: number, Title: string}) => {
+			return {value: value.LibraryID, label: value.Title};
+		}));
+
+		const gameFormName = document.getElementById("gameFormName") as HTMLInputElement;
+		if (gameFormName) {
+			gameFormName.value = data.gameData.Title;
+			setGameName(data.gameData.Title);
+		}
+		const gameFormDescription = document.getElementById("gameFormDescription") as HTMLTextAreaElement;
+		if (gameFormDescription) {
+			gameFormDescription.value = data.gameData.Description;
+			setGameDescription(data.gameData.Description);
+		}
+		const gameFormReleaseDate = document.getElementById("gameFormReleaseDate") as HTMLInputElement;
+		if (gameFormReleaseDate) {
+			gameFormReleaseDate.valueAsNumber = parseInt(data.gameData.ReleaseDate) * 1000; // Converts unix time value from seconds to milliseconds for JavaScript
+			setReleaseDate(gameFormReleaseDate.value);
+		}
+		setSelectedMediaFormat({value: data.gameData.MediaFormatID, label: data.gameData.MediaFormatTitle});
+
+		setCoverArtPath("http://localhost:3000/".concat(data.gameData.CoverArt));
+
+		setSelectedGenres(data.genreData.map((value: {GenreID: number, Title: string}) => {
+			return {value: value.GenreID, label: value.Title};
+		}));
+		setSelectedPublishers(data.publisherData.map((value: {CompanyID: number, Title: string}) => {
+			return {value: value.CompanyID, label: value.Title};
+		}));
+		setSelectedDevelopers(data.developerData.map((value: {CompanyID: number, Title: string}) => {
+			return {value: value.CompanyID, label: value.Title};
+		}));
+		setSelectedPlatforms(data.platformData.map((value: {PlatformID: number, Title: string}) => {
+			return {value: value.PlatformID, label: value.Title};
+		}));
+		setSelectedStorefronts(data.storefrontData.map((value: {StorefrontID: number, Title: string}) => {
+			return {value: value.StorefrontID, label: value.Title};
+		}));
+	}
+
 
 	return (
 		<>
 			<form onSubmit={handleSubmit} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
-				<h2 className="text-2xl">Add Game</h2>
+				<h2 className="text-2xl">{upperFirstLetter(props.formType)} Game</h2>
 				<hr />
 
 				<label htmlFor="newGameCollections">Collections: </label>
@@ -217,6 +314,17 @@ export default function NewGameForm(props: NewGameFormProps) {
 						setCoverArt(null);
 					}
 				}}/>
+				{
+					// Display the currently stored image if the form is in edit mode.
+					props.formType == "edit" &&
+					<figure>
+						<img className="motion-safe:transition-all ease-in-out h-64 w-fit"
+				 		src={coverArtPath}
+						alt="Currently used image for the game being edited" />
+						<figcaption>Currently used image for this game.</figcaption>
+					</figure>
+				}
+
 				<br />
 				<hr />
 				<br />

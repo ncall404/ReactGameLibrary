@@ -16,7 +16,7 @@ import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx'
 import Select from "react-select";
 import type { SingleValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
-import { fillOptionsArray } from '../utilities.ts';
+import { fillOptionsArray, scrollToTop } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
@@ -29,6 +29,8 @@ export const Route = createFileRoute('/')({
 
 function RouteComponent() {
 	const [gameFormIsOpen, setGameFormIsOpen] = useState(false);
+	const [gameFormType, setGameFormType] = useState<"create" | "edit">("create");
+	const [selectedGameID, setSelectedGameID] = useState<number>(0);
 	const [editCollectionsIsOpen, setEditCollectionsIsOpen] = useState(false);
 	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
 
@@ -93,11 +95,26 @@ function RouteComponent() {
 						noOptionsMessage={() => "No collections found."}
 					/>
 					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-					<Btn style={BtnStyle.Primary} func={() => setGameFormIsOpen(true)}>New Game</Btn>
+					<Btn style={BtnStyle.Primary}
+						func={() => {
+							setGameFormType("create");
+							setGameFormIsOpen(true);
+							scrollToTop();
+						}
+					}>Create Game</Btn>
 				</div>
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
-				{singleLibrary.data && singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game}/>)}
+				{
+				singleLibrary.data &&
+				singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game} editFunction={() => {
+							setGameFormType("edit");
+							setSelectedGameID(game.GameID);
+							setGameFormIsOpen(true);
+							scrollToTop();
+						}
+					}/>)
+				}
 			</>
 			}
 			{
@@ -106,10 +123,17 @@ function RouteComponent() {
 				onSubmitted={() => {
 					setGameFormIsOpen(false);
 					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
+					scrollToTop();
 				}} 
-				onCancel={() => setGameFormIsOpen(false)} 
+				onCancel={() => {
+					setGameFormIsOpen(false);
+					if (gameFormType == "create") {
+						scrollToTop();
+					}
+				}} 
 				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
-				formType="create"
+				formType={gameFormType}
+				gameID={selectedGameID}
 				/>
 			}
 		</section>

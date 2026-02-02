@@ -29,7 +29,6 @@ declare module '@tanstack/react-router' {
 const queryClient = new QueryClient();
 
 // Render App ---------------------------------------------
-
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
