@@ -296,29 +296,29 @@ const deleteGame = async function deleteGame(c: Context) {
 			// Delete game connections to other tables prior to deleting the game itself.
 			const deleteGameLibraryEntry = db.prepare(`
 				DELETE FROM GameLibrary
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 			const deleteGameGenreEntry = db.prepare(`
 				DELETE FROM GameGenre
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 			const deleteGamePlatformEntry = db.prepare(`
 				DELETE FROM GamePlatform
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 			const deleteGameStorefrontEntry = db.prepare(`
 				DELETE FROM GameStorefront
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 			const deleteGameCompanyEntry = db.prepare(`
 				DELETE FROM GameCompany
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 
 			// Delete game from Game table.
 			const deleteGameEntry = db.prepare(`
 				DELETE FROM Game
-				WHERE GameID = @GameID
+				WHERE GameID = @GameID;
 			`);
 
 			deleteGameLibraryEntry.run({GameID: deleteGameID});
