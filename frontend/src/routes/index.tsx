@@ -1,7 +1,7 @@
 // Library page component and route. Displays selected library of games.
 
 import { createFileRoute } from '@tanstack/react-router';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 
 import Btn from '../components/common/btn.tsx';
@@ -20,6 +20,7 @@ import { fillOptionsArray, scrollToTop } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
+import Modal from '../components/common/modal.tsx';
 
 
 export const Route = createFileRoute('/')({
@@ -33,6 +34,39 @@ function RouteComponent() {
 	const [selectedGameID, setSelectedGameID] = useState<number>(0);
 	const [editCollectionsIsOpen, setEditCollectionsIsOpen] = useState(false);
 	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
+
+	const [deleteConfirmIsOpen, setDeleteConfirmIsOpen] = useState<boolean>(false);
+	
+	const deleteGameMutation = useMutation({
+		mutationFn: async (formData: FormData) => {
+			const res = await fetch('http://localhost:3000/api/games/delete', {
+				method: 'POST',
+				body: formData,
+			});
+			if (!res.ok) throw new Error('Upload failed');
+			return res.json();
+		},
+		onSuccess: (data) => {
+			console.log(data);
+			invalidateData();
+		},
+		onError: (err) => console.error('Error: ', err),
+	});
+
+	const invalidateData = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: ['libraries'],
+			exact: false,
+			refetchType: 'all',
+		});
+	}
+
+	const handleDeleteGame = (gameID: string) => {
+		const formData = new FormData();
+		formData.append('deleteGameID', gameID);
+
+		deleteGameMutation.mutate(formData);
+	}
 
 	const queryClient = useQueryClient();
 
@@ -113,7 +147,12 @@ function RouteComponent() {
 							setGameFormIsOpen(true);
 							scrollToTop();
 						}
-					}/>)
+					}
+					deleteFunction={() => {
+						setDeleteConfirmIsOpen(true);
+						setSelectedGameID(game.GameID);
+					}}
+					/>)
 				}
 			</>
 			}
@@ -135,6 +174,23 @@ function RouteComponent() {
 				formType={gameFormType}
 				gameID={selectedGameID}
 				/>
+			}
+			{
+				<Modal
+				isOpen={deleteConfirmIsOpen}
+				onConfirm={() => {
+					handleDeleteGame(selectedGameID.toString());
+					setDeleteConfirmIsOpen(false);
+				}}
+				onClose={() => {setDeleteConfirmIsOpen(false)}}
+				isForm={true}>
+					<h2 className="text-2xl">Confirm Game Deletion?</h2>
+					<div className="bg-(--color-darker) rounded-sm p-4 mt-2">
+						<p>Are you sure you want to delete the selected game?</p>
+						<br />
+						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+					</div>
+				</Modal>
 			}
 		</section>
 	);

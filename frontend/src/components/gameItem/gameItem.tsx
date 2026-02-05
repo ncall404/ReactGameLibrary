@@ -6,17 +6,14 @@ import { BtnStyle } from '../../components/common/btn.tsx';
 import type { Key } from "react";
 import type { GameObject } from "../../interfaces/gameObjectInterface.ts";
 
-import { useQueryClient } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
-
 interface GameItemProps {
 	key: Key, // Should be the GameId.
 	data: GameObject,
 	editFunction: () => void,
+	deleteFunction: () => void,
 }
 
 export default function GameItem(props: GameItemProps) {
-	const queryClient = useQueryClient();
 
 	const game = props.data;
 
@@ -25,37 +22,6 @@ export default function GameItem(props: GameItemProps) {
 	if (game.CoverArt !== null) {
 		imgSrc = `http://localhost:3000/${game.CoverArt}`;
 		imgAlt = `Game cover art for ${game.Title}`;
-	}
-
-	const deleteGameMutation = useMutation({
-		mutationFn: async (formData: FormData) => {
-			const res = await fetch('http://localhost:3000/api/games/delete', {
-				method: 'POST',
-				body: formData,
-			});
-			if (!res.ok) throw new Error('Upload failed');
-			return res.json();
-		},
-		onSuccess: (data) => {
-			console.log(data);
-			invalidateData();
-		},
-		onError: (err) => console.error('Error: ', err),
-	});
-
-	const invalidateData = async () => {
-		await queryClient.invalidateQueries({
-			queryKey: ['libraries'],
-			exact: false,
-			refetchType: 'all',
-		});
-	}
-
-	const handleDelete = () => {
-		const formData = new FormData();
-		formData.append('deleteGameID', game.GameID.toString());
-
-		deleteGameMutation.mutate(formData);
 	}
 
 	return (
@@ -72,7 +38,7 @@ export default function GameItem(props: GameItemProps) {
 				</div>
 				<div id="gameActionButtons" className="flex md:flex-col gap-2 place-content-center md:basis-32">
 					<Btn func={props.editFunction} className="max-md:grow md:w-32" style={BtnStyle.Neutral}>Edit</Btn>
-					<Btn func={handleDelete} className="max-md:grow md:w-32" style={BtnStyle.Danger}>Delete</Btn>
+					<Btn func={props.deleteFunction} className="max-md:grow md:w-32" style={BtnStyle.Danger}>Delete</Btn>
 				</div>
 			</div>
 
