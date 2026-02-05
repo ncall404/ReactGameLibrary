@@ -123,7 +123,7 @@ function createTables(): BackendResponse {
 			Description TEXT,
 			ReleaseDate INTEGER NOT NULL,
 			CoverArt TEXT,
-			MediaFormatID INTEGER,
+			MediaFormatID INTEGER NOT NULL,
 			FOREIGN KEY (MediaFormatID) REFERENCES MediaFormat(MediaFormatID)
 			);`
 		);

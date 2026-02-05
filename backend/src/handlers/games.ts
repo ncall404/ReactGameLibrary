@@ -50,9 +50,9 @@ const createGame = async function createGame(c: Context) {
 	const releaseDate = body['releaseDate'];
 	const coverArt = typeof body['coverArt'] === 'string' ? null : body['coverArt'] as File;
 
-	let gameMediaFormat: number | null = null;
-	if (typeof body['gameMediaFormat'] === 'string' && !isNaN(Number(body['gameMediaFormat']))) {
-		gameMediaFormat = Number(body['gameMediaFormat']);
+	let gameMediaFormat: number = 1;
+	if (typeof body['gameMediaFormat'] === 'string' && !isNaN(parseInt(body['gameMediaFormat']))) {
+		gameMediaFormat = parseInt(body['gameMediaFormat']);
 	}
 	
 	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);
@@ -175,7 +175,7 @@ const createGame = async function createGame(c: Context) {
 
 
 // Validates the data that will be uploaded to the Game table.
-async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number | null):
+async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number):
 Promise<GameUploadResponse> {
 	// Validate gameName
 	if (typeof gameName !== 'string') { // Type validation
@@ -245,10 +245,10 @@ Promise<GameUploadResponse> {
 	}
 
 	// Validate gameMediaFormat
-	if (gameMediaFormat !== null && ![1, 2, 3].includes(gameMediaFormat)){
+	if (![1, 2, 3].includes(gameMediaFormat)){
 		return {
 			isValid: false,
-			message: "Error: Media Format must be empty or a valid value.",
+			message: "Error: Media Format must be a valid value.",
 			field: "gameMediaFormats",
 			severity: "error"
 		};
@@ -327,9 +327,9 @@ const editGame = async function editGame(c: Context) {
 	const releaseDate = body['releaseDate'];
 	const coverArt = typeof body['coverArt'] === 'string' ? null : body['coverArt'] as File;
 
-	let gameMediaFormat: number | null = null;
-	if (typeof body['gameMediaFormat'] === 'string' && !isNaN(Number(body['gameMediaFormat']))) {
-		gameMediaFormat = Number(body['gameMediaFormat']);
+	let gameMediaFormat: number = 1;
+	if (typeof body['gameMediaFormat'] === 'string' && !isNaN(parseInt(body['gameMediaFormat']))) {
+		gameMediaFormat = parseInt(body['gameMediaFormat']);
 	}
 	
 	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);

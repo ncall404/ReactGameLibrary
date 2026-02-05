@@ -43,7 +43,7 @@ export default function GameForm(props: GameFormProps) {
 	const [selectedStorefronts, setSelectedStorefronts] = useState<OptionType[]>([]);
 	const [selectedPublishers, setSelectedPublishers] = useState<OptionType[]>([]);
 	const [selectedDevelopers, setSelectedDevelopers] = useState<OptionType[]>([]);
-	const [selectedMediaFormat, setSelectedMediaFormat] = useState<OptionType>();
+	const [selectedMediaFormat, setSelectedMediaFormat] = useState<OptionType>({ value: 1, label: "Physical"});
 
 	// State tracking for the cover art image path for when GameForm is in edit mode.
 	const [coverArtPath, setCoverArtPath] = useState<string | undefined>();
@@ -162,6 +162,12 @@ export default function GameForm(props: GameFormProps) {
 		const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
 		if (matches.length > 0) setSelectedCollections(matches);
 	}, [collectionList.data, props.collectionId]);
+
+	useEffect(() => {
+		if (!mediaFormatList.data) return;
+
+		setSelectedMediaFormat(mediaFormatList.data[0]);
+	}, [mediaFormatList.data]);
 
 	useEffect(() => {
 		if (gameID > 0 && props.formType == "edit") {
@@ -335,6 +341,7 @@ export default function GameForm(props: GameFormProps) {
 					inputId="gameFormMediaFormatOptions"
 					className="text-(--color-dark) cursor-pointer"
 					value={selectedMediaFormat}
+					required
 					onChange={(option: SingleValue<OptionType>) => {
 						setSelectedMediaFormat(option as OptionType);
 					}}
