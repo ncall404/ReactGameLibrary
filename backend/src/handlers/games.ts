@@ -710,7 +710,7 @@ const getGameData = function getGameData(c: Context) {
 			storefrontData: storefronts,
 		});
 	} catch (err) {
-		response.message = `Error getting game data: ${err}`;
+		response.message = `There was an issue retrieving data; ${err}`;
 		return c.json(response);
 	}
 }
