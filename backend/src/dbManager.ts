@@ -277,7 +277,6 @@ function createTables(): BackendResponse {
 			{Title: 'Sony'},
 			{Title: 'Microsoft'},
 			{Title: 'Sega'},
-			{Title: 'Atari'},
 			{Title: 'Google'},
 			{Title: 'Apple'},
 		]);
@@ -300,10 +299,7 @@ function createTables(): BackendResponse {
 			{CompanyID: 4, CompanyTypeID: 2},
 			{CompanyID: 4, CompanyTypeID: 3},
 			{CompanyID: 5, CompanyTypeID: 1},
-			{CompanyID: 5, CompanyTypeID: 2},
-			{CompanyID: 5, CompanyTypeID: 3},
 			{CompanyID: 6, CompanyTypeID: 1},
-			{CompanyID: 7, CompanyTypeID: 1},
 		]);
 		// Common Platforms
 		const insertPlatforms = db.prepare('INSERT INTO Platform (Title, CompanyID) VALUES (@Title, @CompanyID);');
@@ -340,8 +336,8 @@ function createTables(): BackendResponse {
 			{Title: 'Xbox 360', CompanyID: 3},
 			{Title: 'Xbox', CompanyID: 3},
 			// Mobile
-			{Title: 'Android', CompanyID: 6},
-			{Title: 'IOS', CompanyID: 7},
+			{Title: 'Android', CompanyID: 5},
+			{Title: 'IOS', CompanyID: 6},
 			// Sega
 			{Title: 'Dreamcast', CompanyID: 4},
 			{Title: 'Sega Nomad', CompanyID: 4},
@@ -349,13 +345,6 @@ function createTables(): BackendResponse {
 			{Title: 'Game Gear', CompanyID: 4},
 			{Title: 'Sega Genesis/Mega Drive', CompanyID: 4},
 			{Title: 'Sega SG-1000', CompanyID: 4},
-			// Atari
-			{Title: 'Atari VCS', CompanyID: 5},
-			{Title: 'Atari Jaguar', CompanyID: 5},
-			{Title: 'Atari Lynx', CompanyID: 5},
-			{Title: 'Atari 7800', CompanyID: 5},
-			{Title: 'Atari 5200', CompanyID: 5},
-			{Title: 'Atari 2600', CompanyID: 5},
 		]);
 		// Common Storefronts
 		const insertStorefronts = db.prepare('INSERT INTO Storefront (Title, Website) VALUES (@Title, @Website);');
