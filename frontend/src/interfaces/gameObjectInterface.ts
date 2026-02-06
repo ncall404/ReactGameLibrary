@@ -4,9 +4,9 @@ export interface GameObject {
 	GameID: number,
 	Title: string,
 	Description: string | null,
-	ReleaseDate: number, // TODO: may need to change this to a different data type depending on how you return it from the database (currently UNIX time is returned as that's how it is stored)
+	ReleaseDate: number,
 	CoverArt: string,
-	Publishers: [string] | null,
-	Developers: [string] | null,
-	Genres: [string] | null,
+	Publishers: string | null,
+	Developers: string | null,
+	Genres: string | null,
 }
