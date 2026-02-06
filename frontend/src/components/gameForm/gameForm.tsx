@@ -268,7 +268,6 @@ export default function GameForm(props: GameFormProps) {
 					className="text-(--color-dark) cursor-pointer"
 					closeMenuOnSelect={false}
 					isMulti
-					required
 					value={selectedCollections}
 					onChange={(options: MultiValue<OptionType>) => {
 						setSelectedCollections(options as OptionType[]);
