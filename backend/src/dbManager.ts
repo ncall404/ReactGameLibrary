@@ -121,7 +121,7 @@ function createTables(): BackendResponse {
 			GameID INTEGER PRIMARY KEY AUTOINCREMENT,
 			Title TEXT NOT NULL,
 			Description TEXT,
-			ReleaseDate INTEGER NOT NULL,
+			ReleaseDate INTEGER,
 			CoverArt TEXT,
 			MediaFormatID INTEGER NOT NULL,
 			FOREIGN KEY (MediaFormatID) REFERENCES MediaFormat(MediaFormatID)

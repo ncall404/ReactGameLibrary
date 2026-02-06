@@ -212,14 +212,7 @@ Promise<GameUploadResponse> {
 			field: "releaseDate",
 			severity: "error"
 		};
-	} else if (releaseDate.length === 0) {
-		return {
-			isValid: false,
-			message: "Error: Release Date is a required field.",
-			field: "releaseDate",
-			severity: "error"
-		}; // TODO: Evaluate if releaseDate should be a required field.
-	} else if (isNaN(new Date(releaseDate).getTime())) { // Date and format validation
+	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
 		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
 			return {
 				isValid: false,

@@ -303,7 +303,6 @@ export default function GameForm(props: GameFormProps) {
 				name="releaseDate"
 				id="gameFormReleaseDate"
 				onDoubleClick={(e) => e.currentTarget.showPicker()}
-				required
 				onChange={(e) => {
 					setReleaseDate(e.currentTarget.value);
 				}}/>
