@@ -2,7 +2,4 @@ backend/data/game_collection.db
 backend/data/tempSqlFiles/
 backend/images/uploads/**
 
-frontend/src/assets/PlaceholderCoverArtSize1.png
-frontend/src/assets/PlaceholderCoverArtSize2.png
-
 .DS_Store
