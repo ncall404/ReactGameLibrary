@@ -19,6 +19,105 @@ type GameUploadResponse = {
 }
 
 
+// Validates the data that will be uploaded to the Game table.
+async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number):
+Promise<GameUploadResponse> {
+	// Validate gameName
+	if (typeof gameName !== 'string') { // Type validation
+		return {
+			isValid: false,
+			message: "Error: Name is not valid.",
+			field: "gameName",
+			severity: "error"
+		};
+	} else if (gameName.trim().length === 0) { // Required field validation
+		return {
+			isValid: false,
+			message: "Error: Name is a required field.",
+			field: "gameName",
+			severity: "error"
+		};
+	}
+
+	// Validate gameDescription
+	if (typeof gameDescription !== 'string') {
+		return {
+			isValid: false,
+			message: "Error: Description is not valid.",
+			field: "gameDescription",
+			severity: "error"
+		};
+	}
+
+	// Validate releaseDate
+	if (typeof releaseDate !== 'string') { // Type validation
+		return {
+			isValid: false,
+			message: "Error: Release Date is not valid.",
+			field: "releaseDate",
+			severity: "error"
+		};
+	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
+		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
+			return {
+				isValid: false,
+				message: "Error: Release Date must be in the format YYYY-MM-DD",
+				field: "releaseDate",
+				severity: "error"
+			};
+		}
+		return {
+				isValid: false,
+				message: "Error: Release Date must be a date.",
+				field: "releaseDate",
+				severity: "error"
+			};
+	}
+
+	// Validate coverArt
+	if (coverArt) {
+		const covertArtValidation = await validateImageType(coverArt);
+		if (!covertArtValidation.isValid) {
+			return covertArtValidation;
+		}
+	}
+
+	// Validate gameMediaFormat
+	if (![1, 2, 3].includes(gameMediaFormat)){
+		return {
+			isValid: false,
+			message: "Error: Media Format must be a valid value.",
+			field: "gameMediaFormats",
+			severity: "error"
+		};
+	}
+
+	return{ isValid: true };
+}
+
+
+// Validates the image file type as a common browser-compatible image type.
+async function validateImageType(coverArtFile: File): Promise<GameUploadResponse> {
+	// MIME types of valid image formats.
+	const validImageTypes = ["png", "jpeg", "webp", "avif", "svg", "gif", "apng"];
+
+	// Validate against the validImageTypes array.
+	const fileType = await fileTypeFromBlob(coverArtFile);
+	for (let validType of validImageTypes) {
+		if (fileType?.mime === "image/" + validType) {
+			return { isValid: true };
+		}
+	}
+
+	return {
+		isValid: false,
+		message: "Error: The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.toString(),
+		field: "coverArt",
+		severity: "error"
+	};
+}
+
+
 // Validates submitted data and then creates entries for the game in the database.
 const createGame = async function createGame(c: Context) {
 	let uploadResponse: GameUploadResponse | null = null;
@@ -171,105 +270,6 @@ const createGame = async function createGame(c: Context) {
 	}
 
 	return c.json(uploadResponse);
-}
-
-
-// Validates the data that will be uploaded to the Game table.
-async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number):
-Promise<GameUploadResponse> {
-	// Validate gameName
-	if (typeof gameName !== 'string') { // Type validation
-		return {
-			isValid: false,
-			message: "Error: Name is not valid.",
-			field: "gameName",
-			severity: "error"
-		};
-	} else if (gameName.trim().length === 0) { // Required field validation
-		return {
-			isValid: false,
-			message: "Error: Name is a required field.",
-			field: "gameName",
-			severity: "error"
-		};
-	}
-
-	// Validate gameDescription
-	if (typeof gameDescription !== 'string') {
-		return {
-			isValid: false,
-			message: "Error: Description is not valid.",
-			field: "gameDescription",
-			severity: "error"
-		};
-	}
-
-	// Validate releaseDate
-	if (typeof releaseDate !== 'string') { // Type validation
-		return {
-			isValid: false,
-			message: "Error: Release Date is not valid.",
-			field: "releaseDate",
-			severity: "error"
-		};
-	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
-		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
-			return {
-				isValid: false,
-				message: "Error: Release Date must be in the format YYYY-MM-DD",
-				field: "releaseDate",
-				severity: "error"
-			};
-		}
-		return {
-				isValid: false,
-				message: "Error: Release Date must be a date.",
-				field: "releaseDate",
-				severity: "error"
-			};
-	}
-
-	// Validate coverArt
-	if (coverArt) {
-		const covertArtValidation = await validateImageType(coverArt);
-		if (!covertArtValidation.isValid) {
-			return covertArtValidation;
-		}
-	}
-
-	// Validate gameMediaFormat
-	if (![1, 2, 3].includes(gameMediaFormat)){
-		return {
-			isValid: false,
-			message: "Error: Media Format must be a valid value.",
-			field: "gameMediaFormats",
-			severity: "error"
-		};
-	}
-
-	return{ isValid: true };
-}
-
-
-// Validates the image file type as a common browser-compatible image type.
-async function validateImageType(coverArtFile: File): Promise<GameUploadResponse> {
-	// MIME types of valid image formats.
-	const validImageTypes = ["png", "jpeg", "webp", "avif", "svg", "gif", "apng"];
-
-	// Validate against the validImageTypes array.
-	const fileType = await fileTypeFromBlob(coverArtFile);
-	for (let validType of validImageTypes) {
-		if (fileType?.mime === "image/" + validType) {
-			return { isValid: true };
-		}
-	}
-
-	return {
-		isValid: false,
-		message: "Error: The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.toString(),
-		field: "coverArt",
-		severity: "error"
-	};
 }
 
 
