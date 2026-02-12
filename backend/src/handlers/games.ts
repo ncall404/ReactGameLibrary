@@ -15,7 +15,7 @@ type GameUploadResponse = {
 	field?: 
 		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
 		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
-	severity?: "success" | "warning" | "error" | "informative";
+	status: "success" | "warning" | "error" | "informative";
 }
 
 
@@ -28,14 +28,14 @@ Promise<GameUploadResponse> {
 			isValid: false,
 			message: "Error: Name is not valid.",
 			field: "gameName",
-			severity: "error"
+			status: "error"
 		};
 	} else if (gameName.trim().length === 0) { // Required field validation
 		return {
 			isValid: false,
 			message: "Error: Name is a required field.",
 			field: "gameName",
-			severity: "error"
+			status: "error"
 		};
 	}
 
@@ -45,7 +45,7 @@ Promise<GameUploadResponse> {
 			isValid: false,
 			message: "Error: Description is not valid.",
 			field: "gameDescription",
-			severity: "error"
+			status: "error"
 		};
 	}
 
@@ -55,7 +55,7 @@ Promise<GameUploadResponse> {
 			isValid: false,
 			message: "Error: Release Date is not valid.",
 			field: "releaseDate",
-			severity: "error"
+			status: "error"
 		};
 	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
 		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
@@ -63,14 +63,14 @@ Promise<GameUploadResponse> {
 				isValid: false,
 				message: "Error: Release Date must be in the format YYYY-MM-DD",
 				field: "releaseDate",
-				severity: "error"
+				status: "error"
 			};
 		}
 		return {
 				isValid: false,
 				message: "Error: Release Date must be a date.",
 				field: "releaseDate",
-				severity: "error"
+				status: "error"
 			};
 	}
 
@@ -88,11 +88,11 @@ Promise<GameUploadResponse> {
 			isValid: false,
 			message: "Error: Media Format must be a valid value.",
 			field: "gameMediaFormats",
-			severity: "error"
+			status: "error"
 		};
 	}
 
-	return{ isValid: true };
+	return{ isValid: true, status: "success" };
 }
 
 
@@ -105,7 +105,7 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	const fileType = await fileTypeFromBlob(coverArtFile);
 	for (let validType of validImageTypes) {
 		if (fileType?.mime === "image/" + validType) {
-			return { isValid: true };
+			return { isValid: true, status: "success" };
 		}
 	}
 
@@ -113,7 +113,7 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 		isValid: false,
 		message: "Error: The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.toString(),
 		field: "coverArt",
-		severity: "error"
+		status: "error"
 	};
 }
 
@@ -168,7 +168,7 @@ const createGame = async function createGame(c: Context) {
 				isValid: true,
 				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
 				field: "coverArt",
-				severity: "warning"
+				status: "warning"
 			};
 		} catch(err) {
 			try {
@@ -257,7 +257,7 @@ const createGame = async function createGame(c: Context) {
 		uploadResponse = {
 			isValid: false,
 			message: "Error: There was a problem adding the game to the database; " + err,
-			severity: "error"
+			status: "error"
 		}
 	}
 
@@ -265,7 +265,8 @@ const createGame = async function createGame(c: Context) {
 	if (!uploadResponse) {
 		uploadResponse = {
 			isValid: true,
-			message: "Game successfully created!"
+			message: "Game successfully created!",
+			status: "success"
 		}
 	}
 
@@ -339,7 +340,7 @@ const editGame = async function editGame(c: Context) {
 				isValid: true,
 				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
 				field: "coverArt",
-				severity: "warning"
+				status: "warning"
 			};
 		} catch(err) {
 			try {
@@ -444,7 +445,7 @@ const editGame = async function editGame(c: Context) {
 		uploadResponse = {
 			isValid: false,
 			message: "There was a problem editing the game; " + err,
-			severity: "error"
+			status: "error"
 		}
 	}
 
@@ -453,7 +454,7 @@ const editGame = async function editGame(c: Context) {
 		uploadResponse = {
 			isValid: true,
 			message: "Game successfully edited!",
-			severity: "success"
+			status: "success"
 		}
 	}
 
