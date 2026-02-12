@@ -481,4 +481,3 @@ const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Pr
 }
 
 export {db, setupDb, resetDb};
-export type {BackendResponse};
