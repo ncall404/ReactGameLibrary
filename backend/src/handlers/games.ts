@@ -26,14 +26,14 @@ Promise<GameUploadResponse> {
 	if (typeof gameName !== 'string') { // Type validation
 		return {
 			isValid: false,
-			message: "Error: Name is not valid.",
+			message: "Name is not valid.",
 			field: "gameName",
 			status: "error"
 		};
 	} else if (gameName.trim().length === 0) { // Required field validation
 		return {
 			isValid: false,
-			message: "Error: Name is a required field.",
+			message: "Name is a required field.",
 			field: "gameName",
 			status: "error"
 		};
@@ -43,7 +43,7 @@ Promise<GameUploadResponse> {
 	if (typeof gameDescription !== 'string') {
 		return {
 			isValid: false,
-			message: "Error: Description is not valid.",
+			message: "Description is not valid.",
 			field: "gameDescription",
 			status: "error"
 		};
@@ -53,7 +53,7 @@ Promise<GameUploadResponse> {
 	if (typeof releaseDate !== 'string') { // Type validation
 		return {
 			isValid: false,
-			message: "Error: Release Date is not valid.",
+			message: "Release Date is not valid.",
 			field: "releaseDate",
 			status: "error"
 		};
@@ -61,14 +61,14 @@ Promise<GameUploadResponse> {
 		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
 			return {
 				isValid: false,
-				message: "Error: Release Date must be in the format YYYY-MM-DD",
+				message: "Release Date must be in the format YYYY-MM-DD",
 				field: "releaseDate",
 				status: "error"
 			};
 		}
 		return {
 				isValid: false,
-				message: "Error: Release Date must be a date.",
+				message: "Release Date must be a date.",
 				field: "releaseDate",
 				status: "error"
 			};
@@ -86,7 +86,7 @@ Promise<GameUploadResponse> {
 	if (![1, 2, 3].includes(gameMediaFormat)){
 		return {
 			isValid: false,
-			message: "Error: Media Format must be a valid value.",
+			message: "Media Format must be a valid value.",
 			field: "gameMediaFormats",
 			status: "error"
 		};
@@ -111,7 +111,7 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 
 	return {
 		isValid: false,
-		message: "Error: The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.toString(),
+		message: "The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.join(", "),
 		field: "coverArt",
 		status: "error"
 	};
@@ -176,7 +176,7 @@ const createGame = async function createGame(c: Context) {
 			} catch (err) {
 				return c.json({
 					isValid: false,
-					message: "Error: There was a problem writing the cover art image to the server; " + err,
+					message: "There was a problem writing the cover art image to the server; " + err,
 					field: "coverArt",
 					severity: "error"
 				});
@@ -256,7 +256,7 @@ const createGame = async function createGame(c: Context) {
 	} catch (err) {
 		uploadResponse = {
 			isValid: false,
-			message: "Error: There was a problem adding the game to the database; " + err,
+			message: "There was a problem adding the game to the database; " + err,
 			status: "error"
 		}
 	}
@@ -348,7 +348,7 @@ const editGame = async function editGame(c: Context) {
 			} catch (err) {
 				return c.json({
 					isValid: false,
-					message: "Error: There was a problem writing the cover art image to the server; " + err,
+					message: "There was a problem writing the cover art image to the server; " + err,
 					field: "coverArt",
 					severity: "error"
 				});
@@ -515,7 +515,7 @@ const deleteGame = async function deleteGame(c: Context) {
 			response.message = "Game successfully deleted.";
 			response.status = "success";
 		} catch (err) {
-			response.message = `Error deleting the game: ${err}`;
+			response.message = `The game could not be deleted: ${err}`;
 		}
 	}
 
