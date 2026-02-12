@@ -37,6 +37,10 @@ function checkTables(): boolean {
 
 // Creates the database tables and inserts data into relevant tables.
 function createTables(): BackendResponse {
+	const result: BackendResponse = {
+		message: "Game is not finished being created.",
+		status: "error"
+	};
 	let query;
 
 	// Drop existing tables; if there are any.
@@ -404,10 +408,10 @@ function createTables(): BackendResponse {
 		throw new Error("There was a problem creating the database: " + err);
 	}
 
-	return {
-		message: "Success: Database created!",
-		status: "success"
-	}
+	result.message = "Database created!";
+	result.status = "success";
+
+	return result;
 }
 
 
@@ -437,10 +441,10 @@ const setupDb = async function setupDb(): Promise<BackendResponse> {
 				status: "error"
 			}
 		}
-		result.message = "Success: Database created!";
+		result.message = "Database created!";
 		result.status = "success";
 	} else {
-		result.message = "Success: Database already existed.";
+		result.message = "Database already existed.";
 		result.status = "informative";
 	}
 
