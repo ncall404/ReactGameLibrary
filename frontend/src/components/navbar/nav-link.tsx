@@ -2,7 +2,7 @@
 
 import { Link } from "@tanstack/react-router";
 
-interface NavLinkProps {
+type NavLinkProps = {
 	to: string,
 	children?: React.ReactNode,
 }
