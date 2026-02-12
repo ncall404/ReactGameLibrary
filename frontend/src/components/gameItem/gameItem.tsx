@@ -6,7 +6,7 @@ import { BtnStyle } from '../../components/common/btn.tsx';
 import type { Key } from "react";
 import type { GameObject } from '../../routes/index.tsx';
 
-interface GameItemProps {
+type GameItemProps = {
 	key: Key, // Should be the GameId.
 	data: GameObject,
 	editFunction: () => void,
