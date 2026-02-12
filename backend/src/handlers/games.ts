@@ -6,7 +6,7 @@ import { join } from 'path';
 import type { Context } from "hono";
 
 import { db } from "../dbManager.ts";
-import type { BackendResponse } from '../dbManager.ts';
+import type { BackendResponse } from '../server.ts';
 
 // Type for the object sent back from the server in response to an attempt at uploading a game.
 type GameUploadResponse = {

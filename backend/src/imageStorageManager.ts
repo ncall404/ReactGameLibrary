@@ -3,7 +3,7 @@
 import { access, mkdir, rm } from "fs/promises";
 import { constants } from "fs";
 
-import type { BackendResponse } from "./dbManager.ts";
+import type { BackendResponse } from './server.ts';
 
 // Clears the contents of the path for image storage. This removes all stored pictures.
 const clearImageStorage = async function clearImageStorage(imageStoragePath: string): Promise<void> {

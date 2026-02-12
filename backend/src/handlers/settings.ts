@@ -1,7 +1,7 @@
 // Contains functions for handling server requests related to the app settings. (preferences, resetting the app, etc.)
 
 import type { Context } from "hono";
-import type { BackendResponse } from "../dbManager.ts";
+import type { BackendResponse } from '../server.ts';
 import { resetDb } from "../dbManager.ts";
 
 const resetApp = async function resetApp(c: Context) {

@@ -4,6 +4,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 
 import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
+import type { BackendResponse } from './server.ts';
 
 // Create database object for the game_collection database. If game_collection.db is missing then it is created.
 const db = new Database(path.join('data', 'game_collection.db'));
@@ -32,13 +33,6 @@ function checkTables(): boolean {
 		if (isMatch === false) { return false; } // Return false if a table without a match is found.
 	}
 	return true;
-}
-
-// Type for the object sent back from the server in response to a server request if it has no extra needs (i.e. extra data or an extra field).
-// 		TODO: Combine with other similar/identical types for responses from other files such as in settings.ts and move to a new more appropriate location that is TBD.
-type BackendResponse = {
-	message: string;
-	status: "success" | "warning" | "error" | "informative";
 }
 
 // Creates the database tables and inserts data into relevant tables.

@@ -1,6 +1,6 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
-import type { BackendResponse } from "../dbManager.ts";
+import type { BackendResponse } from '../server.ts';
 
 import { upperFirstLetter } from "../utilities.ts";
 

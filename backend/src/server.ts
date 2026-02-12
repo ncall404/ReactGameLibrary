@@ -18,6 +18,14 @@ import { getGenres, addGenre, removeGenres,
 import { createGame, editGame, deleteGame, getGameData } from './handlers/games.ts';
 import { resetApp } from './handlers/settings.ts';
 
+
+// Type for the object sent back from the server in response to a server request if it has no extra needs (i.e. extra data or an extra field).
+export type BackendResponse = {
+	message: string;
+	status: "success" | "warning" | "error" | "informative";
+};
+
+
 const app = new Hono();
 app.use(cors());
 
