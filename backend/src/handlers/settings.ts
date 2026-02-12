@@ -4,29 +4,22 @@ import type { Context } from "hono";
 import type { BackendResponse } from "../dbManager.ts";
 import { resetDb } from "../dbManager.ts";
 
-type SettingsResponse = {
-	message?: string;
-	severity?: "success" | "error";
-}
-
 const resetApp = async function resetApp(c: Context) {
-	let uploadResponse: SettingsResponse | null = null;
+	const resetResponse: BackendResponse = {
+		message: "Reset in progress.",
+		status: "error"
+	};
 
 	const resetStatus: BackendResponse = await resetDb();
 
 	if (resetStatus.status === "success") {
-		uploadResponse = {
-			message: resetStatus.message,
-			severity: "success"
-		}
+		resetResponse.message = resetStatus.message;
+		resetResponse.status = "success";
 	} else {
-		uploadResponse = {
-			message: resetStatus.message,
-			severity: "error"
-		}
+		resetResponse.message = resetStatus.message;
 	}
 
-	return c.json(uploadResponse);
+	return c.json(resetResponse);
 }
 
 export { resetApp };
