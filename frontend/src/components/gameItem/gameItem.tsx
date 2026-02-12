@@ -54,47 +54,45 @@ export default function GameItem(props: GameItemProps) {
 				</div>
 			</div>
 
-			<div id="extraGameInfoContainer" className="flex grow basis-full flex-wrap max-md:gap-2 gap-4">
-				{/* Div for more game data such as release date, genres, platforms, etc. */}
-				{
-					((game.publisherData && game.publisherData.length > 0) || (game.developerData && game.developerData.length > 0) || 
-					(game.platformData && game.platformData.length > 0) || (game.storefrontData && game.storefrontData.length > 0) ||
-					game.gameData.ReleaseDate) &&
-					<details className="basis-1/2 grow font-medium border-2 rounded-sm
-						text-(--color-light) border-(--color-neutral)">
-						<summary className="select-none cursor-pointer p-[5px] border-(--color-neutral) bg-(--color-btn-bg) hover:bg-(--color-neutral)"
-						>Game Details</summary>
-						<div className="p-1 pl-4">
-							{
-								game.gameData.ReleaseDate &&
-								<p><b>Release:</b> {new Date(game.gameData.ReleaseDate * 1000).toLocaleDateString()}</p>
-							}
-							{
-								game.publisherData && game.publisherData.length > 0 &&
-								<p><b>Publishers:</b> {titlesToString(game.publisherData)}</p>
-							}
-							{
-								game.developerData && game.developerData.length > 0 &&
-								<p><b>Developers:</b> {titlesToString(game.developerData)}</p>
-							}
-							{
-								game.platformData && game.platformData.length > 0 &&
-								<p><b>Platforms:</b> {titlesToString(game.platformData)}</p>
-							}
-							{
-								game.storefrontData && game.storefrontData.length > 0 &&
-								<p><b>Storefronts:</b> {titlesToString(game.storefrontData)}</p>
-							}
-							{
-								game.genreData && game.genreData.length > 0 &&
-								<p><b>Genres:</b> {titlesToString(game.genreData)}</p>
-							}
-						</div>
-						
-					</details>
-				}
+			{ /* More game details such as release date, genres, platforms, etc. */
+				((game.publisherData && game.publisherData.length > 0) || (game.developerData && game.developerData.length > 0) || 
+				(game.platformData && game.platformData.length > 0) || (game.storefrontData && game.storefrontData.length > 0) ||
+				game.gameData.ReleaseDate) &&
+				<details className="basis-full grow font-medium border-2 rounded-sm
+					text-(--color-light) border-(--color-neutral)">
+					<summary className="select-none cursor-pointer p-[5px] border-(--color-neutral) bg-(--color-btn-bg) hover:bg-(--color-neutral)"
+					>Game Details</summary>
+					<div className="p-1 pl-4">
+						{
+							game.gameData.ReleaseDate &&
+							<p><b>Release:</b> {new Date(game.gameData.ReleaseDate * 1000).toLocaleDateString()}</p>
+						}
+						{
+							game.publisherData && game.publisherData.length > 0 &&
+							<p><b>Publishers:</b> {titlesToString(game.publisherData)}</p>
+						}
+						{
+							game.developerData && game.developerData.length > 0 &&
+							<p><b>Developers:</b> {titlesToString(game.developerData)}</p>
+						}
+						{
+							game.platformData && game.platformData.length > 0 &&
+							<p><b>Platforms:</b> {titlesToString(game.platformData)}</p>
+						}
+						{
+							game.storefrontData && game.storefrontData.length > 0 &&
+							<p><b>Storefronts:</b> {titlesToString(game.storefrontData)}</p>
+						}
+						{
+							game.genreData && game.genreData.length > 0 &&
+							<p><b>Genres:</b> {titlesToString(game.genreData)}</p>
+						}
+					</div>
+					
+				</details>
+			}
 				
-			</div>
+			
 			
 		</article>
 	);
