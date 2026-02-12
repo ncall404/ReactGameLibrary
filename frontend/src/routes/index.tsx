@@ -8,7 +8,6 @@ import Btn from '../components/common/btn.tsx';
 import { BtnStyle } from '../components/common/btn.tsx';
 
 import GameItem from '../components/gameItem/gameItem.tsx';
-import type { GameObject } from "../interfaces/gameObjectInterface.ts";
 
 import GameForm from '../components/gameForm/gameForm.tsx';
 import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx';
@@ -21,6 +20,33 @@ import { fillOptionsArray, scrollToTop } from '../utilities.ts';
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
 import Modal from '../components/common/modal.tsx';
+
+
+export type GameObject = {
+	gameData: {
+		GameID: number,
+		Title: string,
+		Description: string,
+		ReleaseDate: number,
+		CoverArt: string,
+		MediaFormatTitle: string
+	},
+	publisherData: {
+		Title: string
+	}[],
+	developerData: {
+		Title: string
+	}[],
+	platformData: {
+		Title: string
+	}[],
+	storefrontData: {
+		Title: string
+	}[],
+	genreData: {
+		Title: string
+	}[]
+}
 
 
 export const Route = createFileRoute('/')({
@@ -99,6 +125,9 @@ function RouteComponent() {
 	const singleLibrary = useQuery({
 		queryKey:['libraries', 'contents', 'single-library', selectedCollection.value],
 		queryFn: () => getSingleLibrary(selectedCollection.value),
+		select: (data) => {
+			return data.games;
+		}
 	});
 
 	if (singleLibrary.status === 'pending') {
@@ -140,17 +169,17 @@ function RouteComponent() {
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
 				{
-				singleLibrary.data &&
-				singleLibrary.data?.map((game: GameObject) => <GameItem key={game.GameID} data={game} editFunction={() => {
+					singleLibrary.data &&
+					singleLibrary.data.map((game: GameObject) => <GameItem key={game.gameData.GameID} data={game} editFunction={() => {
 							setGameFormType("edit");
-							setSelectedGameID(game.GameID);
+							setSelectedGameID(game.gameData.GameID);
 							setGameFormIsOpen(true);
 							scrollToTop();
 						}
 					}
 					deleteFunction={() => {
 						setDeleteConfirmIsOpen(true);
-						setSelectedGameID(game.GameID);
+						setSelectedGameID(game.gameData.GameID);
 					}}
 					/>)
 				}

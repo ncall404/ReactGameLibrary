@@ -4,7 +4,7 @@ import Btn from '../../components/common/btn.tsx';
 import { BtnStyle } from '../../components/common/btn.tsx';
 
 import type { Key } from "react";
-import type { GameObject } from "../../interfaces/gameObjectInterface.ts";
+import type { GameObject } from '../../routes/index.tsx';
 
 interface GameItemProps {
 	key: Key, // Should be the GameId.
@@ -19,9 +19,9 @@ export default function GameItem(props: GameItemProps) {
 
 	let imgSrc = "";
 	let imgAlt = "";
-	if (game.CoverArt !== null) {
-		imgSrc = `http://localhost:3000/${game.CoverArt}`;
-		imgAlt = `Game cover art for ${game.Title}`;
+	if (game.gameData.CoverArt !== null) {
+		imgSrc = `http://localhost:3000/${game.gameData.CoverArt}`;
+		imgAlt = `Game cover art for ${game.gameData.Title}`;
 	}
 
 	return (
@@ -33,9 +33,10 @@ export default function GameItem(props: GameItemProps) {
 				max-md:h-56 min-md:h-fit max-sm:self-center" 
 				src={imgSrc} alt={imgAlt}/>
 				<div className="grow flex flex-col gap-0.25">
-					<h2 className="text-2xl">{game.Title}</h2>
-					<p className="text-pretty">{game.Description}</p>
+					<h2 className="text-2xl">{game.gameData.Title}</h2>
+					<p className="text-pretty mb-2">{game.gameData.Description}</p>
 				</div>
+
 				<div id="gameActionButtons" className="flex md:flex-col gap-2 place-content-center md:basis-32">
 					<Btn func={props.editFunction} className="max-md:grow md:w-32" style={BtnStyle.Neutral}>Edit</Btn>
 					<Btn func={props.deleteFunction} className="max-md:grow md:w-32" style={BtnStyle.Danger}>Delete</Btn>
