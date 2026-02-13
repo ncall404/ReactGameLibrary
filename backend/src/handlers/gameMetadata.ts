@@ -3,15 +3,9 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 
-// TODO: Consider making a combined API function or database query for getAll functions for when genres, platforms, storefronts, and companies are all needed (such as in the new game form).
+import type { BackendResponse } from "../server.ts";
 
-// Type for the object sent back from the server in response to an attempt at adding/removing/editing a metadata record.
-type MetadataActionResponse = {
-	action: "add" | "remove" | "edit";
-	isValid: boolean; // True if there are no errors, false if there are errors.
-	message?: string;
-	severity?: "success" | "warning" | "error" | "informative";
-}
+// TODO: Consider making a combined API function or database query for getAll functions for when genres, platforms, storefronts, and companies are all needed (such as in the game form).
 
 
 // Genres -------------------------------------------------------------------
@@ -24,7 +18,10 @@ const getGenres = function getGenres(c: Context) {
 
 	// Adds a new genre to the Genre table.
 const addGenre = async function addGenre(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const response: BackendResponse = {
+		message: "Adding genre not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const genreTitle = body['metadataAddTitle'];
 
@@ -35,50 +32,31 @@ const addGenre = async function addGenre(c: Context) {
 				VALUES (@Title);
 			`);
 			query.run({Title: genreTitle});
-			actionResponse = {
-				action: "add",
-				isValid: true,
-				message: "Genre successfully added to the database!",
-				severity: "success"
-			};
+			response.message = "Genre successfully added to the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "add",
-				isValid: false,
-				message: "Error: The genre could not be added to the database; " + err,
-				severity: "error"
-			};
+			response.message = "The genre could not be added to the database; " + err;
 		}
 	} else {
-		actionResponse = {
-			action: "add",
-			isValid: false,
-			message: "Error: The genre name must not be empty",
-			severity: "error"
-		};
+		response.message = "The genre name must not be empty";
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 	// Removes selected genre(s) from the Genre table and other connected tables (GameGenre).
 const removeGenres = async function removeGenres(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const response: BackendResponse = {
+		message: "Removing genre(s) not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const selectedGenresString = body['editMetadataRemove'];
+
 	if (typeof selectedGenresString !== 'string') {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "Error: Invalid genre selection input.",
-			severity: "error"
-		};
+		response.message = "Invalid genre selection input.";
 	} else if (selectedGenresString.length == 0) {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "No genres were selected for removal.",
-			severity: "warning"
-		}
+		response.message = "No genres were selected for removal.";
+		response.status = "warning";
 	} else {
 		const selectedGenres = selectedGenresString.split(',');
 		
@@ -100,23 +78,14 @@ const removeGenres = async function removeGenres(c: Context) {
 
 		try {
 			deleteSelectedGenres();
-			actionResponse = {
-				action: "remove",
-				isValid: true,
-				message: "Genre(s) successfully removed from the database!",
-				severity: "success"
-			};
+			response.message = "Genre(s) successfully removed from the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "remove",
-				isValid: false,
-				message: "Error: The selected genre(s) could not be remove from the database; " + err,
-				severity: "error"
-			};
+			response.message = "The selected genre(s) could not be removed from the database; " + err;
 		}
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 
 
@@ -134,7 +103,10 @@ const getPlatforms = function getPlatforms(c: Context) {
 
 	// Adds a new platform to the Platform table.
 const addPlatform = async function addPlatform(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const response: BackendResponse = {
+		message: "Adding platform not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const platformTitle = body['metadataAddTitle'];
 	const platformOwnerID = body['platformOwner'];
@@ -148,19 +120,11 @@ const addPlatform = async function addPlatform(c: Context) {
 					VALUES (@Title, @CompanyID);
 				`);
 				query.run({Title: platformTitle, CompanyID: parseInt(platformOwnerID)});
-				actionResponse = {
-					action: "add",
-					isValid: true,
-					message: "Platform successfully added to the database!",
-					severity: "success"
-				};
+
+				response.message = "Platform successfully added to the database!";
+				response.status = "success";
 			} catch (err) {
-				actionResponse = {
-					action: "add",
-					isValid: false,
-					message: "Error: The platform could not be added to the database; " + err,
-					severity: "error"
-				};
+				response.message = "The platform could not be added to the database; " + err;
 			}
 		}
 		// Do this when there is no platform owner specified.
@@ -171,51 +135,33 @@ const addPlatform = async function addPlatform(c: Context) {
 					VALUES (@Title);
 				`);
 				query.run({Title: platformTitle});
-				actionResponse = {
-					action: "add",
-					isValid: true,
-					message: "Platform successfully added to the database!",
-					severity: "success"
-				};
+
+				response.message = "Platform successfully added to the database!";
+				response.status = "success";
 			} catch (err) {
-				actionResponse = {
-					action: "add",
-					isValid: false,
-					message: "Error: The platform could not be added to the database; " + err,
-					severity: "error"
-				};
+				response.message = "The platform could not be added to the database; " + err;
 			}
 		}
 	} else {
-		actionResponse = {
-			action: "add",
-			isValid: false,
-			message: "Error: The platform name must not be empty",
-			severity: "error"
-		};
+		response.message = "The platform name must not be empty";
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 	// Removes selected platform(s) from the Platform table and other connected tables (GamePlatform).
 const removePlatforms = async function removePlatforms(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const response: BackendResponse = {
+		message: "Removing platform(s) not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const selectedPlatformsString = body['editMetadataRemove'];
+
 	if (typeof selectedPlatformsString !== 'string') {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "Error: Invalid platform selection input.",
-			severity: "error"
-		};
+		response.message = "Invalid platform selection input.";
 	} else if (selectedPlatformsString.length == 0) {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "No platforms were selected for removal.",
-			severity: "warning"
-		}
+		response.message = "No platforms were selected for removal.";
+		response.status = "warning";
 	} else {
 		const selectedPlatforms = selectedPlatformsString.split(',');
 		
@@ -237,23 +183,14 @@ const removePlatforms = async function removePlatforms(c: Context) {
 
 		try {
 			deleteSelectedPlatforms();
-			actionResponse = {
-				action: "remove",
-				isValid: true,
-				message: "Platform(s) successfully removed from the database!",
-				severity: "success"
-			};
+			response.message = "Platform(s) successfully removed from the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "remove",
-				isValid: false,
-				message: "Error: The selected platform(s) could not be remove from the database; " + err,
-				severity: "error"
-			};
+			response.message = "The selected platform(s) could not be remove from the database; " + err;
 		}
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 
 
@@ -314,18 +251,16 @@ const getCompanyTypes = function getCompanyTypes(c: Context) {
 
 	// Adds a new company to the Company table. Adds connections between the Company and Company Types tables with the CompanyCompanyType table.
 const addCompany = async function addCompany(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const response: BackendResponse = {
+		message: "Adding company not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const companyTitle = body['metadataAddTitle'];
 	const companyTypesStr = body['companyTypes'];
 
 	if (typeof companyTypesStr !== 'string') {
-		actionResponse = {
-			action: "add",
-			isValid: false,
-			message: "Error: Invalid company type input.",
-			severity: "error"
-		};
+		response.message = "Invalid company type input.";
 	} else {
 		const companyTypes = companyTypesStr.split(',');
 
@@ -353,43 +288,29 @@ const addCompany = async function addCompany(c: Context) {
 		
 		try {
 			insertCompany();
-			actionResponse = {
-				action: "add",
-				isValid: true,
-				message: "Company successfully added to the database!",
-				severity: "success"
-			};
+			response.message = "Company successfully added to the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "add",
-				isValid: false,
-				message: "Error: There was a problem adding the company to the database; " + err,
-				severity: "error"
-			};
+			response.message = "There was a problem adding the company to the database; " + err;
 		}
 	}
 
-	return c.json(actionResponse);
+	return c.json(response);
 }
 	// Removes selected companies from the Company table and other connected tables (GameCompany, CompanyCompanyType).
 const removeCompanies = async function removeCompanies(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const response: BackendResponse = {
+		message: "Removing companies not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const selectedCompaniesString = body['editMetadataRemove'];
+
 	if (typeof selectedCompaniesString !== 'string') {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "Error: Invalid company selection input.",
-			severity: "error"
-		};
+		response.message = "Invalid company selection input.";
 	} else if (selectedCompaniesString.length == 0) {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "No companies were selected for removal.",
-			severity: "warning"
-		}
+		response.message = "No companies were selected for removal.";
+		response.status = "warning";
 	} else {
 		const selectedCompanies = selectedCompaniesString.split(',');
 		
@@ -416,23 +337,14 @@ const removeCompanies = async function removeCompanies(c: Context) {
 
 		try {
 			deleteSelectedCompanies();
-			actionResponse = {
-				action: "remove",
-				isValid: true,
-				message: "Companies successfully removed from the database!",
-				severity: "success"
-			};
+			response.message = "Companies successfully removed from the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "remove",
-				isValid: false,
-				message: "Error: The selected companies could not be remove from the database; " + err,
-				severity: "error"
-			};
+			response.message = "The selected companies could not be remove from the database; " + err;
 		}
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 
 
@@ -456,7 +368,10 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 
 	// Adds a new storefront to the Storefront table.
 const addStorefront = async function addStorefront(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "add", isValid: false};
+	const response: BackendResponse = {
+		message: "Adding storefront not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const storefrontTitle = body['metadataAddTitle'];
 	const storefrontWebsite = body['storefrontWebsite'];
@@ -469,51 +384,32 @@ const addStorefront = async function addStorefront(c: Context) {
 					VALUES (@Title, @Website);
 				`);
 				query.run({Title: storefrontTitle, Website: storefrontWebsite});
-				actionResponse = {
-					action: "add",
-					isValid: true,
-					message: "Storefront successfully added to the database!",
-					severity: "success"
-				};
+				response.message = "Storefront successfully added to the database!";
+				response.status = "success";
 			} catch (err) {
-				actionResponse = {
-					action: "add",
-					isValid: false,
-					message: "Error: The storefront could not be added to the database; " + err,
-					severity: "error"
-				};
+				response.message = "The storefront could not be added to the database; " + err;
 			}
 		}
 	} else {
-		actionResponse = {
-			action: "add",
-			isValid: false,
-			message: "Error: The storefront name must not be empty",
-			severity: "error"
-		};
+		response.message = "The storefront name must not be empty";
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 	// Removes selected storefront(s) from the Storefront table and other connected tables (GameStorefront).
 const removeStorefronts = async function removeStorefronts(c: Context) {
-	let actionResponse: MetadataActionResponse = {action: "remove", isValid: false};
+	const response: BackendResponse = {
+		message: "Removing storefronts not completed.",
+		status: "error"
+	};
 	const body = await c.req.parseBody();
 	const selectedStorefrontsString = body['editMetadataRemove'];
+
 	if (typeof selectedStorefrontsString !== 'string') {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "Error: Invalid storefront selection input.",
-			severity: "error"
-		};
+		response.message = "Invalid storefront selection input.";
 	} else if (selectedStorefrontsString.length == 0) {
-		actionResponse = {
-			action: "remove",
-			isValid: false,
-			message: "No storefront(s) were selected for removal.",
-			severity: "warning"
-		}
+		response.message = "No storefront(s) were selected for removal.";
+		response.status = "warning";
 	} else {
 		const selectedStorefronts = selectedStorefrontsString.split(',');
 		
@@ -535,23 +431,14 @@ const removeStorefronts = async function removeStorefronts(c: Context) {
 
 		try {
 			deleteSelectedStorefronts();
-			actionResponse = {
-				action: "remove",
-				isValid: true,
-				message: "Storefront(s) successfully removed from the database!",
-				severity: "success"
-			};
+			response.message = "Storefront(s) successfully removed from the database!";
+			response.status = "success";
 		} catch (err) {
-			actionResponse = {
-				action: "remove",
-				isValid: false,
-				message: "Error: The selected storefront(s) could not be remove from the database; " + err,
-				severity: "error"
-			};
+			response.message = "The selected storefront(s) could not be remove from the database; " + err;
 		}
 	}
 	
-	return c.json(actionResponse);
+	return c.json(response);
 }
 
 // Media formats ------------------------------------------------------------
