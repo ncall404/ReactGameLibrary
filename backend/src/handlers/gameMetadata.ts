@@ -5,9 +5,6 @@ import { db } from "../dbManager.ts";
 
 import type { BackendResponse } from "../server.ts";
 
-// TODO: Consider making a combined API function or database query for getAll functions for when genres, platforms, storefronts, and companies are all needed (such as in the game form).
-
-
 // Genres -------------------------------------------------------------------
 	// Retrieves all genre entries from the Genre table.
 const getGenres = function getGenres(c: Context) {
