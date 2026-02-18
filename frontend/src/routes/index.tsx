@@ -62,6 +62,8 @@ function RouteComponent() {
 	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
 
 	const [deleteConfirmIsOpen, setDeleteConfirmIsOpen] = useState<boolean>(false);
+
+	const [savedScrollYPosition, setSavedScrollYPosition] = useState<number>(0);
 	
 	const deleteGameMutation = useMutation({
 		mutationFn: async (formData: FormData) => {
@@ -160,6 +162,7 @@ function RouteComponent() {
 					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
 					<Btn style={BtnStyle.Primary}
 						func={() => {
+							setSavedScrollYPosition(window.scrollY);
 							setGameFormType("create");
 							setGameFormIsOpen(true);
 							scrollToTop();
@@ -171,6 +174,7 @@ function RouteComponent() {
 				{
 					singleLibrary.data &&
 					singleLibrary.data.map((game: GameObject) => <GameItem key={game.gameData.GameID} data={game} editFunction={() => {
+							setSavedScrollYPosition(window.scrollY);
 							setGameFormType("edit");
 							setSelectedGameID(game.gameData.GameID);
 							setGameFormIsOpen(true);
@@ -191,13 +195,11 @@ function RouteComponent() {
 				onSubmitted={() => {
 					setGameFormIsOpen(false);
 					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
-					scrollToTop();
+					window.scrollTo(0, savedScrollYPosition);
 				}} 
 				onCancel={() => {
 					setGameFormIsOpen(false);
-					if (gameFormType == "create") {
-						scrollToTop();
-					}
+					window.scrollTo(0, savedScrollYPosition);
 				}} 
 				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
 				formType={gameFormType}
