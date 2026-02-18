@@ -119,6 +119,7 @@ export default function GameForm(props: GameFormProps) {
 	});
 
 	// useQuery hooks for lists that are used to fill Select inputs.
+	// NOTE: While these could be combined into one or two requests, it was done this way so that less data needs to be refetched when data changes since only one of these is invalidated.
 	const collectionList = useQuery({
 		queryKey: ['collections' + props.collectionType],
 		queryFn: () => getCollectionList(CollectionType.Library),
@@ -153,7 +154,7 @@ export default function GameForm(props: GameFormProps) {
 		queryKey:['metadata', MetadataField.MediaFormat],
 		queryFn: () => getMetadata(MetadataField.MediaFormat),
 		select: (data) => fillOptionsArray(data)
-	})
+	});
 
 
 	useEffect(() => {
