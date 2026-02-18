@@ -258,7 +258,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 					}}
 					options={removeList.data}
 				/>
-				<Btn type="submit" style={BtnStyle.Primary}>Remove Selected</Btn>
+				<Btn type="submit" style={BtnStyle.Danger}>Remove Selected</Btn>
 			</form>
 		</Modal>
 	);
