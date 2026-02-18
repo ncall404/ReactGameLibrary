@@ -41,3 +41,7 @@ input[type="file"]::file-selector-button {
 input[type="file"]::file-selector-button:hover {
 	background-color: var(--color-neutral);
 }
+
+#gameForm hr {
+	margin: 10px 0px;
+}

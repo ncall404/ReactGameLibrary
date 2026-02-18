@@ -258,7 +258,7 @@ export default function GameForm(props: GameFormProps) {
 
 	return (
 		<>
-			<form onSubmit={handleSubmit} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleSubmit} method="post" id="gameForm" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
 				<h2 className="text-2xl">{upperFirstLetter(props.formType)} Game</h2>
 				<hr />
 
@@ -275,7 +275,7 @@ export default function GameForm(props: GameFormProps) {
 					}}
 					options={collectionList.data}
 				/>
-				<br />
+
 				<hr />
 
 				<label htmlFor="gameFormName">Name: </label>
@@ -330,9 +330,7 @@ export default function GameForm(props: GameFormProps) {
 					</figure>
 				}
 
-				<br />
-				<hr />
-				<br />
+				
 
 				<label htmlFor="gameFormMediaFormatOptions">Media Format: </label>
 				<Select 
@@ -346,7 +344,8 @@ export default function GameForm(props: GameFormProps) {
 					}}
 					options={mediaFormatList.data}
 				/>
-				<br />
+
+				<hr />
 
 				<label htmlFor="gameFormGenreOptions">Genre(s): </label>
 				<Select
@@ -437,7 +436,7 @@ export default function GameForm(props: GameFormProps) {
 					setEditMetadataField("storefronts");
 					setIsEditModalOpen(true);
 				}}>Edit storefront list</Btn>
-				<br />
+
 				<hr />
 
 				<div className="flex gap-2 mt-3">
