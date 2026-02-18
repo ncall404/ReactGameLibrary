@@ -34,6 +34,8 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	const [storefrontWebsite, setStorefrontWebsite] = useState<string>("");
 	// States for remove form.
 	const [selectedForRemoval, setSelectedForRemoval] = useState<OptionType[]>([]);
+	// State of delete confirmation modal.
+	const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false);
 
 	// Mutation for adding metadata.
 	const editMetadataAddMutation = useMutation({
@@ -163,6 +165,8 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 		const formData = new FormData();
 		formData.append('editMetadataRemove', optionsToString(selectedForRemoval));
 		editMetadataRemoveMutation.mutate(formData);
+
+		setIsDeleteConfirmOpen(true);
 	}
 
 
@@ -243,7 +247,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				<Btn type="submit" style={BtnStyle.Primary}>Add Option</Btn>
 			</form>
 			
-			<form onSubmit={handleEditListRemove} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleEditListRemove} method="post" id="removeMetadataForm" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
 				<h3 className="text-xl">Remove</h3>
 				<label htmlFor="editMetadataRemove">Options to remove: </label>
 				<Select
@@ -258,7 +262,26 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 					}}
 					options={removeList.data}
 				/>
-				<Btn type="submit" style={BtnStyle.Danger}>Remove Selected</Btn>
+				<Btn type="button" style={BtnStyle.Danger} func={() => setIsDeleteConfirmOpen(true)}>Remove Selected</Btn>
+
+				<Modal
+				isOpen={isDeleteConfirmOpen}
+				onConfirm={() => {
+					const form: HTMLFormElement = document.getElementById("removeMetadataForm") as HTMLFormElement;
+					form.requestSubmit(); // Emulate the user clicking a submit button on modal confirmation.
+
+					setIsDeleteConfirmOpen(false);
+				}}
+				onClose={() => {setIsDeleteConfirmOpen(false)}}
+				isForm={true}>
+					<h2 className="text-2xl">Confirm Metadata Removal?</h2>
+					<div className="bg-(--color-darker) rounded-sm p-4 mt-2">
+						<p>Are you sure you want to remove the selected metadata?</p>
+						<p>If there are games using this metadata, it will be removed from those games.</p>
+						<br />
+						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+					</div>
+				</Modal>
 			</form>
 		</Modal>
 	);
