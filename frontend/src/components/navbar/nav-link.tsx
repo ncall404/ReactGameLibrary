@@ -9,7 +9,15 @@ type NavLinkProps = {
 
 export default function NavLink(props: NavLinkProps) {
 	return (
-		<Link to={props.to} className='max-sm:flex-grow max-sm:text-center mx-[5px] p-[10px] border-(--color-light) border-b-2 hover:border-(--color-accent) focus:border-(--color-accent) font-medium'>
+		<Link
+		to={props.to}
+		className='max-sm:flex-grow max-sm:text-center p-[10px] border-b-2 hover:bg-(--color-primary-focus) font-medium'
+		activeProps={{
+			className:"border-(--color-accent) border-b-4 pb-[8px]",
+		}}
+		inactiveProps={{
+			className:"hover:border-(--color-accent) focus:border-(--color-accent)",
+		}}>
 			{props.children}
 		</Link>
 	);
