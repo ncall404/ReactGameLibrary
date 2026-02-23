@@ -3,3 +3,4 @@ backend/data/tempSqlFiles/
 backend/images/uploads/**
 
 .DS_Store
+.vscode/ReactGameLibrary.code-workspace
