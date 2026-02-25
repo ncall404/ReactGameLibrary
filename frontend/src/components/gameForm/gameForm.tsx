@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
+import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter, selectStyles } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
@@ -266,7 +266,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gameCollections"
 					inputId="newGameCollections"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedCollections}
@@ -336,7 +336,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select 
 					name="gameMediaFormat"
 					inputId="gameFormMediaFormatOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					value={selectedMediaFormat}
 					required
 					onChange={(option: OnChangeValue<OptionType, boolean>) => {
@@ -352,7 +352,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gameGenres"
 					inputId="gameFormGenreOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedGenres}
@@ -371,7 +371,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gamePublishers"
 					inputId="gameFormPublisherOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPublishers}
@@ -386,7 +386,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gameDevelopers"
 					inputId="gameFormDeveloperOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedDevelopers}
@@ -405,7 +405,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gamePlatforms"
 					inputId="gameFormPlatformOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPlatforms}
@@ -424,7 +424,7 @@ export default function GameForm(props: GameFormProps) {
 				<Select
 					name="gameStorefronts"
 					inputId="gameFormStorefrontOptions"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedStorefronts}

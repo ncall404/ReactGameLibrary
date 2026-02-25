@@ -7,7 +7,7 @@ import { BtnStyle } from "../common/btn.tsx";
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
+import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter, selectStyles } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -194,7 +194,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 						<Select
 							name="companyTypes"
 							inputId="editMetadataCompanyTypes"
-							className="text-(--color-dark) cursor-pointer"
+							styles={selectStyles}
 							closeMenuOnSelect={false}
 							isMulti
 							value={selectedCompanyTypes}
@@ -231,7 +231,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 						<Select
 							name="platformOwner"
 							inputId="editMetadataPlatformOwner"
-							className="text-(--color-dark) cursor-pointer"
+							styles={selectStyles}
 							value={selectedPlatformOwner}
 							onChange={(option: OnChangeValue<OptionType, boolean>) => {
 								setSelectedPlatformOwner(option as OptionType);
@@ -253,7 +253,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				<Select
 					name="editMetadataRemove"
 					inputId="editMetadataRemove"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedForRemoval}

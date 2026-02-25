@@ -15,7 +15,7 @@ import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx'
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
-import { fillOptionsArray, scrollToTop } from '../utilities.ts';
+import { fillOptionsArray, scrollToTop, selectStyles } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
@@ -149,7 +149,8 @@ function RouteComponent() {
 					<Select
 						name="selectedCollection"
 						inputId="selectedCollection"
-						className="text-(--color-dark) cursor-pointer sm:min-w-3xs"
+						className="sm:min-w-3xs"
+						styles={selectStyles}
 						value={selectedCollection}
 						onChange={(option: OnChangeValue<OptionType, boolean>) => {
 							setSelectedCollection(option as OptionType);

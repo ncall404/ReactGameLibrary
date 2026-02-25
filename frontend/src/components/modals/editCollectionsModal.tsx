@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, optionsToString } from "../../utilities.ts";
+import { fillOptionsArray, optionsToString, selectStyles } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -118,7 +118,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				<Select
 					name="collectionRemove"
 					inputId="collectionRemove"
-					className="text-(--color-dark) cursor-pointer"
+					styles={selectStyles}
 					isMulti
 					value={selectedForRemoval}
 					onChange={(options: OnChangeValue<OptionType, boolean>) => {
