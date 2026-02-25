@@ -10,6 +10,9 @@
 	--color-danger: #D61B1B;
 	--color-neutral: #5c5b59;
 	--color-btn-bg: #18191b;
+
+	--color-input-bg: #18191b; /* Same color as --color-btn-bg but are separated so that they can easily be separately changed in the event that the colors are changed in the future and need to be different, such as for a light mode. */
+	--color-input-focus: #2684FF;
 }
 
 
