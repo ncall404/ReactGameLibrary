@@ -1,7 +1,7 @@
 // Work-in-progress NewGameForm component for getting the info needed to add a new GameItem to the database.
 
 import Select from "react-select";
-import type { MultiValue, SingleValue } from "react-select";
+import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
 import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
 
@@ -270,7 +270,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedCollections}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedCollections(options as OptionType[]);
 					}}
 					options={collectionList.data}
@@ -339,7 +339,7 @@ export default function GameForm(props: GameFormProps) {
 					className="text-(--color-dark) cursor-pointer"
 					value={selectedMediaFormat}
 					required
-					onChange={(option: SingleValue<OptionType>) => {
+					onChange={(option: OnChangeValue<OptionType, boolean>) => {
 						setSelectedMediaFormat(option as OptionType);
 					}}
 					options={mediaFormatList.data}
@@ -356,7 +356,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedGenres}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedGenres(options as OptionType[]);
 					}}
 					options={genreList.data}
@@ -375,7 +375,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPublishers}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedPublishers(options as OptionType[]);
 					}}
 					isLoading={publisherList.isLoading}
@@ -390,7 +390,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedDevelopers}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedDevelopers(options as OptionType[]);
 					}}
 					options={developerList.data}
@@ -409,7 +409,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedPlatforms}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedPlatforms(options as OptionType[]);
 					}}
 					options={platformList.data}
@@ -428,7 +428,7 @@ export default function GameForm(props: GameFormProps) {
 					closeMenuOnSelect={true}
 					isMulti
 					value={selectedStorefronts}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedStorefronts(options as OptionType[]);
 					}}
 					options={storefrontList.data}
