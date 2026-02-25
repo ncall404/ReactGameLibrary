@@ -1,5 +1,6 @@
 // Utility functions likely to be used across more than one other file.
 
+import type { GroupBase, StylesConfig } from "react-select";
 import type { OptionType } from "./types/SelectOptionType";
 
 // Converts the selected options from Select inputs to a string format that can be sent to the backend.
@@ -69,7 +70,81 @@ const scrollToTop = function scrollToTop() {
 	window.scrollTo(0, 0);
 }
 
+
+// A style object to apply the same styles to all of the react-select components.
+const selectStyles: StylesConfig<OptionType, boolean, GroupBase<OptionType>> = {
+	control: (baseStyles) => ({
+		...baseStyles,
+		backgroundColor: "var(--color-input-bg)",
+		borderColor: "var(--color-neutral)",
+		cursor: "pointer",
+	}),
+	input: (baseStyles) => ({
+		...baseStyles,
+		color: "var(--color-light)",
+	}),
+	placeholder: (baseStyles) => ({
+		...baseStyles,
+		color: "var(--color-neutral)",
+	}),
+
+	menu: (baseStyles) => ({
+		...baseStyles,
+		backgroundColor: "var(--color-input-bg)",
+		outlineStyle: "solid",
+		outlineWidth: "1px",
+		outlineColor: "var(--color-neutral)",
+	}),
+	menuList: (baseStyles) => ({
+		...baseStyles,
+		backgroundColor: "var(--color-input-bg)",
+		borderRadius: "0.25rem",
+	}),
+
+	multiValue: (baseStyles) => ({
+		...baseStyles,
+		backgroundColor: "var(--color-neutral)",
+		color: "var(--color-light)",
+	}),
+	multiValueLabel: (baseStyles) => ({
+		...baseStyles,
+		color: "var(--color-light)",
+	}),
+
+	singleValue: (baseStyles) => ({
+		...baseStyles,
+		color: "var(--color-light)",
+	}),
+
+	clearIndicator: (baseStyles) => ({
+		...baseStyles,
+		borderRadius: "0.25rem",
+		cursor: "pointer",
+		"&:hover": { // Uses the colors that react-select uses internally for the multiValueRemove inner-component.
+			backgroundColor: "#FFBDAD",
+			color: "#DE350B"
+		}
+	}),
+	dropdownIndicator: (baseStyles) => ({
+		...baseStyles,
+		borderRadius: "0.25rem",
+		cursor: "pointer",
+		"&:hover": {
+			backgroundColor: "var(--color-neutral)",
+			color: "var(--color-light)",
+		}
+	}),
+
+	option: (baseStyles, state) => ({
+		...baseStyles,
+		cursor: "pointer",
+		color: "var(--color-light)",
+		backgroundColor: state.isFocused ? "var(--color-neutral)" : ""
+	}),
+}
+
+
 export {
 	optionsToString, fillOptionsArray, fillGroupedOptionsArray,
-	upperFirstLetter, scrollToTop
+	upperFirstLetter, scrollToTop, selectStyles
 };
