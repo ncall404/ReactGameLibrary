@@ -23,10 +23,22 @@ Custom non-tailwind styles:
 */
 
 input[type="text"], input[type="date"], textarea {
-	background-color: var(--color-light);
-	color: var(--color-dark);
+	background-color: var(--color-input-bg);
+	color: var(--color-light);
 	padding: 4px 10px;
 	border-radius: 0.25rem;
+
+	outline-style: solid;
+	outline-width: 1px;
+	outline-color: var(--color-neutral);
+}
+input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
+	outline-color: var(--color-input-focus);
+	outline-width: 2px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+	filter:invert(1)
 }
 
 input[type="file"] {
