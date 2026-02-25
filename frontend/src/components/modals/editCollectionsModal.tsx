@@ -1,7 +1,7 @@
 // Modal component for editing game collections. Currently that means adding and removing library collections from the database.
 
 import Select from "react-select";
-import type { MultiValue } from "react-select";
+import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
 import { fillOptionsArray, optionsToString } from "../../utilities.ts";
 
@@ -121,7 +121,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 					className="text-(--color-dark) cursor-pointer"
 					isMulti
 					value={selectedForRemoval}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedForRemoval(options as OptionType[]);
 					}}
 					options={libraryList.data}

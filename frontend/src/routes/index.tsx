@@ -13,7 +13,7 @@ import GameForm from '../components/gameForm/gameForm.tsx';
 import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx';
 
 import Select from "react-select";
-import type { SingleValue } from "react-select";
+import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
 import { fillOptionsArray, scrollToTop } from '../utilities.ts';
 
@@ -151,7 +151,7 @@ function RouteComponent() {
 						inputId="selectedCollection"
 						className="text-(--color-dark) cursor-pointer sm:min-w-3xs"
 						value={selectedCollection}
-						onChange={(option: SingleValue<OptionType>) => {
+						onChange={(option: OnChangeValue<OptionType, boolean>) => {
 							setSelectedCollection(option as OptionType);
 							queryClient.invalidateQueries({queryKey: ['single-library', selectedCollection.value]})
 						}}

@@ -5,7 +5,7 @@ import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 
 import Select from "react-select";
-import type { MultiValue, SingleValue } from "react-select";
+import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
 import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter } from "../../utilities.ts";
 
@@ -198,7 +198,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 							closeMenuOnSelect={false}
 							isMulti
 							value={selectedCompanyTypes}
-							onChange={(options: MultiValue<OptionType>) => {
+							onChange={(options: OnChangeValue<OptionType, boolean>) => {
 								setSelectedCompanyTypes(options as OptionType[]);
 							}}
 							options={companyTypesList.data}
@@ -233,7 +233,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 							inputId="editMetadataPlatformOwner"
 							className="text-(--color-dark) cursor-pointer"
 							value={selectedPlatformOwner}
-							onChange={(option: SingleValue<OptionType>) => {
+							onChange={(option: OnChangeValue<OptionType, boolean>) => {
 								setSelectedPlatformOwner(option as OptionType);
 							}}
 							options={platformOwnersList.data}
@@ -257,7 +257,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 					closeMenuOnSelect={false}
 					isMulti
 					value={selectedForRemoval}
-					onChange={(options: MultiValue<OptionType>) => {
+					onChange={(options: OnChangeValue<OptionType, boolean>) => {
 						setSelectedForRemoval(options as OptionType[]);
 					}}
 					options={removeList.data}
