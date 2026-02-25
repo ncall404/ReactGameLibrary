@@ -343,6 +343,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedMediaFormat(option as OptionType);
 					}}
 					options={mediaFormatList.data}
+					hideSelectedOptions
 				/>
 
 				<hr />
