@@ -159,7 +159,7 @@ function RouteComponent() {
 						hideSelectedOptions
 						noOptionsMessage={() => "No collections found."}
 					/>
-					<Btn style={BtnStyle.Primary} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
+					<Btn style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
 					<Btn style={BtnStyle.Primary}
 						func={() => {
 							setSavedScrollYPosition(window.scrollY);
