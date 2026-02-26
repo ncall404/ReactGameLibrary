@@ -160,8 +160,9 @@ function RouteComponent() {
 						hideSelectedOptions
 						noOptionsMessage={() => "No collections found."}
 					/>
-					<Btn style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-					<Btn style={BtnStyle.Primary}
+					<Btn className="basis-36" style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
+					<Btn className="basis-32"
+					style={BtnStyle.Primary}
 						func={() => {
 							setSavedScrollYPosition(window.scrollY);
 							setGameFormType("create");
