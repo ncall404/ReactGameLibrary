@@ -302,6 +302,7 @@ export default function GameForm(props: GameFormProps) {
 				<input type="date"
 				name="releaseDate"
 				id="gameFormReleaseDate"
+				className="max-md:w-full w-40"
 				onDoubleClick={(e) => e.currentTarget.showPicker()}
 				onChange={(e) => {
 					setReleaseDate(e.currentTarget.value);
