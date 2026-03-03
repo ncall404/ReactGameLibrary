@@ -445,7 +445,7 @@ export default function GameForm(props: GameFormProps) {
 
 				<hr />
 
-				<div className="flex max-sm:flex-col gap-2 mt-3">
+				<div className="flex max-sm:flex-col gap-2 mt-3 min-sm:justify-end">
 					<Btn className="basis-32 max-sm:basis-full" style={BtnStyle.Primary} type="submit">Confirm</Btn>
 					<Btn className="basis-32 max-sm:basis-full" style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
 				</div>
