@@ -296,6 +296,7 @@ export default function GameForm(props: GameFormProps) {
 				name="description"
 				id="gameFormDescription"
 				placeholder="Description of the game"
+				rows={4}
 				onChange={(e) => {
 					setGameDescription(e.currentTarget.value);
 				}}
