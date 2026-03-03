@@ -145,7 +145,7 @@ function RouteComponent() {
 			<h1 className='text-3xl pb-2'>Game Library</h1>
 			{ !gameFormIsOpen &&
 			<>
-				<div className='flex gap-2 max-sm:flex-col'>
+				<div className='flex gap-2 max-sm:flex-col w-full'>
 					<Select
 						name="selectedCollection"
 						inputId="selectedCollection"
@@ -161,7 +161,7 @@ function RouteComponent() {
 						noOptionsMessage={() => "No collections found."}
 					/>
 					<Btn className="min-sm:basis-36" style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-					<Btn className="min-sm:basis-32"
+					<Btn className="min-sm:basis-32 min-sm:ml-auto"
 					style={BtnStyle.Primary}
 						func={() => {
 							setSavedScrollYPosition(window.scrollY);
@@ -173,7 +173,9 @@ function RouteComponent() {
 				</div>
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
+
 				{
+					// List out games from the selected library.
 					singleLibrary.data &&
 					singleLibrary.data.map((game: GameObject) => <GameItem key={game.gameData.GameID} data={game} editFunction={() => {
 							setSavedScrollYPosition(window.scrollY);
