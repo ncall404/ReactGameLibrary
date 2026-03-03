@@ -172,6 +172,8 @@ function RouteComponent() {
 					}>Create Game</Btn>
 				</div>
 
+				<hr className='my-4' />
+
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
 
 				{
