@@ -1,6 +1,5 @@
 // modal.tsx: Modal component. Used for creating pop-ups such as when needing a form, sub-form, or custom action confirmation window.
 
-import type { ReactNode } from "react";
 import Btn from "./btn";
 import { BtnStyle } from "./btn";
 
@@ -9,7 +8,7 @@ type ModalProps = {
 	isForm?: boolean; // Indicates that the modal should have a confirm action.
 	onClose: () => void;
 	onConfirm?: () => void;
-	children: ReactNode;
+	children: React.ReactNode;
 }
 
 export default function Modal(props: ModalProps) {
