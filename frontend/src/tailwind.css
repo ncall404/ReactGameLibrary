@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+	/* Colors */
 	--color-light: #F5F7F8;
 	--color-dark: #45474B;
 	--color-darker: #252628;
@@ -13,6 +14,14 @@
 
 	--color-input-bg: #18191b; /* Same color as --color-btn-bg but are separated so that they can easily be separately changed in the event that the colors are changed in the future and need to be different, such as for a light mode. */
 	--color-input-focus: #2684FF;
+
+	--color-success: #3cb518;
+	--color-error: #e81313;
+	--color-warning: #f7d305;
+	--color-info: #1186ed;
+
+	/* Breakpoints */
+	--breakpoint-3xl: 130rem;
 }
 
 
