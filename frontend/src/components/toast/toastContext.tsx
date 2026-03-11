@@ -4,10 +4,10 @@
 
 // Object as const for defining a toast style.
 export const ToastStyle = {
-	Success: "SUCCESS",
-	Err: "ERROR",
-	Warning: "WARNING",
-	Info: "INFORMATIVE",
+	Success: "success",
+	Err: "error",
+	Warning: "warning",
+	Info: "informative",
 } as const;
 export type ToastType = (typeof ToastStyle)[keyof typeof ToastStyle];
 
