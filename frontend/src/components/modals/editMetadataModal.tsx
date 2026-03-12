@@ -7,7 +7,7 @@ import { BtnStyle } from "../common/btn.tsx";
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter, selectStyles } from "../../utilities.ts";
+import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter, selectStyles, type BackendResponse } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -49,7 +49,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			if (!res.ok) throw new Error('Failed to add to ' + props.metadataField);
 			return res.json();
 		},
-		onSuccess: async (data) => {
+		onSuccess: async (data: BackendResponse) => {
 			setToast({
 				message: data.message,
 				type: data.status,
@@ -84,7 +84,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			if (!res.ok) throw new Error('Failed to remove from ' + props.metadataField);
 			return res.json();
 		},
-		onSuccess: async (data) => {
+		onSuccess: async (data: BackendResponse) => {
 			setToast({
 				message: data.message,
 				type: data.status,

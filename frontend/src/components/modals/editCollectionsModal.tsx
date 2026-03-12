@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, optionsToString, selectStyles } from "../../utilities.ts";
+import { fillOptionsArray, optionsToString, selectStyles, type BackendResponse } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -35,7 +35,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	// Mutation for adding a library.
 	const editCollectionAddMutation = useMutation({
 		mutationFn: addCollection,
-		onSuccess: async (data) => {
+		onSuccess: async (data: BackendResponse) => {
 			setToast({
 				message: data.message,
 				type: data.status,
@@ -53,7 +53,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	// Mutation for removing libraries.
 	const editCollectionRemoveMutation = useMutation({
 		mutationFn: removeCollection,
-		onSuccess: async (data) => {
+		onSuccess: async (data: BackendResponse) => {
 			setToast({
 				message: data.message,
 				type: data.status,
