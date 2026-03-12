@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
+import { useToastContext } from "../toast/toastContext.tsx";
 
 type GameFormProps = {
 	onSubmitted: () => void,
@@ -26,6 +27,7 @@ type GameFormProps = {
 
 export default function GameForm(props: GameFormProps) {
 	const queryClient = useQueryClient();
+	const { setToast } = useToastContext();
 
 	const api: string = 'http://localhost:3000/api/games/'.concat(props.formType);
 
@@ -63,6 +65,11 @@ export default function GameForm(props: GameFormProps) {
 			return res.json();
 		},
 		onSuccess: (data) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log('Uploaded: ', data);
 			invalidateData();
 		},

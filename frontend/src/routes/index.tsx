@@ -79,7 +79,12 @@ function RouteComponent() {
 			if (!res.ok) throw new Error('Upload failed');
 			return res.json();
 		},
-		onSuccess: (data) => {
+		onSuccess: (data: BackendResponse) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log(data);
 			invalidateData();
 		},
