@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 
 import Btn from '../components/common/btn.tsx';
 import { BtnStyle } from '../components/common/btn.tsx';
+import Toast from '../components/toast/toast.tsx'
+import { useToastContext } from '../components/toast/toastContext.tsx';
 
 import GameItem from '../components/gameItem/gameItem.tsx';
 
@@ -16,6 +18,7 @@ import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
 import { fillOptionsArray, scrollToTop, selectStyles } from '../utilities.ts';
+import type { BackendResponse } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
@@ -55,6 +58,8 @@ export const Route = createFileRoute('/')({
 
 
 function RouteComponent() {
+	const { setToast } = useToastContext();
+
 	const [gameFormIsOpen, setGameFormIsOpen] = useState(false);
 	const [gameFormType, setGameFormType] = useState<"create" | "edit">("create");
 	const [selectedGameID, setSelectedGameID] = useState<number>(0);
@@ -229,6 +234,8 @@ function RouteComponent() {
 					</div>
 				</Modal>
 			}
+
+			<Toast />
 		</section>
 	);
 }
