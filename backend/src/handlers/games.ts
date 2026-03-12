@@ -10,7 +10,6 @@ import type { BackendResponse } from '../server.ts';
 
 // Type for the object sent back from the server in response to an attempt at uploading a game.
 type GameUploadResponse = {
-	isValid: boolean; // True if there are no errors, false if there are errors.
 	message: string;
 	field?: 
 		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
@@ -25,14 +24,12 @@ Promise<GameUploadResponse> {
 	// Validate gameName
 	if (typeof gameName !== 'string') { // Type validation
 		return {
-			isValid: false,
 			message: "Name is not valid.",
 			field: "gameName",
 			status: "error"
 		};
 	} else if (gameName.trim().length === 0) { // Required field validation
 		return {
-			isValid: false,
 			message: "Name is a required field.",
 			field: "gameName",
 			status: "error"
@@ -42,7 +39,6 @@ Promise<GameUploadResponse> {
 	// Validate gameDescription
 	if (typeof gameDescription !== 'string') {
 		return {
-			isValid: false,
 			message: "Description is not valid.",
 			field: "gameDescription",
 			status: "error"
@@ -52,7 +48,6 @@ Promise<GameUploadResponse> {
 	// Validate releaseDate
 	if (typeof releaseDate !== 'string') { // Type validation
 		return {
-			isValid: false,
 			message: "Release Date is not valid.",
 			field: "releaseDate",
 			status: "error"
@@ -60,14 +55,12 @@ Promise<GameUploadResponse> {
 	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
 		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
 			return {
-				isValid: false,
 				message: "Release Date must be in the format YYYY-MM-DD",
 				field: "releaseDate",
 				status: "error"
 			};
 		}
 		return {
-				isValid: false,
 				message: "Release Date must be a date.",
 				field: "releaseDate",
 				status: "error"
@@ -77,7 +70,7 @@ Promise<GameUploadResponse> {
 	// Validate coverArt
 	if (coverArt) {
 		const covertArtValidation = await validateImageType(coverArt);
-		if (!covertArtValidation.isValid) {
+		if (covertArtValidation.status == "error") {
 			return covertArtValidation;
 		}
 	}
@@ -85,14 +78,13 @@ Promise<GameUploadResponse> {
 	// Validate gameMediaFormat
 	if (![1, 2, 3].includes(gameMediaFormat)){
 		return {
-			isValid: false,
 			message: "Media Format must be a valid value.",
 			field: "gameMediaFormats",
 			status: "error"
 		};
 	}
 
-	return{ isValid: true, message: "", status: "success" };
+	return{ message: "", status: "success" };
 }
 
 
@@ -105,12 +97,11 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	const fileType = await fileTypeFromBlob(coverArtFile);
 	for (let validType of validImageTypes) {
 		if (fileType?.mime === "image/" + validType) {
-			return { isValid: true, message: "", status: "success" };
+			return { message: "", status: "success" };
 		}
 	}
 
 	return {
-		isValid: false,
 		message: "The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.join(", "),
 		field: "coverArt",
 		status: "error"
@@ -155,7 +146,7 @@ const createGame = async function createGame(c: Context) {
 	}
 	
 	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);
-	if (!validateGameInfoResponse.isValid) {
+	if (validateGameInfoResponse.status == "error") {
 		return c.json(validateGameInfoResponse);
 	}
 
@@ -165,7 +156,6 @@ const createGame = async function createGame(c: Context) {
 		try {
 			await access(coverArtPath);
 			uploadResponse = {
-				isValid: true,
 				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
 				field: "coverArt",
 				status: "warning"
@@ -175,7 +165,6 @@ const createGame = async function createGame(c: Context) {
 				await writeFile(coverArtPath, Buffer.from(await coverArt.arrayBuffer()));
 			} catch (err) {
 				return c.json({
-					isValid: false,
 					message: "There was a problem writing the cover art image to the server; " + err,
 					field: "coverArt",
 					severity: "error"
@@ -255,7 +244,6 @@ const createGame = async function createGame(c: Context) {
 		insertGameWithMetaData();
 	} catch (err) {
 		uploadResponse = {
-			isValid: false,
 			message: "There was a problem adding the game to the database; " + err,
 			status: "error"
 		}
@@ -264,7 +252,6 @@ const createGame = async function createGame(c: Context) {
 	// Give a success response if there were no complications.
 	if (!uploadResponse) {
 		uploadResponse = {
-			isValid: true,
 			message: "Game successfully created!",
 			status: "success"
 		}
@@ -327,7 +314,7 @@ const editGame = async function editGame(c: Context) {
 	}
 	
 	const validateGameInfoResponse = await validateGameInfo(gameName, gameDescription, releaseDate, coverArt, gameMediaFormat);
-	if (!validateGameInfoResponse.isValid) {
+	if (validateGameInfoResponse.status == "error") {
 		return c.json(validateGameInfoResponse);
 	}
 
@@ -337,7 +324,6 @@ const editGame = async function editGame(c: Context) {
 		try {
 			await access(coverArtPath);
 			uploadResponse = {
-				isValid: true,
 				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
 				field: "coverArt",
 				status: "warning"
@@ -443,7 +429,6 @@ const editGame = async function editGame(c: Context) {
 		editGameWithMetaData();
 	} catch (err) {
 		uploadResponse = {
-			isValid: false,
 			message: "There was a problem editing the game; " + err,
 			status: "error"
 		}
@@ -452,7 +437,6 @@ const editGame = async function editGame(c: Context) {
 	// Give a success response if there were no complications.
 	if (!uploadResponse) {
 		uploadResponse = {
-			isValid: true,
 			message: "Game successfully edited!",
 			status: "success"
 		}
