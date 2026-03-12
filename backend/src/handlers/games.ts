@@ -11,7 +11,7 @@ import type { BackendResponse } from '../server.ts';
 // Type for the object sent back from the server in response to an attempt at uploading a game.
 type GameUploadResponse = {
 	isValid: boolean; // True if there are no errors, false if there are errors.
-	message?: string;
+	message: string;
 	field?: 
 		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
 		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
@@ -92,7 +92,7 @@ Promise<GameUploadResponse> {
 		};
 	}
 
-	return{ isValid: true, status: "success" };
+	return{ isValid: true, message: "", status: "success" };
 }
 
 
@@ -105,7 +105,7 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	const fileType = await fileTypeFromBlob(coverArtFile);
 	for (let validType of validImageTypes) {
 		if (fileType?.mime === "image/" + validType) {
-			return { isValid: true, status: "success" };
+			return { isValid: true, message: "", status: "success" };
 		}
 	}
 
