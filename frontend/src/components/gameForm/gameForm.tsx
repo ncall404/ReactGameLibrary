@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter, selectStyles } from "../../utilities.ts";
+import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter, selectStyles, type GameUploadResponse } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
@@ -64,7 +64,7 @@ export default function GameForm(props: GameFormProps) {
 			if (!res.ok) throw new Error('Upload failed');
 			return res.json();
 		},
-		onSuccess: (data) => {
+		onSuccess: (data: GameUploadResponse) => {
 			setToast({
 				message: data.message,
 				type: data.status,
