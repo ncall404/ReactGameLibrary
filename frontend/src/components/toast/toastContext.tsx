@@ -1,4 +1,4 @@
-// toastContext.tsx: Holds context, types, interfaces related to the toast component.
+// toastContext.tsx: Holds context/provider, and types related to the toast component.
 
 import { type ReactNode, createContext, useState, useEffect, useContext } from "react";
 
