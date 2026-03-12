@@ -1,7 +1,24 @@
-// Utility functions likely to be used across more than one other file.
+// Utility functions and types likely to be used across more than one other file.
 
 import type { GroupBase, StylesConfig } from "react-select";
 import type { OptionType } from "./types/SelectOptionType";
+
+// Type for the object sent back from the server in response to a server request if it has no extra needs (i.e. extra data or an extra field).
+type BackendResponse = {
+	message: string;
+	status: "success" | "warning" | "error" | "informative";
+};
+
+// Type for the object sent back from the server in response to an attempt at uploading a game.
+type GameUploadResponse = {
+	isValid: boolean; // True if there are no errors, false if there are errors.
+	message?: string;
+	field?: 
+		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
+		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
+	status: "success" | "warning" | "error" | "informative";
+}
+
 
 // Converts the selected options from Select inputs to a string format that can be sent to the backend.
 const optionsToString = (options: OptionType[]) => {
@@ -143,6 +160,7 @@ const selectStyles: StylesConfig<OptionType, boolean, GroupBase<OptionType>> = {
 	}),
 }
 
+export type { BackendResponse, GameUploadResponse };
 
 export {
 	optionsToString, fillOptionsArray, fillGroupedOptionsArray,
