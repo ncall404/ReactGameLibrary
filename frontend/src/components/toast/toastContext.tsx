@@ -1,11 +1,12 @@
 // toastContext.tsx: Holds context, types, interfaces related to the toast component.
+// TODO: Convert this into allowing multiple toasts along with a new ToastList component.
 
 import { type ReactNode, createContext, useState, useEffect, useContext } from "react";
 
 // Object as const for defining a toast style.
 export const ToastStyle = {
 	Success: "success",
-	Err: "error",
+	Error: "error",
 	Warning: "warning",
 	Info: "informative",
 } as const;
