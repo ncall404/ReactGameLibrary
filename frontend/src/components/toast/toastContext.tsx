@@ -1,5 +1,4 @@
 // toastContext.tsx: Holds context, types, interfaces related to the toast component.
-// TODO: Convert this into allowing multiple toasts along with a new ToastList component.
 
 import { type ReactNode, createContext, useState, useEffect, useContext } from "react";
 
