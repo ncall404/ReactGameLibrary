@@ -13,6 +13,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { getMetadata, MetadataField } from "../../api/gameMetadataApi.ts";
+import { useToastContext } from "../toast/toastContext.tsx";
 
 type EditMetadataModalProps = {
 	metadataField: MetadataField;
@@ -22,6 +23,7 @@ type EditMetadataModalProps = {
 
 export default function EditMetadataModal(props: EditMetadataModalProps) {
 	const queryClient = useQueryClient();
+	const { setToast } = useToastContext();
 
 	const editMetadataField = props.metadataField;
 	const baseApi: string = 'http://localhost:3000/api/metadata/';
@@ -48,6 +50,11 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			return res.json();
 		},
 		onSuccess: async (data) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log('Uploaded: ', data);
 			// Clear state for inputs.
 			switch (editMetadataField) {
@@ -78,6 +85,11 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			return res.json();
 		},
 		onSuccess: async (data) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log('Uploaded: ', data);
 			// Clear state for inputs.
 			setSelectedForRemoval([]);

@@ -14,6 +14,7 @@ import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";
 
 import { CollectionType, getCollectionList, addCollection, removeCollection } from '../../api/collectionsApi.ts';
+import { useToastContext } from "../toast/toastContext.tsx";
 
 type EditCollectionsModalProps = {
 	isOpen: boolean;
@@ -22,6 +23,7 @@ type EditCollectionsModalProps = {
 
 export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	const queryClient = useQueryClient();
+	const { setToast } = useToastContext();
 
 	// State(s) for add form.
 	const [editCollectionAdd, setEditCollectionAdd] = useState<string>("");
@@ -34,6 +36,11 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	const editCollectionAddMutation = useMutation({
 		mutationFn: addCollection,
 		onSuccess: async (data) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log(data);
 			setEditCollectionAdd("");
 
@@ -47,6 +54,11 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	const editCollectionRemoveMutation = useMutation({
 		mutationFn: removeCollection,
 		onSuccess: async (data) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: 7000,
+			});
 			console.log(data);
 			setSelectedForRemoval([]);
 
