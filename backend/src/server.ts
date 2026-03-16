@@ -23,7 +23,16 @@ import { resetApp } from './handlers/settings.ts';
 export type BackendResponse = {
 	message: string;
 	status: "success" | "warning" | "error" | "informative";
+	time: number; // Length of time for the message to display on the front end.
 };
+
+// Default times (in milliseconds) for the response messages that should be good for most normal message lengths. Message types that are generally more important for the user to see (especially errors) will stay on the screen significantly longer by default.
+export const messageTimeDefaults = {
+	success: 7000,
+	info: 9000,
+	warning: 12000,
+	error: 20000,
+} as const;
 
 
 const app = new Hono();

@@ -4,6 +4,7 @@ import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 
 import type { BackendResponse } from "../server.ts";
+import { messageTimeDefaults } from "../server.ts";
 
 // Genres -------------------------------------------------------------------
 	// Retrieves all genre entries from the Genre table.
@@ -16,8 +17,9 @@ const getGenres = function getGenres(c: Context) {
 	// Adds a new genre to the Genre table.
 const addGenre = async function addGenre(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding genre not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const genreTitle = body['metadataAddTitle'];
@@ -31,6 +33,7 @@ const addGenre = async function addGenre(c: Context) {
 			query.run({Title: genreTitle});
 			response.message = "Genre successfully added to the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "The genre could not be added to the database; " + err;
 		}
@@ -43,8 +46,9 @@ const addGenre = async function addGenre(c: Context) {
 	// Removes selected genre(s) from the Genre table and other connected tables (GameGenre).
 const removeGenres = async function removeGenres(c: Context) {
 	const response: BackendResponse = {
-		message: "Removing genre(s) not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const selectedGenresString = body['editMetadataRemove'];
@@ -54,6 +58,7 @@ const removeGenres = async function removeGenres(c: Context) {
 	} else if (selectedGenresString.length == 0) {
 		response.message = "No genres were selected for removal.";
 		response.status = "warning";
+		response.time = messageTimeDefaults.warning;
 	} else {
 		const selectedGenres = selectedGenresString.split(',');
 		
@@ -77,6 +82,7 @@ const removeGenres = async function removeGenres(c: Context) {
 			deleteSelectedGenres();
 			response.message = "Genre(s) successfully removed from the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "The selected genre(s) could not be removed from the database; " + err;
 		}
@@ -101,8 +107,9 @@ const getPlatforms = function getPlatforms(c: Context) {
 	// Adds a new platform to the Platform table.
 const addPlatform = async function addPlatform(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding platform not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const platformTitle = body['metadataAddTitle'];
@@ -142,14 +149,17 @@ const addPlatform = async function addPlatform(c: Context) {
 	} else {
 		response.message = "The platform name must not be empty";
 	}
+
+	if (response.status == "success") response.time = messageTimeDefaults.success;
 	
 	return c.json(response);
 }
 	// Removes selected platform(s) from the Platform table and other connected tables (GamePlatform).
 const removePlatforms = async function removePlatforms(c: Context) {
 	const response: BackendResponse = {
-		message: "Removing platform(s) not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const selectedPlatformsString = body['editMetadataRemove'];
@@ -159,6 +169,7 @@ const removePlatforms = async function removePlatforms(c: Context) {
 	} else if (selectedPlatformsString.length == 0) {
 		response.message = "No platforms were selected for removal.";
 		response.status = "warning";
+		response.time = messageTimeDefaults.warning;
 	} else {
 		const selectedPlatforms = selectedPlatformsString.split(',');
 		
@@ -182,6 +193,7 @@ const removePlatforms = async function removePlatforms(c: Context) {
 			deleteSelectedPlatforms();
 			response.message = "Platform(s) successfully removed from the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "The selected platform(s) could not be remove from the database; " + err;
 		}
@@ -249,8 +261,9 @@ const getCompanyTypes = function getCompanyTypes(c: Context) {
 	// Adds a new company to the Company table. Adds connections between the Company and Company Types tables with the CompanyCompanyType table.
 const addCompany = async function addCompany(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding company not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const companyTitle = body['metadataAddTitle'];
@@ -287,6 +300,7 @@ const addCompany = async function addCompany(c: Context) {
 			insertCompany();
 			response.message = "Company successfully added to the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "There was a problem adding the company to the database; " + err;
 		}
@@ -297,8 +311,9 @@ const addCompany = async function addCompany(c: Context) {
 	// Removes selected companies from the Company table and other connected tables (GameCompany, CompanyCompanyType).
 const removeCompanies = async function removeCompanies(c: Context) {
 	const response: BackendResponse = {
-		message: "Removing companies not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const selectedCompaniesString = body['editMetadataRemove'];
@@ -308,6 +323,7 @@ const removeCompanies = async function removeCompanies(c: Context) {
 	} else if (selectedCompaniesString.length == 0) {
 		response.message = "No companies were selected for removal.";
 		response.status = "warning";
+		response.time = messageTimeDefaults.warning;
 	} else {
 		const selectedCompanies = selectedCompaniesString.split(',');
 		
@@ -336,6 +352,7 @@ const removeCompanies = async function removeCompanies(c: Context) {
 			deleteSelectedCompanies();
 			response.message = "Companies successfully removed from the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "The selected companies could not be remove from the database; " + err;
 		}
@@ -366,8 +383,9 @@ const getStorefrontBasics = function getStorefronts(c: Context) {
 	// Adds a new storefront to the Storefront table.
 const addStorefront = async function addStorefront(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding storefront not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const storefrontTitle = body['metadataAddTitle'];
@@ -383,6 +401,7 @@ const addStorefront = async function addStorefront(c: Context) {
 				query.run({Title: storefrontTitle, Website: storefrontWebsite});
 				response.message = "Storefront successfully added to the database!";
 				response.status = "success";
+				response.time = messageTimeDefaults.success;
 			} catch (err) {
 				response.message = "The storefront could not be added to the database; " + err;
 			}
@@ -396,8 +415,9 @@ const addStorefront = async function addStorefront(c: Context) {
 	// Removes selected storefront(s) from the Storefront table and other connected tables (GameStorefront).
 const removeStorefronts = async function removeStorefronts(c: Context) {
 	const response: BackendResponse = {
-		message: "Removing storefronts not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	const body = await c.req.parseBody();
 	const selectedStorefrontsString = body['editMetadataRemove'];
@@ -407,6 +427,7 @@ const removeStorefronts = async function removeStorefronts(c: Context) {
 	} else if (selectedStorefrontsString.length == 0) {
 		response.message = "No storefront(s) were selected for removal.";
 		response.status = "warning";
+		response.time = messageTimeDefaults.warning;
 	} else {
 		const selectedStorefronts = selectedStorefrontsString.split(',');
 		
@@ -430,6 +451,7 @@ const removeStorefronts = async function removeStorefronts(c: Context) {
 			deleteSelectedStorefronts();
 			response.message = "Storefront(s) successfully removed from the database!";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = "The selected storefront(s) could not be remove from the database; " + err;
 		}

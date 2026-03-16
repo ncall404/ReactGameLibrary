@@ -39,7 +39,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log(data);
 			setEditCollectionAdd("");
@@ -57,7 +57,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log(data);
 			setSelectedForRemoval([]);

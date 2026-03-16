@@ -68,7 +68,7 @@ export default function GameForm(props: GameFormProps) {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log('Uploaded: ', data);
 			invalidateData();

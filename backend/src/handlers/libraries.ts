@@ -3,7 +3,7 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 
-import type { BackendResponse } from '../server.ts';
+import { messageTimeDefaults, type BackendResponse } from '../server.ts';
 
 type GameObject = {
 	gameData: {
@@ -34,8 +34,9 @@ type GameObject = {
 // Retrieves all games in the database that don't belong to a game library. Will have to expand to check if they are in a wishlist if/when that gets implemented.
 const getGamesWithoutCollection = function getGamesWithoutCollection(c: Context) {
 	const response: BackendResponse = {
-		message: "There was trouble when loading the game library.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	}
 
 	const getGameIDsFromLibrary = db.prepare(`
@@ -138,8 +139,9 @@ const getGamesLibrary = function getGamesLibrary(c: Context) {
 	const libraryId = c.req.param('libraryId');
 
 	const response: BackendResponse = {
-		message: "There was trouble when loading the game library.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	}
 
 	if (parseInt(libraryId) > 0) {

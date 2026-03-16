@@ -1,13 +1,14 @@
 // Contains functions for handling server requests related to the app settings. (preferences, resetting the app, etc.)
 
 import type { Context } from "hono";
-import type { BackendResponse } from '../server.ts';
+import { messageTimeDefaults, type BackendResponse } from '../server.ts';
 import { resetDb } from "../dbManager.ts";
 
 const resetApp = async function resetApp(c: Context) {
 	const resetResponse: BackendResponse = {
-		message: "Reset in progress.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 
 	const resetStatus: BackendResponse = await resetDb();
@@ -15,6 +16,7 @@ const resetApp = async function resetApp(c: Context) {
 	if (resetStatus.status === "success") {
 		resetResponse.message = resetStatus.message;
 		resetResponse.status = "success";
+		resetResponse.time = messageTimeDefaults.success;
 	} else {
 		resetResponse.message = resetStatus.message;
 	}

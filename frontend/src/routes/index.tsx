@@ -83,7 +83,7 @@ function RouteComponent() {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log(data);
 			invalidateData();

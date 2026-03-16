@@ -4,7 +4,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 
 import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
-import type { BackendResponse } from './server.ts';
+import { messageTimeDefaults, type BackendResponse } from './server.ts';
 
 // Create database object for the game_collection database. If game_collection.db is missing then it is created.
 const db = new Database(path.join('data', 'game_collection.db'));
@@ -37,9 +37,10 @@ function checkTables(): boolean {
 
 // Creates the database tables and inserts data into relevant tables.
 function createTables(): BackendResponse {
-	const result: BackendResponse = {
-		message: "Game is not finished being created.",
-		status: "error"
+	const response: BackendResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	let query;
 
@@ -408,63 +409,65 @@ function createTables(): BackendResponse {
 		throw new Error("There was a problem creating the database: " + err);
 	}
 
-	result.message = "Database created!";
-	result.status = "success";
+	response.message = "Database created!";
+	response.status = "success";
+	response.time = messageTimeDefaults.success;
 
-	return result;
+	return response;
 }
 
 
 // Checks database table existence. If the amount of tables isn't right, then setup the database.
 const setupDb = async function setupDb(): Promise<BackendResponse> {
-	const result: BackendResponse = {
-		message: "Database setup incomplete",
-		status: "error"
+	const response: BackendResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	let tablesExist: boolean;
 
 	try {
 		tablesExist = checkTables();
 	} catch(err) {
-		return {
-			message: "Error verifying the database: " + err,
-			status: "error"
-		}
+		response.message = "Error verifying the database: " + err;
+		return response
 	}
 
 	if (!tablesExist) {
 		try {
 			createTables();
 		} catch(err) {
-			return {
-				message: "Error creating the database: " + err,
-				status: "error"
-			}
+			response.message = "Error creating the database: " + err;
+			return response;
 		}
-		result.message = "Database created!";
-		result.status = "success";
+		response.message = "Database created!";
+		response.status = "success";
+		response.time = messageTimeDefaults.success;
 	} else {
-		result.message = "Database already existed.";
-		result.status = "informative";
+		response.message = "Database already existed.";
+		response.status = "informative";
+		response.time = messageTimeDefaults.info;
 	}
 
 	const imageStorageResult = await setupImageStorage(imageUploadPath);
 	// If the status of the imageStorageResult isn't success and the result status is, then it should be set to the lower status of the imageStorageResult since they are sent back together.
-	if ((result.status !== "informative" && imageStorageResult.status === "informative") || imageStorageResult.status === "error") {
-		result.status = imageStorageResult.status;
+	if ((response.status !== "informative" && imageStorageResult.status === "informative") || imageStorageResult.status === "error") {
+		response.status = imageStorageResult.status;
+		response.time = imageStorageResult.time;
 	}
 
-	result.message = result.message + "\n" + imageStorageResult.message;
-	return result;
+	response.message = response.message + "\n" + imageStorageResult.message;
+	return response;
 }
 
 
 // Resets the database tables.
 const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Promise<BackendResponse> {
-	const resetStatus: BackendResponse = {
+	const response: BackendResponse = {
 		message: "Database reset incomplete.",
-		status: "error"
-	}
+		status: "error",
+		time: messageTimeDefaults.error
+	};
 
 	try {
 		createTables();
@@ -473,15 +476,16 @@ const resetDb = async function resetDb(deleteUploadedImages: boolean = true): Pr
 			await clearImageStorage(imageUploadPath);
 		}
 	} catch(err) {
-		resetStatus.message = "Database reset failed; " + err;
-		console.error("Error: " + resetStatus.message);
-		return resetStatus;
+		response.message = "Database reset failed; " + err;
+		console.error("Error: " + response.message);
+		return response;
 	}
 
-	resetStatus.message = "Database reset!";
-	resetStatus.status = "success";
-	console.log("Success: " + resetStatus.message);
-	return resetStatus;
+	response.message = "Database reset!";
+	response.status = "success";
+	response.time = messageTimeDefaults.success;
+	console.log("Success: " + response.message);
+	return response;
 }
 
 export {db, setupDb, resetDb};

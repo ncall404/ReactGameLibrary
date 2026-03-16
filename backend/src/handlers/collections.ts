@@ -1,6 +1,7 @@
 import type { Context } from "hono";
 import { db } from "../dbManager.ts";
 import type { BackendResponse } from '../server.ts';
+import { messageTimeDefaults } from "../server.ts";
 
 import { upperFirstLetter } from "../utilities.ts";
 
@@ -28,8 +29,9 @@ const tableWhitelist = {
 // Add a collection.
 const addCollection = async function addCollection(c: Context) {
 	const response: BackendResponse = {
-		message: "Adding collection not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 
 	const body = await c.req.parseBody();
@@ -64,9 +66,11 @@ const addCollection = async function addCollection(c: Context) {
 		if (numCollectionName.Count > 0) {
 			response.message = `Created the ${collectionType} successfully. Name changed to "${collectionTitle.concat(` ${numCollectionName.Count + 1}`)}" to avoid duplicate naming.`;
 			response.status = "informative";
+			response.time = messageTimeDefaults.info;
 		} else {
 			response.message = `Created the ${collectionType} "${collectionTitle}" successfully.`;
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		}
 	} catch (err) {
 		response.message = `Error creating the ${collectionType}: + ${err}`;
@@ -78,8 +82,9 @@ const addCollection = async function addCollection(c: Context) {
 // Remove a collection.
 const removeCollection = async function removeCollection(c: Context) {
 	const response: BackendResponse = {
-		message: "Removing collection not completed.",
-		status: "error"
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 
 	const body = await c.req.parseBody();
@@ -89,6 +94,7 @@ const removeCollection = async function removeCollection(c: Context) {
 	if (selectedCollectionsString.length == 0) {
 		response.message = "No options were selected for removal.";
 		response.status = "warning";
+		response.time = messageTimeDefaults.warning;
 	} else {
 		const selectedCollections = selectedCollectionsString.split(',');
 
@@ -113,6 +119,7 @@ const removeCollection = async function removeCollection(c: Context) {
 			deleteSelectedCollections();
 			response.message = `${upperFirstLetter(collectionType)}(s) successfully removed.`;
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = `Error deleting the ${collectionType}: ${err}`;
 		}

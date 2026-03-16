@@ -7,6 +7,7 @@ import type { OptionType } from "./types/SelectOptionType";
 type BackendResponse = {
 	message: string;
 	status: "success" | "warning" | "error" | "informative";
+	time: number; // Length of time for the message to display.
 };
 
 // Type for the object sent back from the server in response to an attempt at uploading a game.
@@ -16,6 +17,7 @@ type GameUploadResponse = {
 		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
 		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
 	status: "success" | "warning" | "error" | "informative";
+	time: number; // Length of time for the message to display.
 }
 
 

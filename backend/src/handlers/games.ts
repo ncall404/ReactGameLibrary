@@ -6,7 +6,7 @@ import { join } from 'path';
 import type { Context } from "hono";
 
 import { db } from "../dbManager.ts";
-import type { BackendResponse } from '../server.ts';
+import { messageTimeDefaults, type BackendResponse } from '../server.ts';
 
 // Type for the object sent back from the server in response to an attempt at uploading a game.
 type GameUploadResponse = {
@@ -15,56 +15,51 @@ type GameUploadResponse = {
 		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
 		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
 	status: "success" | "warning" | "error" | "informative";
+	time: number; // Length of time for the message to display on the front end.
 }
 
 
 // Validates the data that will be uploaded to the Game table.
 async function validateGameInfo(gameName: string | File, gameDescription: string | File, releaseDate: string | File, coverArt: File | null, gameMediaFormat: number):
 Promise<GameUploadResponse> {
+	const response: GameUploadResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
+
 	// Validate gameName
 	if (typeof gameName !== 'string') { // Type validation
-		return {
-			message: "Name is not valid.",
-			field: "gameName",
-			status: "error"
-		};
+		response.message = "Name is not valid.";
+		response.field = "gameName";
+		return response;
 	} else if (gameName.trim().length === 0) { // Required field validation
-		return {
-			message: "Name is a required field.",
-			field: "gameName",
-			status: "error"
-		};
+		response.message = "Name is a required field.";
+		response.field = "gameName";
+		return response;
 	}
 
 	// Validate gameDescription
 	if (typeof gameDescription !== 'string') {
-		return {
-			message: "Description is not valid.",
-			field: "gameDescription",
-			status: "error"
-		};
+		response.message = "Description is not valid.";
+		response.field = "gameDescription";
+		return response;
 	}
 
 	// Validate releaseDate
 	if (typeof releaseDate !== 'string') { // Type validation
-		return {
-			message: "Release Date is not valid.",
-			field: "releaseDate",
-			status: "error"
-		};
+		response.message = "Release Date is not valid.";
+		response.field = "releaseDate";
+		return response;
 	} else if (releaseDate.length > 0 && isNaN(new Date(releaseDate).getTime())) { // Date and format validation
 		if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
-			return {
-				message: "Release Date must be in the format YYYY-MM-DD",
-				field: "releaseDate",
-				status: "error"
-			};
+			response.message = "Release Date must be in the format YYYY-MM-DD";
+			response.field = "releaseDate";
+			return response;
 		}
-		return {
-				message: "Release Date must be a date.",
-				field: "releaseDate",
-				status: "error"
-			};
+		response.message = "Release Date must be a date.";
+		response.field = "releaseDate";
+		return response;
 	}
 
 	// Validate coverArt
@@ -77,19 +72,24 @@ Promise<GameUploadResponse> {
 
 	// Validate gameMediaFormat
 	if (![1, 2, 3].includes(gameMediaFormat)){
-		return {
-			message: "Media Format must be a valid value.",
-			field: "gameMediaFormats",
-			status: "error"
-		};
+		response.message = "Media Format must be a valid value.";
+		response.field = "gameMediaFormats";
+		return response;
 	}
 
-	return{ message: "", status: "success" };
+	response.status = "success";
+	return response;
 }
 
 
 // Validates the image file type as a common browser-compatible image type.
 async function validateImageType(coverArtFile: File): Promise<GameUploadResponse> {
+	const response: GameUploadResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
+
 	// MIME types of valid image formats.
 	const validImageTypes = ["png", "jpeg", "webp", "avif", "svg", "gif", "apng"];
 
@@ -97,21 +97,25 @@ async function validateImageType(coverArtFile: File): Promise<GameUploadResponse
 	const fileType = await fileTypeFromBlob(coverArtFile);
 	for (let validType of validImageTypes) {
 		if (fileType?.mime === "image/" + validType) {
-			return { message: "", status: "success" };
+			response.status = "success";
+			response.time = messageTimeDefaults.success;
+			return response;
 		}
 	}
 
-	return {
-		message: "The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.join(", "),
-		field: "coverArt",
-		status: "error"
-	};
+	response.message = "The uploaded image was not a valid file type. Please upload one of the following: " + validImageTypes.join(", ");
+	response.field = "coverArt";
+	return response;
 }
 
 
 // Validates submitted data and then creates entries for the game in the database.
 const createGame = async function createGame(c: Context) {
-	let uploadResponse: GameUploadResponse | null = null;
+	const response: GameUploadResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
 	const body = await c.req.parseBody();
 
 	const multiSelect = { // Get all of the data from Select components that can have more than one selection.
@@ -155,20 +159,17 @@ const createGame = async function createGame(c: Context) {
 		coverArtPath = join('./images/uploads/', coverArt.name);
 		try {
 			await access(coverArtPath);
-			uploadResponse = {
-				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
-				field: "coverArt",
-				status: "warning"
-			};
+			response.message = "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.";
+			response.field = "coverArt";
+			response.status = "warning";
+			response.time = messageTimeDefaults.warning;
 		} catch(err) {
 			try {
 				await writeFile(coverArtPath, Buffer.from(await coverArt.arrayBuffer()));
 			} catch (err) {
-				return c.json({
-					message: "There was a problem writing the cover art image to the server; " + err,
-					field: "coverArt",
-					severity: "error"
-				});
+				response.message = "There was a problem writing the cover art image to the server; " + err;
+				response.field = "coverArt";
+				return c.json(response);
 			}
 		}
 	} else {
@@ -243,27 +244,27 @@ const createGame = async function createGame(c: Context) {
 	try {
 		insertGameWithMetaData();
 	} catch (err) {
-		uploadResponse = {
-			message: "There was a problem adding the game to the database; " + err,
-			status: "error"
-		}
+		response.message = "There was a problem adding the game to the database; " + err;
+		return c.json(response);
 	}
 
-	// Give a success response if there were no complications.
-	if (!uploadResponse) {
-		uploadResponse = {
-			message: "Game successfully created!",
-			status: "success"
-		}
+	// If the values of the response object are still the default, set the success response.
+	if (response.message.length == 0 && response.status == "error") {
+		response.message = "Game successfully created!";
+		response.status = "success";
+		response.time = messageTimeDefaults.success;
 	}
-
-	return c.json(uploadResponse);
+	return c.json(response);
 }
 
 
 // Edits a game's data and it's connections to other tables in the databse. Very similar to createGame but with the addition of a gameID and a different query.
 const editGame = async function editGame(c: Context) {
-	let uploadResponse: GameUploadResponse | null = null;
+	const response: GameUploadResponse = {
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
 	const body = await c.req.parseBody();
 
 	const gameID = body['gameID'] as string;
@@ -275,11 +276,8 @@ const editGame = async function editGame(c: Context) {
 	`);
 	const gameIDResult = validateGameID.all({GameID: gameID});
 	if (gameIDResult.length <= 0) {
-		return c.json({
-			isValid: false,
-			message: "The game you are attempting to edit could not be found.",
-			severity: "error",
-		});
+		response.message = "The game you are attempting to edit could not be found.";
+		return c.json(response);
 	}
 
 	const multiSelect = { // Get all of the data from Select components that can have more than one selection.
@@ -323,21 +321,17 @@ const editGame = async function editGame(c: Context) {
 		coverArtPath = join('./images/uploads/', coverArt.name);
 		try {
 			await access(coverArtPath);
-			uploadResponse = {
-				message: "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.",
-				field: "coverArt",
-				status: "warning"
-			};
+			response.message = "Game uploaded. Warning: Using existing cover art image. To use a different image, please give it a different name.";
+			response.field = "coverArt";
+			response.status = "warning";
+			response.time = messageTimeDefaults.warning;
 		} catch(err) {
 			try {
 				await writeFile(coverArtPath, Buffer.from(await coverArt.arrayBuffer()));
 			} catch (err) {
-				return c.json({
-					isValid: false,
-					message: "There was a problem writing the cover art image to the server; " + err,
-					field: "coverArt",
-					severity: "error"
-				});
+				response.message = "There was a problem writing the cover art image to the server; " + err;
+				response.field = "coverArt";
+				return c.json(response);
 			}
 		}
 	} else {
@@ -428,30 +422,27 @@ const editGame = async function editGame(c: Context) {
 	try {
 		editGameWithMetaData();
 	} catch (err) {
-		uploadResponse = {
-			message: "There was a problem editing the game; " + err,
-			status: "error"
-		}
+		response.message = "There was a problem editing the game; " + err;
+		return c.json(response);
 	}
 
-	// Give a success response if there were no complications.
-	if (!uploadResponse) {
-		uploadResponse = {
-			message: "Game successfully edited!",
-			status: "success"
-		}
+	// If the values of the response object are still the default, set the success response.
+	if (response.message.length == 0 && response.status == "error") {
+		response.message = "Game successfully created!";
+		response.status = "success";
+		response.time = messageTimeDefaults.success;
 	}
-
-	return c.json(uploadResponse);
+	return c.json(response);
 }
 
 
 // Deletes a game and it's connections from the database.
 const deleteGame = async function deleteGame(c: Context) {
 	const response: BackendResponse = {
-		message: "Deleting game not completed.",
-		status: "error"
-	}
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
 
 	const body = await c.req.parseBody();
 	const deleteGameID = parseInt(body['deleteGameID'] as string);
@@ -498,6 +489,7 @@ const deleteGame = async function deleteGame(c: Context) {
 			deleteGame();
 			response.message = "Game successfully deleted.";
 			response.status = "success";
+			response.time = messageTimeDefaults.success;
 		} catch (err) {
 			response.message = `The game could not be deleted: ${err}`;
 		}
@@ -567,15 +559,17 @@ const deleteRemovedGameCompanyConnections = function deleteRemovedGameCompanyCon
 // Retreives a single requested game.
 const getGameData = function getGameData(c: Context) {
 	const response: BackendResponse = {
-		message: "Getting game data not completed.",
-		status: "error"
-	}
+		message: "",
+		status: "error",
+		time: messageTimeDefaults.error
+	};
 
 	const gameID = c.req.param('gameID');
 
 	if (parseInt(gameID) == 0) {
 		response.message = "No game requested";
 		response.status = "informative";
+		response.time = messageTimeDefaults.info;
 		return c.json(response);
 	}
 

@@ -3,7 +3,7 @@
 import { access, mkdir, rm } from "fs/promises";
 import { constants } from "fs";
 
-import type { BackendResponse } from './server.ts';
+import { messageTimeDefaults, type BackendResponse } from './server.ts';
 
 // Clears the contents of the path for image storage. This removes all stored pictures.
 const clearImageStorage = async function clearImageStorage(imageStoragePath: string): Promise<void> {
@@ -13,9 +13,10 @@ const clearImageStorage = async function clearImageStorage(imageStoragePath: str
 
 // Checks folder path for image storage then creates the path if it wasn't found.
 const setupImageStorage = async function setupImageStorage(imageStoragePath: string): Promise<BackendResponse> {
-	const result: BackendResponse = {
+	const response: BackendResponse = {
 		message: "Image storage setup incomplete",
-		status: "error"
+		status: "error",
+		time: messageTimeDefaults.error
 	};
 	
 	let storageExists: boolean;
@@ -29,17 +30,19 @@ const setupImageStorage = async function setupImageStorage(imageStoragePath: str
 	if (!storageExists) {
 		try {
 			await mkdir(imageStoragePath, {recursive: true});
-			result.message = "Image storage created.";
-			result.status = "success";
-			return result;
+			response.message = "Image storage created.";
+			response.status = "success";
+			response.time = messageTimeDefaults.success;
+			return response;
 		} catch (err) {
-			result.message = "Error creating the directory for image storage; " + err;
-			return result;
+			response.message = "Error creating the directory for image storage; " + err;
+			return response;
 		}
 	}
-	result.message = "Image storage already existed.";
-	result.status = "informative";
-	return result;
+	response.message = "Image storage already existed.";
+	response.status = "informative";
+	response.time = messageTimeDefaults.info;
+	return response;
 }
 
 export {setupImageStorage, clearImageStorage};

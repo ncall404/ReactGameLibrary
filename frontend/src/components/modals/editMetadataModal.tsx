@@ -53,7 +53,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log('Uploaded: ', data);
 			// Clear state for inputs.
@@ -88,7 +88,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 			setToast({
 				message: data.message,
 				type: data.status,
-				time: 7000,
+				time: data.time,
 			});
 			console.log('Uploaded: ', data);
 			// Clear state for inputs.
