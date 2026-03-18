@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 
 import MainNav from '../components/navbar/main-nav';
+import Toast from '../components/toast/toast.tsx'
 
 export const Route = createRootRoute({
 	component: RootComponent,
@@ -18,6 +19,7 @@ function RootComponent() {
 			
 			<main className='m-1 mx-2 dark:text-(--color-light)'>
 				<Outlet />
+				<Toast />
 			</main>
 		</React.Fragment>
 	);

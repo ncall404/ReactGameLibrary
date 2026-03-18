@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 
 import Btn from '../components/common/btn.tsx';
 import { BtnStyle } from '../components/common/btn.tsx';
-import Toast from '../components/toast/toast.tsx'
+
 import { useToastContext } from '../components/toast/toastContext.tsx';
 
 import GameItem from '../components/gameItem/gameItem.tsx';
@@ -263,8 +263,6 @@ function RouteComponent() {
 					</div>
 				</Modal>
 			}
-
-			<Toast />
 		</section>
 	);
 }
