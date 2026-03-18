@@ -20,6 +20,14 @@ type GameUploadResponse = {
 	time: number; // Length of time for the message to display.
 }
 
+// Default times (in milliseconds) for the response messages that should be good for most normal message lengths. Message types that are generally more important for the user to see (especially errors) will stay on the screen significantly longer by default.
+const messageTimeDefaults = {
+	success: 7000,
+	info: 9000,
+	warning: 12000,
+	error: 20000,
+} as const;
+
 
 // Converts the selected options from Select inputs to a string format that can be sent to the backend.
 const optionsToString = (options: OptionType[]) => {
@@ -165,5 +173,5 @@ export type { BackendResponse, GameUploadResponse };
 
 export {
 	optionsToString, fillOptionsArray, fillGroupedOptionsArray,
-	upperFirstLetter, scrollToTop, selectStyles
+	upperFirstLetter, scrollToTop, selectStyles, messageTimeDefaults
 };
