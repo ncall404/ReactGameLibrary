@@ -17,7 +17,7 @@ import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx'
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
-import { fillOptionsArray, scrollToTop, selectStyles } from '../utilities.ts';
+import { fillOptionsArray, scrollToTop, selectStyles, messageTimeDefaults } from '../utilities.ts';
 import type { BackendResponse } from '../utilities.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
@@ -88,7 +88,14 @@ function RouteComponent() {
 			console.log(data);
 			invalidateData();
 		},
-		onError: (err) => console.error('Error: ', err),
+		onError: (err) => {
+			console.error('Error: ', err);
+			setToast({
+				message: err.message,
+				type: "error",
+				time: messageTimeDefaults.error
+			});
+		},
 	});
 
 	const invalidateData = async () => {
@@ -113,6 +120,15 @@ function RouteComponent() {
 		queryKey:['collections', 'library-list'],
 		queryFn: () => getCollectionList(CollectionType.Library),
 		select: (data) => {
+			if (typeof data === "object" && "message" in data && "type" in data && "time" in data) {
+				setToast({
+					message: data.message,
+					type: data.status,
+					time: data.time,
+				});
+				return;
+			}
+
 			const libraryOptions = fillOptionsArray(data);
 			// Add "None" option to returned array of libraries and return the new array of libraries.
 			libraryOptions.unshift({
@@ -138,6 +154,14 @@ function RouteComponent() {
 		queryKey:['libraries', 'contents', 'single-library', selectedCollection.value],
 		queryFn: () => getSingleLibrary(selectedCollection.value),
 		select: (data) => {
+			if (typeof data === "object" && "message" in data && "type" in data && "time" in data) {
+				setToast({
+					message: data.message,
+					type: data.status,
+					time: data.time,
+				});
+				return;
+			}
 			return data.games;
 		}
 	});

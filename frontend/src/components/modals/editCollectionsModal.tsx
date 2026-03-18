@@ -3,7 +3,7 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, optionsToString, selectStyles, type BackendResponse } from "../../utilities.ts";
+import { fillOptionsArray, optionsToString, selectStyles, messageTimeDefaults, type BackendResponse } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -47,7 +47,14 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 			// Invalidate data that changed.
 			await invalidateData();
 		},
-		onError: (err) => console.error('Error: ', err),
+		onError: (err) => {
+			console.error('Error: ', err);
+			setToast({
+				message: err.message,
+				type: "error",
+				time: messageTimeDefaults.error
+			});
+		},
 	});
 
 	// Mutation for removing libraries.
@@ -65,7 +72,14 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 			// Invalidate data that changed.
 			await invalidateData();
 		},
-		onError: (err) => console.error('Error: ', err),
+		onError: (err) => {
+			console.error('Error: ', err);
+			setToast({
+				message: err.message,
+				type: "error",
+				time: messageTimeDefaults.error
+			});
+		},
 	});
 
 	const invalidateData = async () => {
