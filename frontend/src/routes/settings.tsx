@@ -8,23 +8,42 @@ import Modal from '../components/common/modal.tsx';
 
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { useToastContext } from '../components/toast/toastContext.tsx';
+
+import { messageTimeDefaults, type BackendResponse } from '../utilities.ts';
 
 export const Route = createFileRoute('/settings')({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	const { setToast } = useToastContext();
+
 	const [isResetConfirmOpen, setIsResetConfirmOpen] = useState<boolean>(false);
 
 	const resetAppMutation = useMutation({
 		mutationFn: async () => {
-			// TODO: Change to using the api variable when you ge
 			const res = await fetch('http://localhost:3000/api/settings/reset-app', {
 				method: 'POST',
 			});
 			if (!res.ok) throw new Error('App reset failed');
 			return res.json();
-		}
+		},
+		onSuccess: (data: BackendResponse) => {
+			setToast({
+				message: data.message,
+				type: data.status,
+				time: data.time
+			});
+		},
+		onError: (err) => {
+			console.error('Error: ', err);
+			setToast({
+				message: err.message,
+				type: "error",
+				time: messageTimeDefaults.error
+			});
+		},
 	});
 
 	return (
