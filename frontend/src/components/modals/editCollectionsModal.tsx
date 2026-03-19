@@ -41,7 +41,9 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				type: data.status,
 				time: data.time,
 			});
-			console.log(data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			setEditCollectionAdd("");
 
 			// Invalidate data that changed.
@@ -66,7 +68,9 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				type: data.status,
 				time: data.time,
 			});
-			console.log(data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			setSelectedForRemoval([]);
 
 			// Invalidate data that changed.

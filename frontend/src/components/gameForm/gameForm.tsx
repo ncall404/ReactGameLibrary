@@ -70,7 +70,9 @@ export default function GameForm(props: GameFormProps) {
 				type: data.status,
 				time: data.time,
 			});
-			console.log('Uploaded: ', data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			invalidateData();
 		},
 		onError: (err) => {

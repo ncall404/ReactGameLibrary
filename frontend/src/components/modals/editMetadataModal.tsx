@@ -55,7 +55,9 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				type: data.status,
 				time: data.time,
 			});
-			console.log('Uploaded: ', data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			// Clear state for inputs.
 			switch (editMetadataField) {
 				case MetadataField.Companies:
@@ -97,7 +99,9 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				type: data.status,
 				time: data.time,
 			});
-			console.log('Uploaded: ', data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			// Clear state for inputs.
 			setSelectedForRemoval([]);
 			// Invalidate data that changed.

@@ -85,7 +85,9 @@ function RouteComponent() {
 				type: data.status,
 				time: data.time,
 			});
-			console.log(data);
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 			invalidateData();
 		},
 		onError: (err) => {
@@ -126,6 +128,9 @@ function RouteComponent() {
 					type: data.status,
 					time: data.time,
 				});
+				if (data.status == "error") {
+					console.error(data.message);
+				}
 				return;
 			}
 
