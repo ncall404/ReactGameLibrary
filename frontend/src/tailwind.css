@@ -21,6 +21,7 @@
 	--color-info: #1186ed;
 
 	/* Breakpoints */
+	--breakpoint-xs: 32rem;
 	--breakpoint-3xl: 130rem;
 }
 
