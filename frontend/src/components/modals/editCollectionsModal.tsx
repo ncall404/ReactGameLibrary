@@ -126,7 +126,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 	return (
 		<Modal isOpen={props.isOpen} onClose={props.onClose}>
 			<h2 className="text-2xl">Collections</h2>
-			<form onSubmit={handleEditListAdd} method="post" className="bg-(--color-darker) rounded-sm p-4 mt-2 flex flex-col gap-1.5">
+			<form onSubmit={handleEditListAdd} method="post" className="modal-section flex flex-col gap-1.5">
 				<h3 className="text-xl">Add</h3>
 				<label htmlFor="editCollectionAdd">Name: </label>
 				<input type="text"
@@ -142,7 +142,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				<Btn type="submit" style={BtnStyle.Primary}>Add Collection</Btn>
 			</form>
 
-			<form onSubmit={handleEditListRemove} method="post" id="removeCollectionForm" className="bg-(--color-darker) rounded-sm p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleEditListRemove} method="post" id="removeCollectionForm" className="modal-section accent-(--color-accent) flex flex-col gap-1.5">
 				<h3 className="text-xl">Remove</h3>
 				<label htmlFor="collectionRemove">Collections to remove: </label>
 				<Select
@@ -169,7 +169,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				onClose={() => {setIsDeleteConfirmOpen(false)}}
 				isForm={true}>
 					<h2 className="text-2xl">Confirm Collection Removal?</h2>
-					<div className="bg-(--color-darker) rounded-sm p-4 mt-2">
+					<div className="modal-section">
 						<p>Are you sure you want to remove the selected collection(s)?</p>
 						<p>If there are games exclusively in this collection, you will be able to view them by selecting the "None" collection.</p>
 						<br />

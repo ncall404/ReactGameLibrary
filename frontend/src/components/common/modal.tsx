@@ -16,17 +16,18 @@ export default function Modal(props: ModalProps) {
 
 	return (
 		<div className="flex justify-center backdrop-blur-md w-full h-full top-0 right-0 fixed" onClick={props.onClose}>
-			<div className="min-w-sm max-w-lg md:min-w-md lg:min-w-lg lg:max-w-2xl
-			h-fit p-2 self-center
-			bg-(--color-dark) rounded-sm border-2 border-(--color-darker)"
+			<div className="w-full max-w-lg sm:min-w-md md:min-w-lg lg:max-w-2xl
+			h-fit px-0 py-1 xs:p-2 self-center flex flex-col gap-2
+			bg-(--color-dark) rounded-sm border-2 border-(--color-darker)
+			modal"
 			onClick={(e) => e.stopPropagation()}>
 				{props.children}
-				<div className="content-center text-(--color-light) flex gap-2 mt-3 max-md:flex-wrap">
+				<div className="content-center text-(--color-light) flex gap-2 px-2 xs:px-0 my-1 flex-wrap sm:flex-nowrap">
 					{
 						props.isForm ?
 						<>
-							<Btn className="basis-1/2 max-md:basis-full" style={BtnStyle.Primary} func={props.onConfirm}>Confirm</Btn>
-							<Btn className="basis-1/2 max-md:basis-full" style={BtnStyle.Neutral} func={props.onClose}>Cancel</Btn>
+							<Btn className="basis-full sm:basis-1/2" style={BtnStyle.Primary} func={props.onConfirm}>Confirm</Btn>
+							<Btn className="basis-full sm:basis-1/2 " style={BtnStyle.Neutral} func={props.onClose}>Cancel</Btn>
 						</> :
 						<Btn className="basis-full" style={BtnStyle.Neutral} func={props.onClose}>Close</Btn>
 					}

@@ -261,7 +261,7 @@ function RouteComponent() {
 				onClose={() => {setDeleteConfirmIsOpen(false)}}
 				isForm={true}>
 					<h2 className="text-2xl">Confirm Game Deletion?</h2>
-					<div className="bg-(--color-darker) rounded-sm p-4 mt-2">
+					<div className="modal-section">
 						<p>Are you sure you want to delete the selected game?</p>
 						<br />
 						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
