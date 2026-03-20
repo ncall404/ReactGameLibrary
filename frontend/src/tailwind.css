@@ -76,6 +76,10 @@ h1, .modal h2 {
 	margin-left: 0.5rem;
 }
 
+details p {
+	margin: 0.25rem, 0rem;
+}
+
 #gameForm hr {
 	margin: 10px 0px;
 }
