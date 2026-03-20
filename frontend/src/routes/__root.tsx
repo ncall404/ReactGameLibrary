@@ -17,7 +17,7 @@ function RootComponent() {
 				<MainNav />
 			</header>
 			
-			<main className='m-1 mx-2 dark:text-(--color-light)'>
+			<main className='m-0 sm:mx-2 dark:text-(--color-light)'>
 				<Outlet />
 				<Toast />
 			</main>

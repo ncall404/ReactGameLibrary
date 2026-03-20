@@ -184,7 +184,7 @@ function RouteComponent() {
 			<h1 className='text-3xl pb-2'>Game Library</h1>
 			{ !gameFormIsOpen &&
 			<>
-				<div className='flex gap-2 max-sm:flex-col w-full'>
+				<div className='flex gap-2 p-2 sm:p-0 max-sm:flex-col w-full'>
 					<Select
 						name="selectedCollection"
 						inputId="selectedCollection"

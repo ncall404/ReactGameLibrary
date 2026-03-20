@@ -36,7 +36,7 @@ export default function GameItem(props: GameItemProps) {
 
 
 	return (
-		<article className="flex flex-col gap-2 my-3 p-4 rounded-sm bg-(--color-darker)">
+		<article className="flex flex-col gap-2 my-3 py-3 px-2 sm:p-3 sm:rounded-sm bg-(--color-darker)">
 			{/* Div for main game information */}
 			<div className="flex max-md:flex-col max-md:gap-2 gap-4">
 				<img className="motion-safe:transition-all ease-in-out
