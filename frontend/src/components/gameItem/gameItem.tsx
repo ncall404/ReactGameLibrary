@@ -49,8 +49,8 @@ export default function GameItem(props: GameItemProps) {
 				</div>
 
 				<div id="gameActionButtons" className="flex md:flex-col gap-2 place-content-center md:basis-32">
-					<Btn func={props.editFunction} className="max-md:grow md:w-32" style={BtnStyle.Neutral}>Edit</Btn>
-					<Btn func={props.deleteFunction} className="max-md:grow md:w-32" style={BtnStyle.Danger}>Delete</Btn>
+					<Btn func={props.editFunction} className=" w-1/2 md:w-32" style={BtnStyle.Neutral}>Edit</Btn>
+					<Btn func={props.deleteFunction} className="w-1/2 md:w-32" style={BtnStyle.Danger}>Delete</Btn>
 				</div>
 			</div>
 
