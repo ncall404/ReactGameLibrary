@@ -35,6 +35,9 @@ function RouteComponent() {
 				type: data.status,
 				time: data.time
 			});
+			if (data.status == "error") {
+				console.error(data.message);
+			}
 		},
 		onError: (err) => {
 			console.error('Error: ', err);
