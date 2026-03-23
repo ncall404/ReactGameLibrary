@@ -77,7 +77,13 @@ h1, .modal h2 {
 }
 
 details p {
-	margin: 0.25rem, 0rem;
+	margin: 0.125rem 0rem;
+	font-weight: var(--font-weight-normal) /* 400 */;
+}
+
+details span {
+	text-decoration-line: underline;
+	font-weight: var(--font-weight-semibold) /* 600 */;
 }
 
 #gameForm hr {

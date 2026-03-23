@@ -62,30 +62,30 @@ export default function GameItem(props: GameItemProps) {
 					text-(--color-light) border-(--color-neutral)">
 					<summary className="select-none cursor-pointer p-[5px] border-(--color-neutral) bg-(--color-btn-bg) hover:bg-(--color-neutral)"
 					>Game Details</summary>
-					<div className="p-1 pl-4">
+					<div className="p-1 pl-2 sm:pl-4">
 						{
 							game.gameData.ReleaseDate &&
-							<p><b>Release:</b> {new Date(game.gameData.ReleaseDate * 1000).toLocaleDateString()}</p>
+							<p><span>Release:</span> {new Date(game.gameData.ReleaseDate * 1000).toLocaleDateString()}</p>
 						}
 						{
 							game.publisherData && game.publisherData.length > 0 &&
-							<p><b>Publishers:</b> {titlesToString(game.publisherData)}</p>
+							<p><span>Publishers:</span> {titlesToString(game.publisherData)}</p>
 						}
 						{
 							game.developerData && game.developerData.length > 0 &&
-							<p><b>Developers:</b> {titlesToString(game.developerData)}</p>
+							<p><span>Developers:</span> {titlesToString(game.developerData)}</p>
 						}
 						{
 							game.platformData && game.platformData.length > 0 &&
-							<p><b>Platforms:</b> {titlesToString(game.platformData)}</p>
+							<p><span>Platforms:</span> {titlesToString(game.platformData)}</p>
 						}
 						{
 							game.storefrontData && game.storefrontData.length > 0 &&
-							<p><b>Storefronts:</b> {titlesToString(game.storefrontData)}</p>
+							<p><span>Storefronts:</span> {titlesToString(game.storefrontData)}</p>
 						}
 						{
 							game.genreData && game.genreData.length > 0 &&
-							<p><b>Genres:</b> {titlesToString(game.genreData)}</p>
+							<p><span>Genres:</span> {titlesToString(game.genreData)}</p>
 						}
 					</div>
 					
