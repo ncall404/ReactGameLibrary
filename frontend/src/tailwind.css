@@ -80,7 +80,6 @@ details p {
 	margin: 0.125rem 0rem;
 	font-weight: var(--font-weight-normal) /* 400 */;
 }
-
 details span {
 	text-decoration-line: underline;
 	font-weight: var(--font-weight-semibold) /* 600 */;
@@ -94,6 +93,7 @@ details span {
 	padding: 0.5rem;
 	background-color: var(--color-darker);
 }
+
 
 @media (width >= 32rem /* 512px, equivalent to var(--breakpoint-xs) */) {
     .modal-section {
