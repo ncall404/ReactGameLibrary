@@ -155,6 +155,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 						setSelectedForRemoval(options as OptionType[]);
 					}}
 					options={libraryList.data}
+					noOptionsMessage={() => "No collections found."}
 				/>
 				<Btn type="button" style={BtnStyle.Danger} func={() => setIsDeleteConfirmOpen(true)}>Remove Selected</Btn>
 

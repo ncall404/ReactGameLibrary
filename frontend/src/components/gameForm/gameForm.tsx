@@ -294,6 +294,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedCollections(options as OptionType[]);
 					}}
 					options={collectionList.data}
+					noOptionsMessage={() => "No collections found."}
 				/>
 
 				<hr />
@@ -366,6 +367,7 @@ export default function GameForm(props: GameFormProps) {
 					}}
 					options={mediaFormatList.data}
 					hideSelectedOptions
+					noOptionsMessage={() => "No media formats found."}
 				/>
 
 				<hr />
@@ -382,6 +384,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedGenres(options as OptionType[]);
 					}}
 					options={genreList.data}
+					noOptionsMessage={() => "No genres found."}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditMetadataField(MetadataField.Genres);
@@ -402,6 +405,7 @@ export default function GameForm(props: GameFormProps) {
 					}}
 					isLoading={publisherList.isLoading}
 					options={publisherList.data}
+					noOptionsMessage={() => "No publishers found."}
 				/>
 
 				<label htmlFor="gameFormDeveloperOptions">Developer(s): </label>
@@ -416,6 +420,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedDevelopers(options as OptionType[]);
 					}}
 					options={developerList.data}
+					noOptionsMessage={() => "No developers found."}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditMetadataField("companies");
@@ -435,6 +440,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedPlatforms(options as OptionType[]);
 					}}
 					options={platformList.data}
+					noOptionsMessage={() => "No platforms found."}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditMetadataField("platforms");
@@ -454,6 +460,7 @@ export default function GameForm(props: GameFormProps) {
 						setSelectedStorefronts(options as OptionType[]);
 					}}
 					options={storefrontList.data}
+					noOptionsMessage={() => "No storefronts found."}
 				/>
 				<Btn style={BtnStyle.Neutral} type="button" func={() => {
 					setEditMetadataField("storefronts");

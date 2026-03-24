@@ -267,6 +267,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 								setSelectedPlatformOwner(option as OptionType);
 							}}
 							options={platformOwnersList.data}
+							noOptionsMessage={() => "No platform owner companies found."}
 							isClearable
 							required
 						/>
@@ -291,6 +292,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 						setSelectedForRemoval(options as OptionType[]);
 					}}
 					options={removeList.data}
+					noOptionsMessage={() => "No options found."}
 				/>
 				<Btn type="button" style={BtnStyle.Danger} func={() => setIsDeleteConfirmOpen(true)}>Remove Selected</Btn>
 
