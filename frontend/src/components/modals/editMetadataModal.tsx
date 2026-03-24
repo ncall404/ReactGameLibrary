@@ -267,6 +267,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 								setSelectedPlatformOwner(option as OptionType);
 							}}
 							options={platformOwnersList.data}
+							hideSelectedOptions
 							noOptionsMessage={() => "No platform owner companies found."}
 							isClearable
 							required
