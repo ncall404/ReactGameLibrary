@@ -19,7 +19,7 @@ import { useToastContext } from "../toast/toastContext.tsx";
 type GameFormProps = {
 	onSubmitted: () => void,
 	onCancel: () => void,
-	collectionType: string, // Change type to object as const with the possible collection types in it.
+	collectionType: CollectionType,
 	collectionId: number,
 	formType: "create" | "edit",
 	gameID?: number,
