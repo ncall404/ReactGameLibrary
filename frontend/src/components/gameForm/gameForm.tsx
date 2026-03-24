@@ -3,7 +3,8 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter, selectStyles, messageTimeDefaults, type GameUploadResponse } from "../../utilities.ts";
+import type { GameUploadResponse } from "../../types/ServerResponseTypes.ts";
+import { fillOptionsArray, fillGroupedOptionsArray, optionsToString, upperFirstLetter, selectStyles, messageTimeDefaults } from "../../utilities.ts";
 
 import Btn from "../common/btn.tsx";
 import { BtnStyle } from "../common/btn.tsx";

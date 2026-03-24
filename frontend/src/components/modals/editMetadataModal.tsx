@@ -7,7 +7,8 @@ import { BtnStyle } from "../common/btn.tsx";
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter, selectStyles, messageTimeDefaults, type BackendResponse } from "../../utilities.ts";
+import type { BackendResponse } from "../../types/ServerResponseTypes.ts";
+import { fillGroupedOptionsArray, fillOptionsArray, optionsToString, upperFirstLetter, selectStyles, messageTimeDefaults } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";

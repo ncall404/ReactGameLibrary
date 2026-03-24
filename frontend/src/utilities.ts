@@ -3,23 +3,6 @@
 import type { GroupBase, StylesConfig } from "react-select";
 import type { OptionType } from "./types/SelectOptionType";
 
-// Type for the object sent back from the server in response to a server request if it has no extra needs (i.e. extra data or an extra field).
-type BackendResponse = {
-	message: string;
-	status: "success" | "warning" | "error" | "informative";
-	time: number; // Length of time for the message to display.
-};
-
-// Type for the object sent back from the server in response to an attempt at uploading a game.
-type GameUploadResponse = {
-	message: string;
-	field?: 
-		"gameCollections" | "gameGenres" | "gamePlatforms" | "gameStorefronts" | "gamePublishers" | "gameDevelopers" | "gameMediaFormats" |
-		"gameName" | "gameDescription" | "releaseDate" | "coverArt";
-	status: "success" | "warning" | "error" | "informative";
-	time: number; // Length of time for the message to display.
-}
-
 // Default times (in milliseconds) for the response messages that should be good for most normal message lengths. Message types that are generally more important for the user to see (especially errors) will stay on the screen significantly longer by default.
 const messageTimeDefaults = {
 	success: 7000,
@@ -168,8 +151,6 @@ const selectStyles: StylesConfig<OptionType, boolean, GroupBase<OptionType>> = {
 		backgroundColor: state.isFocused ? "var(--color-neutral)" : ""
 	}),
 }
-
-export type { BackendResponse, GameUploadResponse };
 
 export {
 	optionsToString, fillOptionsArray, fillGroupedOptionsArray,

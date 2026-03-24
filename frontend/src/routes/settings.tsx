@@ -10,7 +10,8 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useToastContext } from '../components/toast/toastContext.tsx';
 
-import { messageTimeDefaults, type BackendResponse } from '../utilities.ts';
+import { messageTimeDefaults } from '../utilities.ts';
+import type { BackendResponse } from '../types/ServerResponseTypes.ts';
 
 export const Route = createFileRoute('/settings')({
 	component: RouteComponent,

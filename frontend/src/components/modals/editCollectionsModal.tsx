@@ -3,7 +3,8 @@
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../../types/SelectOptionType.ts";
-import { fillOptionsArray, optionsToString, selectStyles, messageTimeDefaults, type BackendResponse } from "../../utilities.ts";
+import type { BackendResponse } from "../../types/ServerResponseTypes.ts";
+import { fillOptionsArray, optionsToString, selectStyles, messageTimeDefaults } from "../../utilities.ts";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";

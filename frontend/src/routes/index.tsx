@@ -18,7 +18,7 @@ import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
 import { fillOptionsArray, scrollToTop, selectStyles, messageTimeDefaults } from '../utilities.ts';
-import type { BackendResponse } from '../utilities.ts';
+import type { BackendResponse } from '../types/ServerResponseTypes.ts';
 
 import { getSingleLibrary } from '../api/libraryApi.ts';
 import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
