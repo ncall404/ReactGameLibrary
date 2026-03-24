@@ -13,11 +13,11 @@ export const Route = createRootRoute({
 function RootComponent() {
 	return (
 		<React.Fragment>
-			<header>
+			<header className="fixed w-full xl:w-4/5 z-1">
 				<MainNav />
 			</header>
 			
-			<main className='m-0 sm:mx-2 dark:text-(--color-light)'>
+			<main className="m-0 mt-16 sm:mx-2 dark:text-(--color-light)">
 				<Outlet />
 				<Toast />
 			</main>
