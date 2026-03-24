@@ -72,8 +72,9 @@ export default function GameForm(props: GameFormProps) {
 			});
 			if (data.status == "error") {
 				console.error(data.message);
+			} else {
+				invalidateData();
 			}
-			invalidateData();
 		},
 		onError: (err) => {
 			console.error('Error: ', err);
