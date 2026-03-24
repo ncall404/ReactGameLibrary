@@ -56,7 +56,7 @@ export default function Toast(props: ToastProps) {
 						<h3 className="text-xl">{toastTitle}</h3>
 						<p>{toastData ? toastData.message : "None"}</p>
 					</div>
-					<Btn className="self-center ml-auto w-10 h-10" style={BtnStyle.Danger} func={() => clearToast()}>X</Btn>
+					<Btn className="self-center ml-auto min-w-10 min-h-10 w-10 h-10" style={BtnStyle.Danger} func={() => clearToast()}>X</Btn>
 				</div>
 			}
 		</>
