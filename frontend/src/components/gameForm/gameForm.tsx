@@ -96,7 +96,7 @@ export default function GameForm(props: GameFormProps) {
 
 	// TODO: Whenever wishlists get added, submit the collection type with the rest of the formData.
 	// Handles correctly submitting the main form's data.
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData();
 		if (props.formType === "edit" && props.gameID) {
@@ -117,9 +117,9 @@ export default function GameForm(props: GameFormProps) {
 		formData.append('gamePublishers', optionsToString(selectedPublishers));
 		formData.append('gameDevelopers', optionsToString(selectedDevelopers));
 		formData.append('gameMediaFormat', selectedMediaFormat?.value.toString() as string);
-
-		gameMutation.mutate(formData);
-		if (props.onSubmitted) props.onSubmitted();
+		
+		const res = await gameMutation.mutateAsync(formData);
+		if (res.status != "error" && props.onSubmitted) props.onSubmitted();
 	}
 
 	// useQuery hook for loading data when editing a game entry
