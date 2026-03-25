@@ -13,7 +13,7 @@ export const Route = createRootRoute({
 function RootComponent() {
 	return (
 		<React.Fragment>
-			<header className="fixed w-full xl:w-4/5 z-1">
+			<header className="fixed max-w-7xl w-full xl:w-4/5 z-1">
 				<MainNav />
 			</header>
 			
