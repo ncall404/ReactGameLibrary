@@ -8,6 +8,7 @@
 	--color-primary: #495E57;
 	--color-primary-focus: #658c7f;
 	--color-accent: #F4CE14;
+	--color-link-hover: #f4b814;
 	--color-danger: #D61B1B;
 	--color-neutral: #5c5b59;
 	--color-btn-bg: #18191b;
@@ -93,6 +94,24 @@ details p {
 details span {
 	text-decoration-line: underline;
 	font-weight: var(--font-weight-semibold) /* 600 */;
+}
+
+ul {
+	display: block;
+	list-style-type: disc;
+	margin-block-start: 0.125em;
+	margin-block-end: 1em;
+	padding-inline-start: 20px;
+}
+
+article a {
+	color: var(--color-accent);
+	text-decoration-line: underline;
+}
+article a:hover {
+	color: var(--color-link-hover);
+	text-decoration-thickness: 2px;
+	text-underline-offset: 2px;
 }
 
 #gameForm hr {
