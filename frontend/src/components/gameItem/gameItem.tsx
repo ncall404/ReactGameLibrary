@@ -45,7 +45,7 @@ export default function GameItem(props: GameItemProps) {
 				src={imgSrc} alt={imgAlt}/>
 				<div className="grow flex flex-col gap-0.25">
 					<h2 className="text-2xl">{game.gameData.Title}</h2>
-					<p className="text-pretty mb-2">{game.gameData.Description}</p>
+					<p className="mb-2">{game.gameData.Description}</p>
 				</div>
 
 				<div id="gameActionButtons" className="flex md:flex-col gap-2 place-content-center md:basis-32">

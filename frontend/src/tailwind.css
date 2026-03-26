@@ -82,6 +82,9 @@ article {
 	padding-block: 0.75rem;
 	padding-inline: 0.5rem;
 }
+article p {
+	text-wrap: pretty;
+}
 
 details p {
 	margin: 0.125rem 0rem;
