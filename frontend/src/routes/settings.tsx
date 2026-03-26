@@ -55,7 +55,7 @@ function RouteComponent() {
 			<section>
 				<h1 className="text-3xl pb-2">Settings</h1>
 
-				<article className="my-2 p-2 sm:rounded-sm bg-(--color-darker)">
+				<article>
 					<h2 className="text-2xl">Reset App</h2>
 					<p className="py-2 text-pretty">Resets the app to it's initial state, removing all: collections, games, metadata, and images.</p>
 					<Btn className="w-full sm:w-32" style={BtnStyle.Danger} func={() => {setIsResetConfirmOpen(true)}}>Reset App</Btn>
