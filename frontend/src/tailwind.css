@@ -98,6 +98,6 @@ details span {
 @media (width >= 32rem /* 512px, equivalent to var(--breakpoint-xs) */) {
     .modal-section {
 		padding: 0.75rem;
-		border-radius: 0.25rem;
+		border-radius: var(--radius-sm);
 	}
 }
