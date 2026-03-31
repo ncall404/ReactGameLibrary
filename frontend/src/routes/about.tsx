@@ -27,8 +27,25 @@ function RouteComponent() {
 				</article>
 
 				<article>
-					<h2 className="text-2xl">Future Project Plans and Desires</h2>
-					<p>...</p>
+					<h2 className="text-2xl">Future Plans And Desires For The Project</h2>
+					<p>There are many things that I would like to do in the future to improve and iterate on this project. Some of them are things that I needed to cut or ran out of time to implement for the current version; others are things that I would like to do for completely new versions of the project.</p>
+					<p>Here are some of the things I have in mind:</p>
+					<br />
+					<p className="font-semibold">For this project:</p>
+					<ul>
+						<li>Change toast notifications to be a list to allow more than one showing at once.</li>
+						<li>Make a light mode color scheme option.</li>
+						<li>Improve dark mode color scheme.</li>
+						<li>Client-side form validation.</li>
+						<li>Lazy loading of game collections.</li>
+						<li>A way to delete unused game cover art images.</li>
+					</ul>
+
+					<p className="font-semibold">For future versions of the project:</p>
+					<ul>
+						<li>Make a native desktop app.</li>
+						<li>Make a wishlist feature with price tracking for storefronts with available APIs.</li>
+					</ul>
 				</article>
 
 				<article>
