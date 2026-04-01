@@ -31,7 +31,7 @@ function RouteComponent() {
 					<p>There are many things that I would like to do in the future to improve and iterate on this project. Some of them are things that I needed to cut or ran out of time to implement for the current version; others are things that I would like to do for completely new versions of the project.</p>
 					<p>Here are some of the things I have in mind:</p>
 					<br />
-					<p className="font-semibold">For this project:</p>
+					<p className="mt-1 text-xl">For this project:</p>
 					<ul>
 						<li>Change toast notifications to be a list to allow more than one showing at once.</li>
 						<li>Make a light mode color scheme option.</li>
@@ -41,7 +41,7 @@ function RouteComponent() {
 						<li>A way to delete unused game cover art images.</li>
 					</ul>
 
-					<p className="font-semibold">For future versions of the project:</p>
+					<p className="mt-1 text-xl">For future versions of the project:</p>
 					<ul>
 						<li>Make a native desktop app.</li>
 						<li>Make a wishlist feature with price tracking for storefronts with available APIs.</li>
