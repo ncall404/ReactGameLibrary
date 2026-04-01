@@ -103,6 +103,9 @@ ul {
 	margin-block-end: 1em;
 	padding-inline-start: 20px;
 }
+li ul {
+	list-style-type: circle;
+}
 
 article a {
 	color: var(--color-accent);
