@@ -52,7 +52,7 @@ function RouteComponent() {
 					<h2 className="text-2xl">Technology Used</h2>
 					<p className="mt-1 text-xl">Used Throughout:</p>
 					<ul>
-						<li><b>Logic:</b> <a href="https://www.typescriptlang.org/">Typescript</a></li>
+						<li><b>Logic:</b> <a href="https://www.typescriptlang.org/">TypeScript</a></li>
 						<li><b>Runtime:</b> <a href="https://nodejs.org/en">NodeJS</a></li>
 						<li><b>Package Manager:</b> <a href="https://www.npmjs.com/">NPM (Node Package Manager)</a></li>
 					</ul>
