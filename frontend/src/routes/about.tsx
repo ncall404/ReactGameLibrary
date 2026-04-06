@@ -13,8 +13,35 @@ function RouteComponent() {
 
 			<div className="flex flex-col gap-1">
 				<article>
-					<h2 className="text-2xl">Project Purpose</h2>
-					<p>...</p>
+					<h2 className="text-2xl">What This Project Is</h2>
+					<p>This project is a web app for tracking a collection of video games across platforms. The purpose of this project was for both learning and practice.</p>
+					<p>Some specific technologies that I wanted to learn and practice with were the following:</p>
+					<ul>
+						<li>
+							TypeScript
+							<ul>
+								<li>I had only used TypeScript a small amount before and I wanted to get to know the language since it has become so widely used. I had prior experience with C# and other typed languages so it wasn't too difficult to get used to.</li>
+							</ul>
+						</li>
+						<li>
+							React
+							<ul>
+								<li>For react I took a class in college that had us use React for a couple of weeks. I have followed some tutorials as well.</li>
+							</ul>
+						</li>
+						<li>
+							Tailwind
+							<ul>
+								<li>Tailwind has become a widely used CSS library by large companies so I decided to try it out. Once again, I had only used it a small amount before and was mostly used to custom CSS and bootstrap components.</li>
+							</ul>
+						</li>
+						<li>
+							SQLite
+							<ul>
+								<li>SQLite is the most used database engine and is available on most devices by default. Because of this I decided it would be good to learn SQLite. I took a couple of database classes in college around designing databases so I had some experience already. Additionally I had used both MySQL and Microsoft SQL Server.</li>
+							</ul>
+						</li>
+					</ul>
 				</article>
 
 				<article>
