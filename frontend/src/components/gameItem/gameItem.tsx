@@ -40,8 +40,9 @@ export default function GameItem(props: GameItemProps) {
 			{/* Div for main game information */}
 			<div className="flex max-md:flex-col max-md:gap-2 gap-4">
 				<img className="motion-safe:transition-all ease-in-out
-				min-md:w-56 lg:w-64 max-md:w-fit
-				max-md:h-56 min-md:h-fit max-sm:self-center" 
+				w-56 lg:w-64
+				object-contain object-top
+				max-sm:self-center"
 				src={imgSrc} alt={imgAlt}/>
 				<div className="grow flex flex-col gap-0.25">
 					<h2 className="text-2xl">{game.gameData.Title}</h2>
