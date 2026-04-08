@@ -46,7 +46,50 @@ function RouteComponent() {
 
 				<article>
 					<h2 className="text-2xl">What I've Learned</h2>
-					<p>...</p>
+					<p className="text-xl">Planning</p>
+					<ul>
+						<li>It's hard to keep scope realistic when it's the first sizable project you have planned by yourself.</li>
+						<li>You need to be willing to scrap and replan features.</li>
+					</ul>
+					<p className="text-xl">Technologies</p>
+					<ul>
+						<li>
+							TypeScript
+							<ul>
+								<li>Overall it feels like a nice mix of JavaScript with some stuff from C#.</li>
+								<li>Being able to make custom types so easily is nice.</li>
+								<li>There are some pain points where you can definitely feel that it is a language built on top of JavaScript. One instance is the suggested way (by the language creators) to do an enum-like structure being an "object as const" instead of just the enum keyword due to performance and compiling reasons. It makes more boilerplate necessary where it really shouldn't be. This also makes the language feel just a little messier to use.</li>
+							</ul>
+						</li>
+						<li>
+							Tailwind
+							<ul>
+								<li>Is fast for prototyping components.</li>
+								<li>Good for quickly seeing how a portion of HTML/JSX/TSX is going to look without having to switch to the CSS file.</li>
+								<li>Is very flexible and extensible. I was able to add custom breakpoints and colors very easliy.</li>
+								<li>The provided variables can be useful in custom CSS.</li>
+								<li>It can get messy easily due to the styles being inline with the tags.</li>
+							</ul>
+						</li>
+						<li>
+							React
+							<ul>
+								<li>Making components that use dynamic data is pretty nice compared to vanilla HTML/CSS/Javascript.</li>
+								<li>Sometimes its better to just find a component that somebody else has already made rather than write your own. In my instance, I found the react-select component was convenient and worth using compared to the idea of creating my own multi-select dropdown menu.</li>
+								<li>State management and placement can be somewhat messy.</li>
+							</ul>
+						</li>
+						<li>
+							SQLite
+							<ul>
+								<li>It's similar to MySQL and SQL Server for the most part for a simple database.</li>
+								<li>There are less/different data types than the other options. This can be both good and bad. Its nice not needing to define the number of characters for text fields. The lack of a built-in date-time type was a little annoying but wasn't too bad to find a solution for.</li>
+								<li>Not needing to do any extra software installations to get SQLite to work is very nice.</li>
+								<li>There are some nice JavaScript/TypeScript packages that make writing queries for SQLite easy. In my instance I used better-sqlite3</li>
+							</ul>
+						</li>
+					</ul>
+
 				</article>
 				<article>
 					<h2 className="text-2xl">What I Would Do Different</h2>
