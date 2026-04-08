@@ -70,6 +70,7 @@ function RouteComponent() {
 
 					<p className="text-xl">For future versions of the project:</p>
 					<ul>
+						<li>Make another web version that doesn't need a separate backend server process. This would be done by using a technology to do everything for storage client-side such as SQLite-WASM.</li>
 						<li>Make a native desktop app.</li>
 						<li>Make a wishlist feature with price tracking for storefronts with available APIs.</li>
 					</ul>
