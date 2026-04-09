@@ -51,13 +51,13 @@ function RouteComponent() {
 
 				<article>
 					<h2 className="text-2xl">Technology Used</h2>
-					<p className="mt-1 text-xl">Used Throughout:</p>
+					<h3 className="mt-1 text-xl">Used Throughout:</h3>
 					<ul>
 						<li><b>Logic:</b> <a href="https://www.typescriptlang.org/">TypeScript</a></li>
 						<li><b>Runtime:</b> <a href="https://nodejs.org/en">NodeJS</a></li>
 						<li><b>Package Manager:</b> <a href="https://www.npmjs.com/">NPM (Node Package Manager)</a></li>
 					</ul>
-					<p className="mt-1 text-xl">Front End Tech:</p>
+					<h3 className="mt-1 text-xl">Front End Tech:</h3>
 					<ul>
 						<li><b>Layout:</b> HTML and <a href="https://react.dev/">React</a></li>
 						<li><b>Styling:</b> CSS and <a href="https://tailwindcss.com/">Tailwind</a></li>
@@ -65,7 +65,7 @@ function RouteComponent() {
 						<li><b>Server:</b> <a href="https://vite.dev/">Vite</a> (via the dev server)</li>
 					</ul>
 
-					<p className="mt-1 text-xl">Back End Tech:</p>
+					<h3 className="mt-1 text-xl">Back End Tech:</h3>
 					<ul>
 						<li><b>Server Framework:</b> <a href="https://hono.dev/">Hono</a></li>
 						<li><b>Database:</b> <a href="https://sqlite.org/">SQLite</a> through <a href="https://github.com/WiseLibs/better-sqlite3">better-sqlite3</a></li>
@@ -74,12 +74,12 @@ function RouteComponent() {
 
 				<article>
 					<h2 className="text-2xl">What I've Learned</h2>
-					<p className="text-xl">Planning</p>
+					<h3 className="mt-1 text-xl">Planning</h3>
 					<ul>
 						<li>It's hard to keep scope realistic when it's the first sizable project you have planned by yourself.</li>
 						<li>You need to be willing to scrap and replan features.</li>
 					</ul>
-					<p className="text-xl">Technologies</p>
+					<h3 className="text-xl">Technologies</h3>
 					<ul>
 						<li>
 							TypeScript
@@ -129,7 +129,7 @@ function RouteComponent() {
 					<p>There are many things that I would like to do in the future to improve and iterate on this project. Some of them are things that I needed to cut or ran out of time to implement for the current version; others are things that I would like to do for completely new versions of the project.</p>
 					<p className="mt-4">Here are some of the things I have in mind:</p>
 
-					<p className="mt-4 text-xl">For this project:</p>
+					<h3 className="mt-4 text-xl">For this project:</h3>
 					<ul>
 						<li>Change toast notifications to be a list to allow more than one showing at once.</li>
 						<li>Make a light mode color scheme option.</li>
@@ -139,7 +139,7 @@ function RouteComponent() {
 						<li>A way to delete unused game cover art images.</li>
 					</ul>
 
-					<p className="text-xl">For future versions of the project:</p>
+					<h3 className="text-xl">For future versions of the project:</h3>
 					<ul>
 						<li>Make another web version that doesn't need a separate backend server process. This would be done by using a technology to do everything for storage client-side such as SQLite-WASM.</li>
 						<li>Make a native desktop app.</li>
