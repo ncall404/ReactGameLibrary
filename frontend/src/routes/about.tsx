@@ -13,6 +13,11 @@ function RouteComponent() {
 
 			<div className="flex flex-col gap-1">
 				<article>
+					<h2 className="text-2xl">Project By:</h2>
+					<p>Nathan Call</p>
+				</article>
+
+				<article>
 					<h2 className="text-2xl">What This Project Is</h2>
 					<p>This project is a web app for tracking a collection of video games across platforms. The purpose of this project was for both learning and practice.</p>
 					<p>Some specific technologies that I wanted to learn and practice with were the following:</p>
@@ -41,6 +46,29 @@ function RouteComponent() {
 								<li>SQLite is the most used database engine and is available on most devices by default. Because of this I decided it would be good to learn SQLite. I took a couple of database classes in college around designing databases so I had some experience already. Additionally I had used both MySQL and Microsoft SQL Server.</li>
 							</ul>
 						</li>
+					</ul>
+				</article>
+
+				<article>
+					<h2 className="text-2xl">Technology Used</h2>
+					<p className="mt-1 text-xl">Used Throughout:</p>
+					<ul>
+						<li><b>Logic:</b> <a href="https://www.typescriptlang.org/">TypeScript</a></li>
+						<li><b>Runtime:</b> <a href="https://nodejs.org/en">NodeJS</a></li>
+						<li><b>Package Manager:</b> <a href="https://www.npmjs.com/">NPM (Node Package Manager)</a></li>
+					</ul>
+					<p className="mt-1 text-xl">Front End Tech:</p>
+					<ul>
+						<li><b>Layout:</b> HTML and <a href="https://react.dev/">React</a></li>
+						<li><b>Styling:</b> CSS and <a href="https://tailwindcss.com/">Tailwind</a></li>
+						<li><b>Routing and Queries:</b> <a href="https://tanstack.com/router/latest">Tanstack Router</a> and <a href="https://tanstack.com/query/latest">Tanstack Query</a></li>
+						<li><b>Server:</b> <a href="https://vite.dev/">Vite</a> (via the dev server)</li>
+					</ul>
+
+					<p className="mt-1 text-xl">Back End Tech:</p>
+					<ul>
+						<li><b>Server Framework:</b> <a href="https://hono.dev/">Hono</a></li>
+						<li><b>Database:</b> <a href="https://sqlite.org/">SQLite</a> through <a href="https://github.com/WiseLibs/better-sqlite3">better-sqlite3</a></li>
 					</ul>
 				</article>
 
@@ -117,34 +145,6 @@ function RouteComponent() {
 						<li>Make a native desktop app.</li>
 						<li>Make a wishlist feature with price tracking for storefronts with available APIs.</li>
 					</ul>
-				</article>
-
-				<article>
-					<h2 className="text-2xl">Technology Used</h2>
-					<p className="mt-1 text-xl">Used Throughout:</p>
-					<ul>
-						<li><b>Logic:</b> <a href="https://www.typescriptlang.org/">TypeScript</a></li>
-						<li><b>Runtime:</b> <a href="https://nodejs.org/en">NodeJS</a></li>
-						<li><b>Package Manager:</b> <a href="https://www.npmjs.com/">NPM (Node Package Manager)</a></li>
-					</ul>
-					<p className="mt-1 text-xl">Front End Tech:</p>
-					<ul>
-						<li><b>Layout:</b> HTML and <a href="https://react.dev/">React</a></li>
-						<li><b>Styling:</b> CSS and <a href="https://tailwindcss.com/">Tailwind</a></li>
-						<li><b>Routing and Queries:</b> <a href="https://tanstack.com/router/latest">Tanstack Router</a> and <a href="https://tanstack.com/query/latest">Tanstack Query</a></li>
-						<li><b>Server:</b> <a href="https://vite.dev/">Vite</a> (via the dev server)</li>
-					</ul>
-
-					<p className="mt-1 text-xl">Back End Tech:</p>
-					<ul>
-						<li><b>Server Framework:</b> <a href="https://hono.dev/">Hono</a></li>
-						<li><b>Database:</b> <a href="https://sqlite.org/">SQLite</a> through <a href="https://github.com/WiseLibs/better-sqlite3">better-sqlite3</a></li>
-					</ul>
-				</article>
-
-				<article>
-					<h2 className="text-2xl">Created By:</h2>
-					<p>Nathan Call</p>
 				</article>
 			</div>
 			
