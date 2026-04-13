@@ -31,7 +31,7 @@ function RouteComponent() {
 						<li>
 							React
 							<ul>
-								<li>For react I took a class in college that had us use React for a couple of weeks. I have followed some tutorials as well.</li>
+								<li>For React I took a class in college that had us use it for a couple of weeks. I have followed some tutorials as well.</li>
 							</ul>
 						</li>
 						<li>
@@ -43,7 +43,7 @@ function RouteComponent() {
 						<li>
 							SQLite
 							<ul>
-								<li>SQLite is the most used database engine and is available on most devices by default. Because of this I decided it would be good to learn SQLite. I took a couple of database classes in college around designing databases so I had some experience already. Additionally I had used both MySQL and Microsoft SQL Server.</li>
+								<li>SQLite is the most used database engine and is available on most devices by default. Because of this I decided it would be good to learn SQLite. I took a couple of database classes in college around designing databases so I had some experience already. I had used both MySQL and Microsoft SQL Server.</li>
 							</ul>
 						</li>
 					</ul>
