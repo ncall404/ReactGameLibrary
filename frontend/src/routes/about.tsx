@@ -121,7 +121,19 @@ function RouteComponent() {
 				</article>
 				<article>
 					<h2 className="text-2xl">What I Would Do Different</h2>
-					<p>...</p>
+					<p>These are things I would do differently if I started the project with the knowledge I have now.</p>
+
+					<h3 className="mt-4 text-xl">Planning</h3>
+					<ul>
+						<li>I would plan out the file structure of the project differently. It's not that it's bad right now, I just think it could be better in terms of things like naming consistency and removing dedicated folders for some of the component files.</li>
+						<li>I would do another review the scope of the project before getting started on implementation. I understand there would still be cuts and changes during development. I just should have done some extra technical implementation research for some of the features I had planned.</li>
+					</ul>
+					<h3 className="text-xl">Coding</h3>
+					<ul>
+						<li>There are some files that I don't think need to be separate files and could have their contents merged into other existing files or into a combined file. One example of this is the files in the frontend/src/api file location. This is low priority right now but I may come back and fix it in the future.</li>
+						<li>I think that I wouldn't use Tailwind. It was good to use it as a learning experience and great for prototyping of the layout. It's not that Tailwind is bad, I just would prefer to use normal CSS.</li>
+						<li>I don't know if I would make a different choice but I would do a deeper look at other backend options that aren't node/hono. For instance, I have heard good things about using C# and Dotnet for that side of things.</li>
+					</ul>
 				</article>
 
 				<article>
