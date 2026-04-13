@@ -344,6 +344,16 @@ export default function GameForm(props: GameFormProps) {
 					}
 				}}/>
 				{
+					(coverArt !== null && coverArt !== undefined) &&
+					<Btn style={BtnStyle.Danger} type="button" func={() => {
+						const coverArtSelector = document.getElementById("gameFormCoverArt") as HTMLInputElement;
+						if (coverArtSelector.files !== null && coverArtSelector.files[0]) {
+							coverArtSelector.value = '';
+							setCoverArt(null);
+						}
+					}}>Clear Image Selection</Btn>
+				}
+				{
 					// Display the currently stored image if the form is in edit mode.
 					props.formType == "edit" &&
 					<figure>
