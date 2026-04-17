@@ -76,7 +76,7 @@ function RouteComponent() {
 					<h2 className="text-2xl">What I've Learned</h2>
 					<h3 className="mt-1 text-xl">Planning</h3>
 					<ul>
-						<li>It's hard to keep scope realistic when it's the first sizable project you have planned by yourself.</li>
+						<li>It's hard to keep scope realistic; especially when it's the first sizable project you have planned by yourself.</li>
 						<li>You need to be willing to scrap and replan features.</li>
 					</ul>
 					<h3 className="text-xl">Technologies</h3>
@@ -103,7 +103,7 @@ function RouteComponent() {
 							React
 							<ul>
 								<li>Making components that use dynamic data is pretty nice compared to vanilla HTML/CSS/Javascript.</li>
-								<li>Sometimes its better to just find a component that somebody else has already made rather than write your own. In my instance, I found the react-select component was convenient and worth using compared to the idea of creating my own multi-select dropdown menu.</li>
+								<li>Sometimes it's better to just find a component that somebody else has already made rather than write your own. In my instance, I found the react-select component was convenient and worth using compared to the idea of creating my own multi-select dropdown menu.</li>
 								<li>State management and placement can be somewhat messy.</li>
 							</ul>
 						</li>
@@ -111,7 +111,7 @@ function RouteComponent() {
 							SQLite
 							<ul>
 								<li>It's similar to MySQL and SQL Server for the most part for a simple database.</li>
-								<li>There are less/different data types than the other options. This can be both good and bad. Its nice not needing to define the number of characters for text fields. The lack of a built-in date-time type was a little annoying but wasn't too bad to find a solution for.</li>
+								<li>There are less/different data types than the other options. This can be both good and bad. It's nice not needing to define the number of characters for text fields. The lack of a built-in date-time type was a little annoying but wasn't too bad to find a solution for.</li>
 								<li>Not needing to do any extra software installations to get SQLite to work is very nice.</li>
 								<li>There are some nice JavaScript/TypeScript packages that make writing queries for SQLite easy. In my instance I used better-sqlite3</li>
 							</ul>
@@ -125,7 +125,7 @@ function RouteComponent() {
 
 					<h3 className="mt-4 text-xl">Planning</h3>
 					<ul>
-						<li>I would plan out the file structure of the project differently. It's not that it's bad right now, I just think it could be better in terms of things like naming consistency and removing dedicated folders for some of the component files.</li>
+						<li>I would plan out the file structure of the project differently. It's not that it's bad right now, I just think it could be better. Particular improvements include naming consistency and removing dedicated folders for some fo the component files.</li>
 						<li>I would do another review the scope of the project before getting started on implementation. I understand there would still be cuts and changes during development. I just should have done some extra technical implementation research for some of the features I had planned.</li>
 					</ul>
 					<h3 className="text-xl">Coding</h3>
