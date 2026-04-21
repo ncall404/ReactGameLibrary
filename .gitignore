@@ -2,5 +2,7 @@ backend/data/game_collection.db
 backend/data/tempSqlFiles/
 backend/images/uploads/**
 
+node_modules
+
 .DS_Store
 .vscode/ReactGameLibrary.code-workspace
