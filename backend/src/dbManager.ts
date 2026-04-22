@@ -2,11 +2,15 @@
 
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 
 import { setupImageStorage, clearImageStorage } from './imageStorageManager.ts';
 import { messageTimeDefaults, type BackendResponse } from './server.ts';
 
 // Create database object for the game_collection database. If game_collection.db is missing then it is created.
+if (!fs.existsSync("data")) {
+	fs.mkdirSync("data");
+}
 const db = new Database(path.join('data', 'game_collection.db'));
 // Relative path to use for storing uploaded images.
 const imageUploadPath = "./images/uploads";
