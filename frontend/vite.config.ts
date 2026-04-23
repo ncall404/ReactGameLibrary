@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
@@ -8,7 +8,7 @@ import { devtools } from '@tanstack/devtools-vite';
 export default defineConfig({
   plugins: [
 	devtools(),
-	// Make sure that '@tanstack/router-plugin' is passed before '@vitejs/plugin-react-swc'
+	// Make sure that '@tanstack/router-plugin' is passed before '@vitejs/plugin-react-swc' (alias of 'react')
 	tanstackRouter({
 		target: 'react',
 		autoCodeSplitting: true,
