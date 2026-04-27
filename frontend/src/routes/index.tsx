@@ -1,28 +1,28 @@
 // Library page component and route. Displays selected library of games.
 
-import { createFileRoute } from '@tanstack/react-router';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
-import Btn from '../components/common/btn.tsx';
-import { BtnStyle } from '../components/common/btn.tsx';
+import Btn from "../components/common/btn.tsx";
+import { BtnStyle } from "../components/common/btn.tsx";
 
-import { useToastContext } from '../components/toast/toastContext.tsx';
+import { useToastContext } from "../components/toast/toastContext.tsx";
 
-import GameItem from '../components/gameItem/gameItem.tsx';
+import GameItem from "../components/gameItem/gameItem.tsx";
 
-import GameForm from '../components/gameForm/gameForm.tsx';
-import EditCollectionsModal from '../components/modals/editCollectionsModal.tsx';
+import GameForm from "../components/gameForm/gameForm.tsx";
+import EditCollectionsModal from "../components/modals/editCollectionsModal.tsx";
 
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
 import type { OptionType } from "../types/SelectOptionType.ts";
-import { fillOptionsArray, scrollToTop, selectStyles, messageTimeDefaults } from '../utilities.ts';
-import type { BackendResponse } from '../types/ServerResponseTypes.ts';
+import { fillOptionsArray, scrollToTop, selectStyles, messageTimeDefaults } from "../utilities.ts";
+import type { BackendResponse } from "../types/ServerResponseTypes.ts";
 
-import { getSingleLibrary } from '../api/libraryApi.ts';
-import { CollectionType, getCollectionList } from '../api/collectionsApi.ts';
-import Modal from '../components/common/modal.tsx';
+import { getSingleLibrary } from "../api/libraryApi.ts";
+import { CollectionType, getCollectionList } from "../api/collectionsApi.ts";
+import Modal from "../components/common/modal.tsx";
 
 
 export type GameObject = {
@@ -52,7 +52,7 @@ export type GameObject = {
 }
 
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
 	component: RouteComponent,
 });
 
@@ -75,11 +75,11 @@ function RouteComponent() {
 	
 	const deleteGameMutation = useMutation({
 		mutationFn: async (formData: FormData) => {
-			const res = await fetch('http://localhost:3000/api/games/delete', {
-				method: 'POST',
+			const res = await fetch("http://localhost:3000/api/games/delete", {
+				method: "POST",
 				body: formData,
 			});
-			if (!res.ok) throw new Error('Upload failed');
+			if (!res.ok) throw new Error("Upload failed");
 			return res.json();
 		},
 		onSuccess: (data: BackendResponse) => {
@@ -94,7 +94,7 @@ function RouteComponent() {
 			invalidateData();
 		},
 		onError: (err) => {
-			console.error('Error: ', err);
+			console.error("Error: ", err);
 			setToast({
 				message: err.message,
 				type: "error",
@@ -105,15 +105,15 @@ function RouteComponent() {
 
 	const invalidateData = async () => {
 		await queryClient.invalidateQueries({
-			queryKey: ['libraries'],
+			queryKey: ["libraries"],
 			exact: false,
-			refetchType: 'all',
+			refetchType: "all",
 		});
 	}
 
 	const handleDeleteGame = (gameID: string) => {
 		const formData = new FormData();
-		formData.append('deleteGameID', gameID);
+		formData.append("deleteGameID", gameID);
 
 		deleteGameMutation.mutate(formData);
 	}
@@ -122,7 +122,7 @@ function RouteComponent() {
 
 	// For retrieving a list of the stored libraries. Formats to work in a Select input.
 	const libraryList = useQuery({
-		queryKey:['collections', 'library-list'],
+		queryKey:["collections", "library-list"],
 		queryFn: () => getCollectionList(CollectionType.Library),
 		select: (data) => {
 			if (typeof data === "object" && "message" in data && "type" in data && "time" in data) {
@@ -164,7 +164,7 @@ function RouteComponent() {
 
 	// For retrieving the contents of a single library.
 	const singleLibrary = useQuery({
-		queryKey:['libraries', 'contents', 'single-library', checkSelectedCollection],
+		queryKey:["libraries", "contents", "single-library", checkSelectedCollection],
 		queryFn: () => getSingleLibrary(checkSelectedCollection),
 		select: (data) => {
 			if (typeof data === "object" && "message" in data && "type" in data && "time" in data) {
@@ -179,20 +179,20 @@ function RouteComponent() {
 		}
 	});
 
-	if (singleLibrary.status === 'pending') {
-		return <p className='text-accent'>Loading games...</p>
+	if (singleLibrary.status === "pending") {
+		return <p className="text-accent">Loading games...</p>
 	}
 
-	if (singleLibrary.status === 'error') {
-		return <p className='text-red-500'>Error: {singleLibrary.error.message}</p>
+	if (singleLibrary.status === "error") {
+		return <p className="text-red-500">Error: {singleLibrary.error.message}</p>
 	}
 
 	return (
 		<section>
-			<h1 className='text-3xl pb-2'>Game Library</h1>
+			<h1 className="text-3xl pb-2">Game Library</h1>
 			{ !gameFormIsOpen &&
 			<>
-				<div className='flex gap-2 p-2 sm:p-0 max-sm:flex-col w-full'>
+				<div className="flex gap-2 p-2 sm:p-0 max-sm:flex-col w-full">
 					<Select
 						name="selectedCollection"
 						inputId="selectedCollection"
@@ -201,7 +201,7 @@ function RouteComponent() {
 						value={selectedCollection}
 						onChange={(option: OnChangeValue<OptionType, boolean>) => {
 							setSelectedCollection(option as OptionType);
-							queryClient.invalidateQueries({queryKey: ['single-library', checkSelectedCollection]})
+							queryClient.invalidateQueries({queryKey: ["single-library", checkSelectedCollection]})
 						}}
 						options={libraryList.data}
 						hideSelectedOptions
@@ -219,7 +219,7 @@ function RouteComponent() {
 					}>Create Game</Btn>
 				</div>
 
-				<hr className='my-4' />
+				<hr className="my-4" />
 
 				<EditCollectionsModal isOpen={editCollectionsIsOpen} onClose={() => setEditCollectionsIsOpen(false)} />
 
@@ -247,7 +247,7 @@ function RouteComponent() {
 				<GameForm 
 				onSubmitted={() => {
 					setGameFormIsOpen(false);
-					queryClient.invalidateQueries({queryKey: ['libraries']}); // Refetch libraries query.
+					queryClient.invalidateQueries({queryKey: ["libraries"]}); // Refetch libraries query.
 					window.scrollTo(0, savedScrollYPosition);
 				}} 
 				onCancel={() => {
