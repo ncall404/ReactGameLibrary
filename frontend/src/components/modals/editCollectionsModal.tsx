@@ -143,7 +143,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 				<Btn type="submit" style={BtnStyle.Primary}>Add Collection</Btn>
 			</form>
 
-			<form onSubmit={handleEditListRemove} method="post" id="removeCollectionForm" className="modal-section accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleEditListRemove} method="post" id="removeCollectionForm" className="modal-section accent-accent flex flex-col gap-1.5">
 				<h3 className="text-xl">Remove</h3>
 				<label htmlFor="collectionRemove">Collections to remove: </label>
 				<Select
@@ -175,7 +175,7 @@ export default function EditCollectionsModal(props: EditCollectionsModalProps) {
 						<p>Are you sure you want to remove the selected collection(s)?</p>
 						<p>If there are games exclusively in this collection, you will be able to view them by selecting the "None" collection.</p>
 						<br />
-						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+						<p><b className="font-bold text-danger">This action can NOT be undone!</b></p>
 					</div>
 				</Modal>
 			</form>

@@ -48,9 +48,9 @@ export default function Toast(props: ToastProps) {
 			{
 				toastData &&
 				<div className={`flex gap-1 w-full sm:w-96 p-2 fixed 
-				bottom-0 sm:bottom-5 min-3xl:right-5 bg-(--color-darker) 
+				bottom-0 sm:bottom-5 3xl:right-5 bg-darker
 				max-3xl:left-1/2 max-3xl:-translate-x-1/2
-				rounded-sm border-(--color-neutral) border-2 border-l-8
+				rounded-sm border-neutral border-2 border-l-8
 				${toastStyles} ${props.className}`}>
 					<div>
 						<h3 className="text-xl">{toastTitle}</h3>

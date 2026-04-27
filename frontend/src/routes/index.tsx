@@ -180,7 +180,7 @@ function RouteComponent() {
 	});
 
 	if (singleLibrary.status === 'pending') {
-		return <p className='text-(--color-accent)'>Loading games...</p>
+		return <p className='text-accent'>Loading games...</p>
 	}
 
 	if (singleLibrary.status === 'error') {
@@ -207,8 +207,8 @@ function RouteComponent() {
 						hideSelectedOptions
 						noOptionsMessage={() => "No collections found."}
 					/>
-					<Btn className="min-sm:basis-36" style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
-					<Btn className="min-sm:basis-32 min-sm:ml-auto"
+					<Btn className="sm:basis-36" style={BtnStyle.Neutral} func={() => setEditCollectionsIsOpen(true)}>Edit Collections</Btn>
+					<Btn className="sm:basis-32 sm:ml-auto"
 					style={BtnStyle.Primary}
 						func={() => {
 							setSavedScrollYPosition(window.scrollY);
@@ -272,7 +272,7 @@ function RouteComponent() {
 					<div className="modal-section">
 						<p>Are you sure you want to delete the selected game?</p>
 						<br />
-						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+						<p><b className="font-bold text-danger">This action can NOT be undone!</b></p>
 					</div>
 				</Modal>
 			}

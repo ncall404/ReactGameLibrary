@@ -204,7 +204,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 	return (
 		<Modal isOpen={props.isOpen} onClose={props.onClose}>
 			<h2 className="text-2xl">{upperFirstLetter(editMetadataField)}</h2>
-			<form onSubmit={handleEditListAdd} method="post" className="modal-section accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleEditListAdd} method="post" className="modal-section accent-accent flex flex-col gap-1.5">
 				<h3 className="text-xl">Add</h3>
 				<label htmlFor="editMetadataAdd">Name: </label>
 				<input type="text"
@@ -280,7 +280,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 				<Btn type="submit" style={BtnStyle.Primary}>Add Option</Btn>
 			</form>
 			
-			<form onSubmit={handleEditListRemove} method="post" id="removeMetadataForm" className="modal-section accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleEditListRemove} method="post" id="removeMetadataForm" className="modal-section accent-accent flex flex-col gap-1.5">
 				<h3 className="text-xl">Remove</h3>
 				<label htmlFor="editMetadataRemove">Options to remove: </label>
 				<Select
@@ -313,7 +313,7 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 						<p>Are you sure you want to remove the selected metadata?</p>
 						<p>If there are games using this metadata, it will be removed from those games.</p>
 						<br />
-						<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+						<p><b className="font-bold text-danger">This action can NOT be undone!</b></p>
 					</div>
 				</Modal>
 			</form>

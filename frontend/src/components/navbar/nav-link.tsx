@@ -11,7 +11,7 @@ export default function NavLink(props: NavLinkProps) {
 	return (
 		<Link
 		to={props.to}
-		className='basis-1/3 sm:basis-24 text-center p-2.5 border-b-2 hover:bg-(--color-primary-focus) font-medium'
+		className='basis-1/3 sm:basis-24 text-center p-2.5 border-b-2 hover:bg-primary-focus font-medium'
 		activeProps={{
 			className:"border-(--color-accent) border-b-4 pb-[8px]",
 		}}

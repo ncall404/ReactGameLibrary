@@ -44,7 +44,7 @@ export default function GameItem(props: GameItemProps) {
 				object-contain object-top
 				max-sm:self-center"
 				src={imgSrc} alt={imgAlt}/>
-				<div className="grow flex flex-col gap-0.25">
+				<div className="grow flex flex-col gap-px">
 					<h2 className="text-2xl">{game.gameData.Title}</h2>
 					<p className="mb-2">{game.gameData.Description}</p>
 				</div>
@@ -60,8 +60,8 @@ export default function GameItem(props: GameItemProps) {
 				(game.platformData && game.platformData.length > 0) || (game.storefrontData && game.storefrontData.length > 0) ||
 				game.gameData.ReleaseDate) &&
 				<details className="basis-full grow font-medium border-2 rounded-sm
-					text-(--color-light) border-(--color-neutral)">
-					<summary className="select-none cursor-pointer p-[5px] border-(--color-neutral) bg-(--color-btn-bg) hover:bg-(--color-neutral)"
+					text-light border-neutral">
+					<summary className="select-none cursor-pointer p-1.25 border-neutral bg-(--color-btn-bg) hover:bg-neutral"
 					>Game Details</summary>
 					<div className="p-1 pl-2 sm:pl-4">
 						{

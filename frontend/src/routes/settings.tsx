@@ -72,11 +72,11 @@ function RouteComponent() {
 			onClose={() => {setIsResetConfirmOpen(false)}}
 			isForm={true}>
 				<h2 className="text-2xl">Confirm App Reset</h2>
-				<div className="bg-(--color-darker) rounded-sm p-4 mt-2">
+				<div className="bg-darker rounded-sm p-4 mt-2">
 					<p>Are you sure you want to reset all app data?</p>
 					<p>This removes: collections, games, metadata, and images.</p>
 					<br />
-					<p><b className="font-bold text-(--color-danger)">This action can NOT be undone!</b></p>
+					<p><b className="font-bold text-danger">This action can NOT be undone!</b></p>
 				</div>
 				
 			</Modal>

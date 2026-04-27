@@ -276,7 +276,7 @@ export default function GameForm(props: GameFormProps) {
 
 	return (
 		<>
-			<form onSubmit={handleSubmit} method="post" id="gameForm" className="bg-(--color-darker) sm:rounded-sm p-2 sm:p-4 mt-2 accent-(--color-accent) flex flex-col gap-1.5">
+			<form onSubmit={handleSubmit} method="post" id="gameForm" className="bg-darker sm:rounded-sm p-2 sm:p-4 mt-2 accent-accent flex flex-col gap-1.5">
 				<div className="flex max-sm:flex-col gap-2 sm:items-center">
 					<h2 className="text-2xl max-sm:order-2 grow">{upperFirstLetter(props.formType)} Game</h2>
 					<Btn className="basis-32 justify-self-end max-sm:basis-full max-sm:order-1" style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
@@ -480,7 +480,7 @@ export default function GameForm(props: GameFormProps) {
 
 				<hr />
 
-				<div className="flex max-sm:flex-col gap-2 mt-3 min-sm:justify-end">
+				<div className="flex max-sm:flex-col gap-2 mt-3 sm:justify-end">
 					<Btn className="basis-32 max-sm:basis-full" style={BtnStyle.Primary} type="submit">Confirm</Btn>
 					<Btn className="basis-32 max-sm:basis-full" style={BtnStyle.Neutral} type="button" func={props.onCancel}>Cancel</Btn>
 				</div>
