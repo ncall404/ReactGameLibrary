@@ -2,7 +2,7 @@
 
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import Btn from '../components/common/btn.tsx';
 import { BtnStyle } from '../components/common/btn.tsx';
@@ -64,7 +64,10 @@ function RouteComponent() {
 	const [gameFormType, setGameFormType] = useState<"create" | "edit">("create");
 	const [selectedGameID, setSelectedGameID] = useState<number>(0);
 	const [editCollectionsIsOpen, setEditCollectionsIsOpen] = useState(false);
-	const [selectedCollection, setSelectedCollection] = useState<OptionType>({ value: 0, label: "None"});
+
+	const [selectedCollection, setSelectedCollection] = useState<OptionType | undefined>();
+	const noCollection: OptionType = { value: 0, label: "None"}
+	const checkSelectedCollection = selectedCollection ? selectedCollection.value : noCollection.value
 
 	const [deleteConfirmIsOpen, setDeleteConfirmIsOpen] = useState<boolean>(false);
 
@@ -140,24 +143,29 @@ function RouteComponent() {
 				value: 0,
 				label: "None"
 			});
+
+			if (!selectedCollection ||
+				selectedCollection.value !== 1
+				&& !libraryOptions.find((value) => value.value == selectedCollection.value)
+				&& libraryOptions.length > 1
+				&& libraryOptions.find((value) => value.value == 1)
+			) {
+				setSelectedCollection(libraryOptions[1]);
+			}
+			else if (selectedCollection.value !== 0
+				&& !libraryOptions.find((value) => value.value == 1)
+			) {
+				setSelectedCollection(libraryOptions[0]);
+			}
+
 			return libraryOptions;
 		}
 	});
 
-	useEffect(() => {
-		if (!libraryList.data) return;
-
-		if (libraryList.data.length > 1) {
-			setSelectedCollection(libraryList.data[1]);
-		} else {
-			setSelectedCollection(libraryList.data[0]);
-		}
-	}, [libraryList.data]);
-
 	// For retrieving the contents of a single library.
 	const singleLibrary = useQuery({
-		queryKey:['libraries', 'contents', 'single-library', selectedCollection.value],
-		queryFn: () => getSingleLibrary(selectedCollection.value),
+		queryKey:['libraries', 'contents', 'single-library', checkSelectedCollection],
+		queryFn: () => getSingleLibrary(checkSelectedCollection),
 		select: (data) => {
 			if (typeof data === "object" && "message" in data && "type" in data && "time" in data) {
 				setToast({
@@ -193,7 +201,7 @@ function RouteComponent() {
 						value={selectedCollection}
 						onChange={(option: OnChangeValue<OptionType, boolean>) => {
 							setSelectedCollection(option as OptionType);
-							queryClient.invalidateQueries({queryKey: ['single-library', selectedCollection.value]})
+							queryClient.invalidateQueries({queryKey: ['single-library', checkSelectedCollection]})
 						}}
 						options={libraryList.data}
 						hideSelectedOptions
@@ -246,7 +254,7 @@ function RouteComponent() {
 					setGameFormIsOpen(false);
 					window.scrollTo(0, savedScrollYPosition);
 				}} 
-				collectionType={CollectionType.Library} collectionId={selectedCollection.value}
+				collectionType={CollectionType.Library} collectionId={checkSelectedCollection}
 				formType={gameFormType}
 				gameID={selectedGameID}
 				/>
