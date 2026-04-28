@@ -1,6 +1,6 @@
 // toast.tsx: Toast component. Used for creating dismissable popups to show messages/notifications to the user. Good for things such as success and error messages.
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Btn from "../common/btn";
 import { BtnStyle } from "../common/btn";
 
@@ -15,9 +15,10 @@ export default function Toast(props: ToastProps) {
 	const { clearToast, getToastState } = useToastContext();
 	const [toastData, setToastData] = useState<ToastObj | undefined>(getToastState());
 
-	useEffect(() => {
+	// Update toastData if a new toast has been set.
+	if (toastData !== getToastState()) {
 		setToastData(getToastState());
-	}, [getToastState, setToastData]);
+	}
 
 	// Setting the styling and title that are dependent on the style type.
 	let toastStyles: string = "";
