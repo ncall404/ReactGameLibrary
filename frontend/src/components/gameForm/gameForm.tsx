@@ -1,4 +1,4 @@
-// Work-in-progress NewGameForm component for getting the info needed to add a new GameItem to the database.
+// GameForm component for getting the info needed to add a new GameItem to the database or edit an existing GameItem.
 
 import Select from "react-select";
 import type { OnChangeValue } from "react-select";
