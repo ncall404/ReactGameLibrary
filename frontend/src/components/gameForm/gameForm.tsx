@@ -123,79 +123,6 @@ export default function GameForm(props: GameFormProps) {
 		if (res.status != "error" && props.onSubmitted) props.onSubmitted();
 	}
 
-	// useQuery hook for loading data when editing a game entry
-	const gameData = useQuery({
-		queryKey:['game', gameID],
-		queryFn: async () => {
-			const res = await fetch(`http://localhost:3000/api/game/${gameID}`);
-			if (!res.ok) {
-				throw new Error("Network response was not OK");
-			}
-			const data = await res.json();
-			return data;
-		}
-	});
-
-	// useQuery hooks for lists that are used to fill Select inputs.
-	// NOTE: While these could be combined into one or two requests, it was done this way so that less data needs to be refetched when data changes since only one of these is invalidated.
-	const collectionList = useQuery({
-		queryKey: ['collections' + props.collectionType],
-		queryFn: () => getCollectionList(CollectionType.Library),
-		select: (data) => fillOptionsArray(data)
-	})
-	const genreList = useQuery({
-		queryKey:['metadata', MetadataField.Genres],
-		queryFn: () => getMetadata(MetadataField.Genres),
-		select: (data) => fillOptionsArray(data)
-	});
-	const platformList = useQuery({
-		queryKey:['metadata', MetadataField.Platforms],
-		queryFn: () => getMetadata(MetadataField.Platforms),
-		select: (data) => fillGroupedOptionsArray(data)
-	});
-	const developerList = useQuery({
-		queryKey:['metadata', MetadataField.Companies, MetadataField.Developers],
-		queryFn: () => getMetadata(MetadataField.Developers),
-		select: (data) => fillOptionsArray(data)
-	});
-	const publisherList = useQuery({
-		queryKey:['metadata', MetadataField.Companies, MetadataField.Publishers],
-		queryFn: () => getMetadata(MetadataField.Publishers),
-		select: (data) => fillOptionsArray(data)
-	});
-	const storefrontList = useQuery({
-		queryKey:['metadata', MetadataField.Storefronts],
-		queryFn: () => getMetadata(MetadataField.Storefronts),
-		select: (data) => fillOptionsArray(data)
-	});
-	const mediaFormatList = useQuery({
-		queryKey:['metadata', MetadataField.MediaFormat],
-		queryFn: () => getMetadata(MetadataField.MediaFormat),
-		select: (data) => fillOptionsArray(data)
-	});
-
-
-	useEffect(() => {
-		if (!collectionList.data) return;
-
-		const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
-		if (matches.length > 0) setSelectedCollections(matches);
-	}, [collectionList.data, props.collectionId]);
-
-	useEffect(() => {
-		if (!mediaFormatList.data) return;
-
-		setSelectedMediaFormat(mediaFormatList.data[0]);
-	}, [mediaFormatList.data]);
-
-	useEffect(() => {
-		if (gameID > 0 && props.formType == "edit") {
-			if (!gameData.data) return;
-
-			parseGameData(gameData.data);
-		}
-	}, [gameData.data, gameID, props.formType]);
-
 
 	const parseGameData = function parseGameData(data: 
 		{
@@ -272,6 +199,71 @@ export default function GameForm(props: GameFormProps) {
 			return {value: value.StorefrontID, label: value.Title};
 		}));
 	}
+	
+
+	// useQuery hook for loading data when editing a game entry
+	const gameData = useQuery({
+		queryKey:['game', gameID],
+		queryFn: async () => {
+			const res = await fetch(`http://localhost:3000/api/game/${gameID}`);
+			if (!res.ok) {
+				throw new Error("Network response was not OK");
+			}
+			const data = await res.json();
+			return data;
+		}
+	});
+
+	// useQuery hooks for lists that are used to fill Select inputs.
+	// NOTE: While these could be combined into one or two requests, it was done this way so that less data needs to be refetched when data changes since only one of these is invalidated.
+	const collectionList = useQuery({
+		queryKey: ['collections' + props.collectionType],
+		queryFn: () => getCollectionList(CollectionType.Library),
+		select: (data) => fillOptionsArray(data)
+	})
+	const genreList = useQuery({
+		queryKey:['metadata', MetadataField.Genres],
+		queryFn: () => getMetadata(MetadataField.Genres),
+		select: (data) => fillOptionsArray(data)
+	});
+	const platformList = useQuery({
+		queryKey:['metadata', MetadataField.Platforms],
+		queryFn: () => getMetadata(MetadataField.Platforms),
+		select: (data) => fillGroupedOptionsArray(data)
+	});
+	const developerList = useQuery({
+		queryKey:['metadata', MetadataField.Companies, MetadataField.Developers],
+		queryFn: () => getMetadata(MetadataField.Developers),
+		select: (data) => fillOptionsArray(data)
+	});
+	const publisherList = useQuery({
+		queryKey:['metadata', MetadataField.Companies, MetadataField.Publishers],
+		queryFn: () => getMetadata(MetadataField.Publishers),
+		select: (data) => fillOptionsArray(data)
+	});
+	const storefrontList = useQuery({
+		queryKey:['metadata', MetadataField.Storefronts],
+		queryFn: () => getMetadata(MetadataField.Storefronts),
+		select: (data) => fillOptionsArray(data)
+	});
+	const mediaFormatList = useQuery({
+		queryKey:['metadata', MetadataField.MediaFormat],
+		queryFn: () => getMetadata(MetadataField.MediaFormat),
+		select: (data) => fillOptionsArray(data)
+	});
+
+	// Selects a collection based on what game collection was being viewed on the index page.
+	if (selectedCollections.length == 0 && collectionList.data) {
+		const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
+		if (matches.length > 0) setSelectedCollections(matches);
+	}
+
+	useEffect(() => {
+		if (gameID > 0 && props.formType == "edit") {
+			if (!gameData.data) return;
+			parseGameData(gameData.data);
+		}
+	}, [gameData.data, gameID, props.formType]);
 
 
 	return (
