@@ -12,7 +12,7 @@ import EditMetadataModal from "../modals/editMetadataModal.tsx";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
 import { useToastContext } from "../toast/toastContext.tsx";
@@ -258,12 +258,12 @@ export default function GameForm(props: GameFormProps) {
 		if (matches.length > 0) setSelectedCollections(matches);
 	}
 
-	useEffect(() => {
-		if (gameID > 0 && props.formType == "edit") {
-			if (!gameData.data) return;
-			parseGameData(gameData.data);
-		}
-	}, [gameData.data, gameID, props.formType]);
+	// Parse and fill game data when editing.
+	const [prevGameID, setPrevGameID] = useState(0);
+	if (gameID !== prevGameID && gameID > 0 && props.formType == "edit" && gameData.data) {
+		setPrevGameID(gameID);
+		parseGameData(gameData.data);
+	}
 
 
 	return (
