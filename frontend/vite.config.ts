@@ -6,14 +6,19 @@ import { devtools } from '@tanstack/devtools-vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-	devtools(),
-	// Make sure that '@tanstack/router-plugin' is passed before '@vitejs/plugin-react-swc' (alias of 'react')
-	tanstackRouter({
-		target: 'react',
-		autoCodeSplitting: true,
-	}),
-	react(),
-	tailwindcss(),
+	server: {
+		hmr: {
+			host: 'localhost',
+		}
+	},
+	plugins: [
+		devtools(),
+		// Make sure that '@tanstack/router-plugin' is passed before '@vitejs/plugin-react-swc' (alias of 'react')
+		tanstackRouter({
+			target: 'react',
+			autoCodeSplitting: true,
+		}),
+		react(),
+		tailwindcss(),
 ],
 });
