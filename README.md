@@ -1,6 +1,17 @@
 # Game Library
 
 ## Table of contents
+- [How To Run](#how-to-run)
+	- [Prerequisite Installations](#prerequisite-installations)
+	- [Installing](#installing)
+		- [Installing Project Packages on Windows](#installing-project-packages-on-windows)
+		- [Installing Project Packages on MacOS](#installing-project-packages-on-macos)
+		- [Alternative Install On Windows, MacOS, and Linux](#alternative-install-on-windows-macos-and-linux)
+	- [Running The Program](#running-the-program)
+		- [Windows:](#windows)
+		- [MacOS:](#macos)
+		- [Alternative on Windows, MacOS, and Linux](#alternative-on-windows-macos-and-linux)
+	- [Stopping The Program](#stopping-the-program)
 - [What This Project Is](#what-this-project-is)
 - [Technology Used](#technology-used)
 - [What I've Learned](#what-ive-learned)
@@ -8,6 +19,48 @@
 - [Future Plans And Desires For The Project](#future-plans-and-desires-for-the-project)
 
 ---
+
+## How To Run
+### Prerequisite Installations
+- Node **22.16** or newer: [https://nodejs.org/en/download](https://nodejs.org/en/download)
+- Node Package Manager (NPM) **11.13.0** or newer (installed alongside Node)
+### Installing
+There are two ways to download the project files:
+- Clone the Github repository.
+- Download the project zip file on Github
+
+Both can be accessed by clicking on the bright green "Code" button at the top of the repository.
+After it is downloaded, extract the files if you downloaded the zip, then follow the next steps based on your operating system.
+
+#### Installing Project Packages on Windows
+Run the script **setupWindows.bat** by double clicking it in the file explorer.
+#### Installing Project Packages on MacOS
+- Open the **ReactGameLibrary** project folder in a terminal/shell that supports Bash.
+- Run the command: `sh setupMac.sh`
+#### Alternative Install On Windows, MacOS, and Linux
+If you don't want to run the scripts, or if they aren't working for you, then follow these steps instead:
+- Open the **ReactGameLibrary** project folder in a terminal/shell.
+- Run the command: `npm run install-all`
+
+### Running The Program
+The program uses ports `5173` and `3000` for the localhost servers.
+#### Windows:
+- Run the script **runWindows.bat** by double clicking it in the file explorer.
+- Go to http://localhost:5173 in a browser of your choice.
+#### MacOS:
+- Open the **ReactGameLibrary** project folder in a terminal/shell that supports Bash.
+- Run the command: `sh runMac.sh`
+#### Alternative on Windows, MacOS, and Linux
+If you don't want to run the scripts, or if they aren't working for you, then follow these steps instead:
+- Open the **ReactGameLibrary** project folder in a terminal/shell.
+- Run the command: `npm run dev`
+
+After the prior steps for your operating system, go to http://localhost:5173 in a browser of your choice. The website should be there and running!
+
+### Stopping The Program
+To stop the program, go to the terminal that the run script opened. Next, do one of the following depending on preference: 
+- Close the terminal and confirm that you want to stop the running processes.
+- Use the key combo `CTRL + C` in the terminal and then close the terminal.
 
 ## What This Project Is
 This project is a web app for tracking a collection of video games across platforms. The purpose of this project was for both learning and practice.
