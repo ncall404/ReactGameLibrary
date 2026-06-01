@@ -12,7 +12,7 @@ import EditMetadataModal from "../modals/editMetadataModal.tsx";
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MetadataField, getMetadata} from "../../api/gameMetadataApi.ts";
 import { CollectionType, getCollectionList } from "../../api/collectionsApi.ts";
 import { useToastContext } from "../toast/toastContext.tsx";
@@ -33,7 +33,7 @@ export default function GameForm(props: GameFormProps) {
 	const api: string = 'http://localhost:3000/api/games/'.concat(props.formType);
 
 
-	const gameID = props.gameID ? props.gameID : 0
+	const gameID = props.gameID ? props.gameID : 0;
 	// State tracking for non-Select inputs.
 	const [gameName, setGameName] = useState<string>('');
 	const [gameDescription, setGameDescription] = useState<string>('');
@@ -258,13 +258,15 @@ export default function GameForm(props: GameFormProps) {
 		if (matches.length > 0) setSelectedCollections(matches);
 	}
 
-	// Parse and fill game data when editing.
-	const [prevGameID, setPrevGameID] = useState(0);
-	if (gameID !== prevGameID && gameID > 0 && props.formType == "edit" && gameData.data) {
-		setPrevGameID(gameID);
-		parseGameData(gameData.data);
-	}
-
+	useEffect(() => {
+		if (gameID > 0 && props.formType == "edit") {
+			if (!gameData.data) return;
+			// Schedule parsing to run asynchronously on the next tick. This prevents a React error from showing up about updating state synchronously.
+			setTimeout(() => {
+				parseGameData(gameData.data);
+			}, 0);
+		}
+	}, [gameData.data, gameID, props.formType]);
 
 	return (
 		<>
