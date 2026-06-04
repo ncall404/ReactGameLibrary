@@ -226,7 +226,6 @@ export default function EditMetadataModal(props: EditMetadataModalProps) {
 							name="companyTypes"
 							inputId="editMetadataCompanyTypes"
 							styles={selectStyles}
-							closeMenuOnSelect={false}
 							isMulti
 							value={selectedCompanyTypes}
 							onChange={(options: OnChangeValue<OptionType, boolean>) => {
