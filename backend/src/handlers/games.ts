@@ -566,7 +566,7 @@ const getGameData = function getGameData(c: Context) {
 
 	const gameID = c.req.param('gameID');
 
-	if (parseInt(gameID) == 0) {
+	if (gameID && parseInt(gameID) == 0) {
 		response.message = "No game requested";
 		response.status = "informative";
 		response.time = messageTimeDefaults.info;
