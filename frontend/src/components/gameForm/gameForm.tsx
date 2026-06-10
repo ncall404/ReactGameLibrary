@@ -251,13 +251,18 @@ export default function GameForm(props: GameFormProps) {
 		queryFn: () => getMetadata(MetadataField.MediaFormat),
 		select: (data) => fillOptionsArray(data)
 	});
-
+	
 	// Selects a collection based on what game collection was being viewed on the index page.
-	if (selectedCollections.length == 0 && collectionList.data) {
-		const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
-		if (matches.length > 0) setSelectedCollections(matches);
-	}
+	useEffect(() => {
+		if (collectionList.data) {
+			setTimeout(() => {
+				const matches = fillOptionsArray(collectionList.data).filter(option => option.value === props.collectionId);
+				if (matches.length > 0) setSelectedCollections(matches);
+			}, 0);
+		}
+	}, [collectionList.data, props.collectionId]);
 
+	// Checks if the form is being used for editing. If it is then it gets the data for the game being edited.
 	useEffect(() => {
 		if (gameID > 0 && props.formType == "edit") {
 			if (!gameData.data) return;
