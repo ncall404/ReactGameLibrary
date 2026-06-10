@@ -428,7 +428,7 @@ const editGame = async function editGame(c: Context) {
 
 	// If the values of the response object are still the default, set the success response.
 	if (response.message.length == 0 && response.status == "error") {
-		response.message = "Game successfully created!";
+		response.message = "Game successfully edited!";
 		response.status = "success";
 		response.time = messageTimeDefaults.success;
 	}
