@@ -26,8 +26,8 @@ If you would like to see the project either before or without downloading then y
 
 ## How To Run
 ### Prerequisite Installations
-- Node **22.16** or newer: [https://nodejs.org/en/download](https://nodejs.org/en/download)
-- Node Package Manager (NPM) **11.13.0** or newer (installed alongside Node)
+- Node **26.13.0** or newer: [https://nodejs.org/en/download](https://nodejs.org/en/download)
+- Node Package Manager (NPM) **(installed alongside Node)**
 ### Installing
 There are two ways to download the project files:
 - Clone the Github repository.
