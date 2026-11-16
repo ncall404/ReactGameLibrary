@@ -69,6 +69,8 @@ To stop the program, go to the terminal that the run script opened. Next, do one
 ## What This Project Is
 This project is a web app for tracking a collection of video games across platforms. The purpose of this project was for both learning and practice.
 
+**Note:** The reason this project isn't being hosted anywhere by me is because, with the current database and project structure, that would require a user system which was out of scope for this project.
+
 Some specific technologies that I wanted to learn and practice with were the following:
 - TypeScript
   - I had only used TypeScript a small amount before and I wanted to get to know the language since it has become so widely used. I had prior experience with C# and other typed languages so it wasn't too difficult to get used to.
@@ -148,5 +150,5 @@ For this project:
 
 For future versions of the project:
 - Make another web version that doesn't need a separate back end server process. This would be done by using a technology to do everything for storage client-side such as SQLite-WASM.
-- Make a native desktop app.
+- Make a desktop app version.
 - Make a wish list feature with price tracking for storefronts with available APIs.
