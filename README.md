@@ -28,6 +28,7 @@ If you would like to see the project either before or without downloading then y
 ### Prerequisite Installations
 - Node **26.13.0** or newer: [https://nodejs.org/en/download](https://nodejs.org/en/download)
 - Node Package Manager (NPM) **(installed alongside Node)**
+- **Node installation must be added to PATH to run `npm` commands or use shell scripts.**
 ### Installing
 There are two ways to download the project files:
 - Clone the Github repository.
